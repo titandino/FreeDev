@@ -5,6 +5,10 @@ package kraken.plugin.api;
  */
 public class Widget {
 
+    public static final int CONTAINER = 0;
+    public static final int TEXT = 4;
+    public static final int ITEM = 5;
+
     // internal values, attempting to use these will break the client
 
     private long internal1;
