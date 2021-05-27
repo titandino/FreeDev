@@ -8,14 +8,16 @@ public class Stat {
     private int index;
     private int current;
     private int max;
+    private int xp;
 
     public Stat() {
     }
 
-    public Stat(int index, int current, int max) {
+    public Stat(int index, int current, int max, int xp) {
         this.index = index;
         this.current = current;
         this.max = max;
+        this.xp = xp;
     }
 
     public int getIndex() {
@@ -42,4 +44,11 @@ public class Stat {
         this.max = max;
     }
 
+    public int getXp() {
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
 }
