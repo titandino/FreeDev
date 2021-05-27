@@ -33,4 +33,11 @@ public class Client {
      */
     public static native Stat getStatById(int id);
 
+    /**
+     * Retrieves a ConVar by id.
+     *
+     * @param id The id of the ConVar to search for.
+     * @return The found ConVar with the provided id, or NULL if one was not found.
+     */
+    public static native ConVar getConVarById(int id);
 }
