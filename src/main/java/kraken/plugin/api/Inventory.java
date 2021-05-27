@@ -6,7 +6,7 @@ package kraken.plugin.api;
 public class Inventory {
 
     private Inventory() { }
-    
+
     /**
      * Retrieves all items in the inventory.
      *
