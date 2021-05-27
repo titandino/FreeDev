@@ -13,6 +13,13 @@ public class Npc extends Entity {
     public native int getServerIndex();
 
     /**
+     * Rerieves this NPC's id.
+     *
+     * @return This NPC's id.
+     */
+    public native int getId();
+
+    /**
      * Retrieves this NPC's health.
      *
      * @return This NPC's health.
