@@ -5,6 +5,10 @@ package kraken.plugin.api;
  */
 public class Client {
 
+    public static final int AT_LOGIN = 10;
+    public static final int IN_LOBBY = 20;
+    public static final int IN_GAME = 30;
+
     private Client() { }
 
     /**
