@@ -11,6 +11,13 @@ public class Player extends Entity {
     Player() { }
 
     /**
+     * Retrieves this player's server index.
+     *
+     * @return This player's server index.
+     */
+    public native int getServerIndex();
+
+    /**
      * Determines if this player is currently moving.
      * @return If this player is currently moving.
      */

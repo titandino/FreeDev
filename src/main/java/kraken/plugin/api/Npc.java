@@ -6,6 +6,13 @@ package kraken.plugin.api;
 public class Npc extends Entity {
 
     /**
+     * Retrieves this NPC's server index.
+     *
+     * @return This NPC's server index.
+     */
+    public native int getServerIndex();
+
+    /**
      * Retrieves this NPC's health.
      *
      * @return This NPC's health.
