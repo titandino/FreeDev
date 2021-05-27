@@ -25,7 +25,7 @@ public class Client {
      * Retrieves a stat by id.
      *
      * @param id The id of the stat to retrieve.
-     * @return The state with the provided id, or NULL if one was not found.
+     * @return The stat with the provided id, or NULL if one was not found.
      */
     public static native Stat getStatById(int id);
 
