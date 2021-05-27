@@ -12,5 +12,6 @@ public class ImGui {
     public static native void label(String label);
     public static native boolean checkbox(String text, boolean initial);
     public static native int intSlider(int v, int min, int max);
+    public static native boolean button(String text);
 
 }
