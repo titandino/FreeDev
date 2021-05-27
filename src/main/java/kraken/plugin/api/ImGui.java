@@ -10,5 +10,6 @@ public class ImGui {
     public static native boolean beginChild(String id);
     public static native void endChild();
     public static native void label(String label);
+    public static native boolean checkbox(String text, boolean initial);
 
 }
