@@ -6,11 +6,11 @@ package kraken.plugin.api;
 public class Npc extends Entity {
 
     /**
-     * Retrieves this NPC's health (0-1.)
+     * Retrieves this NPC's health.
      *
      * @return This NPC's health.
      */
-    public native float getHealth();
+    public native int getHealth();
 
     /**
      * Do not make instances of this.
