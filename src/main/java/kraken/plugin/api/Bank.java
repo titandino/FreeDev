@@ -8,6 +8,13 @@ public class Bank {
     private Bank() { }
 
     /**
+     * Determines if the bank widget is open.
+     *
+     * @return If the bank widget is open.
+     */
+    public static native boolean isOpen();
+
+    /**
      * Retrieves all items in the bank.
      *
      * @return All items in the bank.
