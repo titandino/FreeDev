@@ -22,4 +22,17 @@ public class Player extends Entity {
      */
     public native float getStatusBarFill(int id);
 
+    /**
+     * Retrieves the id of the playing animation.
+     *
+     * @return The id of the playing animation, or -1 if no animation is playing.
+     */
+    public native int getAnimationId();
+
+    /**
+     * Determines if this player has an animation playing.
+     *
+     * @return If this player has an animation playing.
+     */
+    public native boolean isAnimationPlaying();
 }
