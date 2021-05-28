@@ -6,6 +6,11 @@ package kraken.plugin.api;
 public class Npc extends Entity {
 
     /**
+     * Do not make instances of this.
+     */
+    Npc() { }
+
+    /**
      * Retrieves this NPC's server index.
      *
      * @return This NPC's server index.
@@ -27,8 +32,9 @@ public class Npc extends Entity {
     public native int getHealth();
 
     /**
-     * Do not make instances of this.
+     * Interacts with this NPC.
      */
-    Npc() { }
-
+    public void interact(int type) {
+        Actions.entity(this, type);
+    }
 }

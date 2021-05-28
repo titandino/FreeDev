@@ -17,4 +17,10 @@ public class SceneObject extends Entity {
      */
     public native int getId();
 
+    /**
+     * Interacts with this object.
+     */
+    public void interact(int type) {
+        Actions.entity(this, type);
+    }
 }
