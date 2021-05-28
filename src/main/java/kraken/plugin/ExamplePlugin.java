@@ -71,7 +71,6 @@ public class ExamplePlugin extends AbstractPlugin {
         if (bankWidget != null) {
             ImGui.label("Bank");
             ImGui.label(" -> Group= " + bankWidget.getId());
-            ImGui.label(" -> Widgets= " + bankWidget.getId());
 
             Widget[] widgets = bankWidget.getWidgets();
             for (Widget w : widgets) {
