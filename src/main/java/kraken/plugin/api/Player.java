@@ -10,7 +10,7 @@ public class Player extends Entity {
     /**
      * Do not make instances of this.
      */
-    Player() { }
+    private Player() { }
 
     /**
      * Retrieves this player's server index.

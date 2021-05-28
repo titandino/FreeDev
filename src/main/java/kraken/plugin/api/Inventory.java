@@ -50,6 +50,8 @@ public class Inventory {
 
     /**
      * Determines if the inventory contains an item.
+     *
+     * @return If the inventory contains an item with the provided id.
      */
     public static boolean contains(int id) {
         return count(id) > 0;

@@ -8,7 +8,7 @@ public class Effect extends Entity {
     /**
      * Do not make instances of this.
      */
-    Effect() { }
+    private Effect() { }
 
     /**
      * Retrieves the id of the effect.

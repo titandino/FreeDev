@@ -1,5 +1,7 @@
 package kraken.plugin.api;
 
+import java.util.Objects;
+
 /**
  * A generic item.
  */
@@ -38,5 +40,19 @@ public class Item {
                 "id=" + id +
                 ", amount=" + amount +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return id == item.id &&
+                amount == item.amount;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, amount);
     }
 }

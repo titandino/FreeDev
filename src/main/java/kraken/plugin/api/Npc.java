@@ -37,4 +37,5 @@ public class Npc extends Entity {
     public void interact(int type) {
         Actions.entity(this, type);
     }
+
 }

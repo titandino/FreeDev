@@ -1,5 +1,7 @@
 package kraken.plugin.api;
 
+import java.util.Objects;
+
 /**
  * A 2-dimensional area of integers.
  */
@@ -25,5 +27,19 @@ public class Area2di {
                 v.getX() <= end.getX() &&
                 v.getY() >= begin.getY() &&
                 v.getY() <= end.getY();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Area2di area2di = (Area2di) o;
+        return Objects.equals(begin, area2di.begin) &&
+                Objects.equals(end, area2di.end);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(begin, end);
     }
 }

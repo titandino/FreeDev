@@ -1,5 +1,7 @@
 package kraken.plugin.api;
 
+import java.util.Objects;
+
 /**
  * A vector3 made up of integers.
  */
@@ -46,5 +48,20 @@ public class Vector3i {
                 ", y=" + y +
                 ", z=" + z +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vector3i vector3i = (Vector3i) o;
+        return x == vector3i.x &&
+                y == vector3i.y &&
+                z == vector3i.z;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 }

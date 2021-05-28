@@ -1,6 +1,7 @@
 package kraken.plugin.api;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * A character.
@@ -48,4 +49,18 @@ public class Entity {
      */
     public native Vector3i getGlobalPosition();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entity entity = (Entity) o;
+        return internal1 == entity.internal1 &&
+                internal2 == entity.internal2 &&
+                internal3 == entity.internal3;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(internal1, internal2, internal3);
+    }
 }

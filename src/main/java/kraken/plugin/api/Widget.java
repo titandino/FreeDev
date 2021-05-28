@@ -1,5 +1,7 @@
 package kraken.plugin.api;
 
+import java.util.Objects;
+
 /**
  * A widget.
  */
@@ -12,6 +14,11 @@ public class Widget {
     // internal values, attempting to use these will break the client
 
     private long internal1;
+
+    /**
+     * Do not make instances of this.
+     */
+    private Widget() { }
 
     /**
      * Retrieves the type of this widget.
@@ -41,15 +48,23 @@ public class Widget {
      */
     public native Item getItem();
 
-    /**
-     * Do not make instances of this.
-     */
-    Widget() { }
-
     @Override
     public String toString() {
         return "Widget{" +
                 "type= " + getType() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Widget widget = (Widget) o;
+        return internal1 == widget.internal1;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(internal1);
     }
 }

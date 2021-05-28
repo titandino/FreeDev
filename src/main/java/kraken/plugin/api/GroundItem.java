@@ -1,5 +1,7 @@
 package kraken.plugin.api;
 
+import java.util.Objects;
+
 /**
  * An item on the ground.
  */
@@ -28,4 +30,17 @@ public class GroundItem extends Entity {
      */
     public native int getAmount();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        GroundItem that = (GroundItem) o;
+        return internal10 == that.internal10;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), internal10);
+    }
 }

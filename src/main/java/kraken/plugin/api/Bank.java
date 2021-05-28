@@ -55,6 +55,8 @@ public class Bank {
 
     /**
      * Determines if the bank contains an item.
+     *
+     * @return If the bank contains an item with the provided id.
      */
     public static boolean contains(int id) {
         return count(id) > 0;
