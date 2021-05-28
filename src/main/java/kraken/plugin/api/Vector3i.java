@@ -41,6 +41,17 @@ public class Vector3i {
         this.z = z;
     }
 
+    public int distance(Vector2i other) {
+        return (int) Math.sqrt(Math.pow(other.getX() - x, 2) + Math.pow(other.getY() - y, 2));
+    }
+
+    /**
+     * Calculates the distance between 2 vectors.
+     */
+    public int distance(Vector3i other) {
+        return (int) Math.sqrt(Math.pow(other.getX() - x, 2) + Math.pow(other.getY() - y, 2) + Math.pow(other.getZ() - z, 2));
+    }
+
     @Override
     public String toString() {
         return "Vector3i{" +
