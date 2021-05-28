@@ -49,6 +49,12 @@ public class ExamplePlugin extends AbstractPlugin {
         testDepositing = ImGui.checkbox("Test Depositing", testDepositing);
         testNpcInteract = ImGui.checkbox("Test NPC Interact", testNpcInteract);
 
+        ImGui.checkbox("Checkbox", true);
+        ImGui.label("Label");
+        ImGui.intSlider("Int Slider", 37, 1, 100);
+        ImGui.intInput("Int Input", 40);
+        ImGui.button("Button");
+
         ImGui.label("State= " + Client.getState());
         ImGui.label("Loading= " + Client.isLoading());
         ImGui.label("ConVar= " + Client.getConVarById(3913));
