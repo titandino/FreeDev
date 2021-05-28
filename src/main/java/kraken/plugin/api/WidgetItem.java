@@ -12,4 +12,12 @@ public class WidgetItem extends Item{
         this.slot = slot;
     }
 
+    @Override
+    public String toString() {
+        return "WidgetItem{" +
+                "id=" + getId() +
+                ", amount= " + getAmount() +
+                ", slot=" + slot +
+                '}';
+    }
 }

@@ -32,5 +32,12 @@ public class ConVar {
         this.value = value;
     }
 
+    @Override
+    public String toString() {
+        return "ConVar{" +
+                "id=" + id +
+                ", value=" + value +
+                '}';
+    }
 }
 

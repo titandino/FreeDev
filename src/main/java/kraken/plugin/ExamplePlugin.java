@@ -29,6 +29,11 @@ public class ExamplePlugin extends AbstractPlugin {
 
     @Override
     public void onPaint() {
+        ImGui.label("State= " + Client.getState());
+        ImGui.label("Loading= " + Client.isLoading());
+        ImGui.label("ConVar= " + Client.getConVarById(3913));
+        ImGui.label("Mining= " + Client.getStatById(Client.MINING));
+
         Player self = Players.self();
         if (self != null) {
             ImGui.label("Self");
@@ -53,7 +58,7 @@ public class ExamplePlugin extends AbstractPlugin {
         if (firstObj != null) {
             ImGui.label("Obj");
             ImGui.label(" -> Name= " + firstObj.getName());
-            ImGui.label(" -> Health= " + firstObj.getId());
+            ImGui.label(" -> Id= " + firstObj.getId());
             ImGui.label(" -> GlobalPos= " + firstObj.getGlobalPosition());
             ImGui.label(" -> ScenePos= " + firstObj.getScenePosition());
         }
@@ -62,11 +67,17 @@ public class ExamplePlugin extends AbstractPlugin {
         if (bankWidget != null) {
             ImGui.label("Bank");
             ImGui.label(" -> Group= " + bankWidget.getId());
+            ImGui.label(" -> Widgets= " + bankWidget.getId());
 
             Widget[] widgets = bankWidget.getWidgets();
             for (Widget w : widgets) {
-                ImGui.label("  -> Widget= " + w.getType());
+                ImGui.label("  -> Type= " + w.getType());
             }
+        }
+
+        ImGui.label("Inventory");
+        for (WidgetItem item : Inventory.getItems()) {
+            ImGui.label(" -> " + item);
         }
     }
 

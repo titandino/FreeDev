@@ -31,4 +31,12 @@ public class Item {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", amount=" + amount +
+                '}';
+    }
 }
