@@ -85,7 +85,7 @@ public class ExamplePlugin extends AbstractPlugin {
         }
 
         GroundItem firstGround = GroundItems.closest((obj) -> true);
-        if (firstObj != null) {
+        if (firstGround != null) {
             ImGui.label("GroundItem");
             ImGui.label(" -> Id= " + firstGround.getId());
             ImGui.label(" -> GlobalPos= " + firstGround.getGlobalPosition());
