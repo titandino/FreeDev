@@ -2,6 +2,10 @@ package kraken.plugin;
 
 import kraken.plugin.api.*;
 
+import static kraken.plugin.api.Actions.MENU_EXECUTE_NPC1;
+import static kraken.plugin.api.Client.MINING;
+import static kraken.plugin.api.Player.ADRENALINE;
+
 /**
  * An example plugin.
  */
@@ -32,7 +36,7 @@ public class ExamplePlugin extends AbstractPlugin {
         if (testNpcInteract) {
             Npc firstNpc = Npcs.closest((npc) -> npc.getName() != null && !npc.getName().isEmpty());
             if (firstNpc != null) {
-                Actions.menu(Actions.MENU_EXECUTE_NPC1, firstNpc.getServerIndex(), 0, 0, 1);
+                Actions.menu(MENU_EXECUTE_NPC1, firstNpc.getServerIndex(), 0, 0, 1);
             }
         }
 
@@ -48,7 +52,7 @@ public class ExamplePlugin extends AbstractPlugin {
         ImGui.label("State= " + Client.getState());
         ImGui.label("Loading= " + Client.isLoading());
         ImGui.label("ConVar= " + Client.getConVarById(3913));
-        ImGui.label("Mining= " + Client.getStatById(Client.MINING));
+        ImGui.label("Mining= " + Client.getStatById(MINING));
 
         Player self = Players.self();
         if (self != null) {
@@ -58,6 +62,7 @@ public class ExamplePlugin extends AbstractPlugin {
             ImGui.label(" -> Moving= " + self.isMoving());
             ImGui.label(" -> GlobalPos= " + self.getGlobalPosition());
             ImGui.label(" -> ScenePos= " + self.getScenePosition());
+            ImGui.label(" -> Adrenaline= " + self.getStatusBarFill(ADRENALINE));
         }
 
         Npc firstNpc = Npcs.closest((npc) -> npc.getName() != null && !npc.getName().isEmpty());
@@ -77,6 +82,22 @@ public class ExamplePlugin extends AbstractPlugin {
             ImGui.label(" -> Id= " + firstObj.getId());
             ImGui.label(" -> GlobalPos= " + firstObj.getGlobalPosition());
             ImGui.label(" -> ScenePos= " + firstObj.getScenePosition());
+        }
+
+        GroundItem firstGround = GroundItems.closest((obj) -> true);
+        if (firstObj != null) {
+            ImGui.label("GroundItem");
+            ImGui.label(" -> Id= " + firstGround.getId());
+            ImGui.label(" -> GlobalPos= " + firstGround.getGlobalPosition());
+            ImGui.label(" -> ScenePos= " + firstGround.getScenePosition());
+        }
+
+        Effect effect = Effects.closest((obj) -> true);
+        if (effect != null) {
+            ImGui.label("Effect");
+            ImGui.label(" -> Id= " + effect.getId());
+            ImGui.label(" -> GlobalPos= " + effect.getGlobalPosition());
+            ImGui.label(" -> ScenePos= " + effect.getScenePosition());
         }
 
         WidgetGroup bankWidget = Widgets.getGroupById(517);

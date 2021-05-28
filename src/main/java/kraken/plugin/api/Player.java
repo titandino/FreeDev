@@ -5,6 +5,8 @@ package kraken.plugin.api;
  */
 public class Player extends Entity {
 
+    public static final int ADRENALINE = 5;
+
     /**
      * Do not make instances of this.
      */
