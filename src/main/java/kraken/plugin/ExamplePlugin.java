@@ -9,6 +9,7 @@ public class ExamplePlugin extends AbstractPlugin {
 
     private boolean testWithdrawing = false;
     private boolean testDepositing = false;
+    private boolean testNpcInteract = false;
     
     @Override
     public boolean onLoaded(PluginContext pluginContext) {
@@ -25,13 +26,22 @@ public class ExamplePlugin extends AbstractPlugin {
         if (testDepositing) {
             Bank.deposit((item) -> true, 1);
         }
-        return 1800;
+
+        if (testNpcInteract) {
+            Npc firstNpc = Npcs.closest((npc) -> npc.getName() != null && !npc.getName().isEmpty());
+            if (firstNpc != null) {
+                Actions.menu(Actions.MENU_EXECUTE_NPC1, firstNpc.getServerIndex(), 0, 0, 1);
+            }
+        }
+
+        return 8000;
     }
 
     @Override
     public void onPaint() {
         testWithdrawing = ImGui.checkbox("Test Withdrawing", testWithdrawing);
         testDepositing = ImGui.checkbox("Test Depositing", testDepositing);
+        testNpcInteract = ImGui.checkbox("Test NPC Interact", testNpcInteract);
 
         ImGui.label("State= " + Client.getState());
         ImGui.label("Loading= " + Client.isLoading());
