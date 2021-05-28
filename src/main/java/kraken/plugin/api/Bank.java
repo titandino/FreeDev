@@ -53,4 +53,11 @@ public class Bank {
      */
     public static native void deposit(Filter<WidgetItem> filter, int option);
 
+    /**
+     * Determines if the bank contains an item.
+     */
+    public static boolean contains(int id) {
+        return count(id) > 0;
+    }
+
 }

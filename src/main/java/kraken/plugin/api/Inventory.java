@@ -48,4 +48,10 @@ public class Inventory {
         return getItems().length == 0;
     }
 
+    /**
+     * Determines if the inventory contains an item.
+     */
+    public static boolean contains(int id) {
+        return count(id) > 0;
+    }
 }
