@@ -39,4 +39,4 @@ public class ExamplePlugin extends AbstractPlugin {
 }
 ```
 
-![example](https://i.imgur.com/QEchULS.png)
+![example](https://i.imgur.com/37tAJPh.png)
