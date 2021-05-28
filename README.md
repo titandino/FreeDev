@@ -21,10 +21,9 @@ public class ExamplePlugin extends AbstractPlugin {
     public int onLoop() {
         Player self = Players.self();
         if (!self.isMoving()) {
-            SceneObject object = SceneObjects.closest((obj) -> obj.getName().equals("Bank Booth"));
+            SceneObject object = SceneObjects.closest((obj) -> obj.getName().toLowerCase().contains("bank booth"));
             if (object != null) {
-                Vector3i pos = object.getGlobalPosition();
-                Actions.menu(Actions.MENU_EXECUTE_OBJECT2, object.getId(), pos.getX(), pos.getY(), 1);
+                object.interact(Actions.MENU_EXECUTE_OBJECT2);
             }
         }
 
