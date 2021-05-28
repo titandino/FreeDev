@@ -7,6 +7,9 @@ import kraken.plugin.api.*;
  */
 public class ExamplePlugin extends AbstractPlugin {
 
+    private boolean testWithdrawing = false;
+    private boolean testDepositing = false;
+    
     @Override
     public boolean onLoaded(PluginContext pluginContext) {
         pluginContext.setName("Example");
@@ -15,20 +18,21 @@ public class ExamplePlugin extends AbstractPlugin {
 
     @Override
     public int onLoop() {
-        Player self = Players.self();
-        if (!self.isMoving()) {
-            SceneObject object = SceneObjects.closest((obj) -> obj.getName().equals("Bank Booth"));
-            if (object != null) {
-                Vector3i pos = object.getGlobalPosition();
-                Actions.menu(Actions.MENU_EXECUTE_OBJECT2, object.getId(), pos.getX(), pos.getY(), 1);
-            }
+        if (testWithdrawing) {
+            Bank.withdraw((item) -> item.getSlot() < 10, 1);
         }
 
+        if (testDepositing) {
+            Bank.deposit((item) -> true, 1);
+        }
         return 1800;
     }
 
     @Override
     public void onPaint() {
+        testWithdrawing = ImGui.checkbox("Test Withdrawing", testWithdrawing);
+        testDepositing = ImGui.checkbox("Test Depositing", testDepositing);
+
         ImGui.label("State= " + Client.getState());
         ImGui.label("Loading= " + Client.isLoading());
         ImGui.label("ConVar= " + Client.getConVarById(3913));

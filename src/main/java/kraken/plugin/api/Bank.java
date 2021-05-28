@@ -41,16 +41,16 @@ public class Bank {
      * Withdraws some items from the bank.
      *
      * @param filter The filter items must pass through in order to be withdrawn.
-     * @param count The number of items to withdraw.
+     * @param option The menu option to use for withdrawing.
      */
-    public static native void withdraw(Filter<WidgetItem> filter, int count);
+    public static native void withdraw(Filter<WidgetItem> filter, int option);
 
     /**
      * Deposits items into the bank.
      *
      * @param filter The filter items must pass through in order to be deposited.
-     * @param count The number of items to deposit.
+     * @param option The menu option to use for depositing.
      */
-    public static native void deposit(Filter<WidgetItem> filter, int count);
+    public static native void deposit(Filter<WidgetItem> filter, int option);
 
 }

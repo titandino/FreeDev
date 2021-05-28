@@ -12,6 +12,14 @@ public class WidgetItem extends Item{
         this.slot = slot;
     }
 
+    public int getSlot() {
+        return slot;
+    }
+
+    public void setSlot(int slot) {
+        this.slot = slot;
+    }
+
     @Override
     public String toString() {
         return "WidgetItem{" +
