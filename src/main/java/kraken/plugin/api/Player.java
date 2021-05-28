@@ -42,4 +42,11 @@ public class Player extends Entity {
      * @return If this player has an animation playing.
      */
     public native boolean isAnimationPlaying();
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "serverIndex=" + getServerIndex() +
+                '}';
+    }
 }

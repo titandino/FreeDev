@@ -28,4 +28,12 @@ public class Vector2i {
     public void setY(int y) {
         this.y = y;
     }
+
+    @Override
+    public String toString() {
+        return "Vector2i{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

@@ -39,4 +39,12 @@ public class Vector3 {
         this.z = z;
     }
 
+    @Override
+    public String toString() {
+        return "Vector3{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
+    }
 }

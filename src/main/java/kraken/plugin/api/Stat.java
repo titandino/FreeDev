@@ -51,4 +51,14 @@ public class Stat {
     public void setXp(int xp) {
         this.xp = xp;
     }
+
+    @Override
+    public String toString() {
+        return "Stat{" +
+                "index=" + index +
+                ", current=" + current +
+                ", max=" + max +
+                ", xp=" + xp +
+                '}';
+    }
 }

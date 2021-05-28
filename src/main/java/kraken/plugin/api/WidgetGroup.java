@@ -23,4 +23,10 @@ public class WidgetGroup {
      */
     public native Widget[] getWidgets();
 
+    @Override
+    public String toString() {
+        return "WidgetGroup{" +
+                "id=" + getId() +
+                '}';
+    }
 }

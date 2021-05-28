@@ -45,4 +45,11 @@ public class Widget {
      * Do not make instances of this.
      */
     Widget() { }
+
+    @Override
+    public String toString() {
+        return "Widget{" +
+                "type= " + getType() +
+                '}';
+    }
 }

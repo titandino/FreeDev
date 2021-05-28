@@ -38,4 +38,13 @@ public class Vector3i {
     public void setZ(int z) {
         this.z = z;
     }
+
+    @Override
+    public String toString() {
+        return "Vector3i{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
+    }
 }

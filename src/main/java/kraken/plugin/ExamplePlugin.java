@@ -29,7 +29,45 @@ public class ExamplePlugin extends AbstractPlugin {
 
     @Override
     public void onPaint() {
-        ImGui.label("Example Paint");
+        Player self = Players.self();
+        if (self != null) {
+            ImGui.label("Self");
+            ImGui.label(" -> Name= " + self.getName());
+            ImGui.label(" -> Animation= " + self.getAnimationId());
+            ImGui.label(" -> Moving= " + self.isMoving());
+            ImGui.label(" -> GlobalPos= " + self.getGlobalPosition());
+            ImGui.label(" -> ScenePos= " + self.getScenePosition());
+        }
+
+        Npc firstNpc = Npcs.closest((npc) -> npc.getName() != null && !npc.getName().isEmpty());
+        if (firstNpc != null) {
+            ImGui.label("Npc");
+            ImGui.label(" -> Name= " + firstNpc.getName());
+            ImGui.label(" -> Id= " + firstNpc.getId());
+            ImGui.label(" -> Health= " + firstNpc.getHealth());
+            ImGui.label(" -> GlobalPos= " + firstNpc.getGlobalPosition());
+            ImGui.label(" -> ScenePos= " + firstNpc.getScenePosition());
+        }
+
+        SceneObject firstObj = SceneObjects.closest((obj) -> obj.getName() != null && !obj.getName().isEmpty());
+        if (firstObj != null) {
+            ImGui.label("Obj");
+            ImGui.label(" -> Name= " + firstObj.getName());
+            ImGui.label(" -> Health= " + firstObj.getId());
+            ImGui.label(" -> GlobalPos= " + firstObj.getGlobalPosition());
+            ImGui.label(" -> ScenePos= " + firstObj.getScenePosition());
+        }
+
+        WidgetGroup bankWidget = Widgets.getGroupById(517);
+        if (bankWidget != null) {
+            ImGui.label("Bank");
+            ImGui.label(" -> Group= " + bankWidget.getId());
+
+            Widget[] widgets = bankWidget.getWidgets();
+            for (Widget w : widgets) {
+                ImGui.label("  -> Widget= " + w.getType());
+            }
+        }
     }
 
 }
