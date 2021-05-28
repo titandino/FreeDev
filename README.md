@@ -1,5 +1,5 @@
 # KrakenAPI
-The scripting API for [Kraken](https://github.com/RSKraken), including a basic example plugin.
+The scripting API for [Kraken](https://github.com/RSKraken), including a basic example plugin. The scripting API is currently only being tested on Java 8.
 
 ```Java
 package kraken.plugin;
