@@ -13,6 +13,10 @@ public class Vector2i {
         this.y = y;
     }
 
+    public Vector2i(Vector3i v) {
+        this(v.getX(), v.getY());
+    }
+
     public int getX() {
         return x;
     }
@@ -27,6 +31,14 @@ public class Vector2i {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int distance(Vector2i other) {
+        return (int) Math.sqrt(Math.pow(other.getX() - x, 2) + Math.pow(other.getY() - y, 2));
+    }
+
+    public int distance(Vector3i other) {
+        return (int) Math.sqrt(Math.pow(other.getX() - x, 2) + Math.pow(other.getY() - y, 2));
     }
 
     @Override

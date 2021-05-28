@@ -30,4 +30,22 @@ public class Inventory {
      */
     public static native WidgetItem first(Filter<WidgetItem> filter);
 
+    /**
+     * Determines if the inventory is full.
+     *
+     * @return If the inventory is full.
+     */
+    public static boolean isFull() {
+        return getItems().length == 28;
+    }
+
+    /**
+     * Determines if the inventory is empty.
+     *
+     * @return If the inventory is empty.
+     */
+    public static boolean isEmpty() {
+        return getItems().length == 0;
+    }
+
 }
