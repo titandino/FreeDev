@@ -32,4 +32,14 @@ public class Actions {
      */
     public static native void menu(int type, int param1, int param2, int param3, int param4);
 
+    // Entity utilities.
+
+    public static void entity(SceneObject object, int type) {
+        Vector3i pos = object.getGlobalPosition();
+        Actions.menu(type, object.getId(), pos.getX(), pos.getY(), 1);
+    }
+
+    public static void entity(Npc npc, int type) {
+        Actions.menu(type, npc.getServerIndex(), 0, 0, 1);
+    }
 }
