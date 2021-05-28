@@ -19,12 +19,14 @@ public class ExamplePlugin extends AbstractPlugin {
 
     @Override
     public int onLoop() {
-        if (testWithdrawing) {
-            Bank.withdraw((item) -> item.getSlot() < 10, 1);
-        }
+        if (Bank.isOpen()) {
+            if (testWithdrawing) {
+                Bank.withdraw((item) -> item.getSlot() < 10, 1);
+            }
 
-        if (testDepositing) {
-            Bank.deposit((item) -> true, 1);
+            if (testDepositing) {
+                Bank.deposit((item) -> true, 1);
+            }
         }
 
         if (testNpcInteract) {
