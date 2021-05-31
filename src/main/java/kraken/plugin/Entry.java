@@ -1,5 +1,7 @@
 package kraken.plugin;
 
+import com.darkan.plugins.aiodiv.AIODiv;
+
 import kraken.plugin.api.*;
 
 /**
@@ -8,7 +10,7 @@ import kraken.plugin.api.*;
  */
 public class Entry {
 
-    private static final AbstractPlugin plugin = new ExamplePlugin();
+    private static final AbstractPlugin plugin = new AIODiv();
 
     public static boolean onLoaded(PluginContext pluginContext) {
         return plugin.onLoaded(pluginContext);
