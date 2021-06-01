@@ -10,10 +10,6 @@ import static kraken.plugin.api.Player.ADRENALINE;
  * An example plugin.
  */
 public class ExamplePlugin extends AbstractPlugin {
-
-    private boolean testWithdrawing = false;
-    private boolean testDepositing = false;
-    private boolean testNpcInteract = false;
     
     @Override
     public boolean onLoaded(PluginContext pluginContext) {
@@ -23,32 +19,12 @@ public class ExamplePlugin extends AbstractPlugin {
 
     @Override
     public int onLoop() {
-        if (Bank.isOpen()) {
-            if (testWithdrawing) {
-                Bank.withdraw((item) -> item.getSlot() < 10, 1);
-            }
-
-            if (testDepositing) {
-                Bank.deposit((item) -> true, 1);
-            }
-        }
-
-        if (testNpcInteract) {
-            Npc firstNpc = Npcs.closest((npc) -> npc.getName() != null && !npc.getName().isEmpty());
-            if (firstNpc != null) {
-                Actions.menu(MENU_EXECUTE_NPC1, firstNpc.getServerIndex(), 0, 0, 1);
-            }
-        }
 
         return 8000;
     }
 
     @Override
     public void onPaint() {
-        testWithdrawing = ImGui.checkbox("Test Withdrawing", testWithdrawing);
-        testDepositing = ImGui.checkbox("Test Depositing", testDepositing);
-        testNpcInteract = ImGui.checkbox("Test NPC Interact", testNpcInteract);
-
         ImGui.checkbox("Checkbox", true);
         ImGui.label("Label");
         ImGui.intSlider("Int Slider", 37, 1, 100);
