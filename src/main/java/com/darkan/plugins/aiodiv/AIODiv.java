@@ -7,6 +7,13 @@ import com.darkan.kraken.Util;
 
 public class AIODiv extends AbstractPlugin {
 	
+	/**
+	 * TODO
+	 * Seren spirit support
+	 * Chronicle absorbtion prayer support
+	 * Better prioritization of enriched
+	 */
+	
 	private static final int GAUS_VARIANCE = 4000;
 	private static final int[] ENERGIES = { 29313, 29314, 29315, 29316, 29317, 29318, 29319, 29320, 31312, 29321, 29322, 29323, 29324, 37941 };
 	
@@ -38,17 +45,23 @@ public class AIODiv extends AbstractPlugin {
 		
 		int loopDelay = 1500;
 		
+		Npc serenSpirit = Npcs.closest(npc -> npc.getName().equalsIgnoreCase("seren spirit"));
+		if (serenSpirit != null) {
+			serenSpirit.interact(Actions.MENU_EXECUTE_NPC1);
+			return Util.gaussian(loopDelay + 2500, GAUS_VARIANCE);
+		}
+		
 		if (Inventory.isFull()) {
 			state = "Inventory full. Finding closest rift...";
-			SceneObject rift = SceneObjects.closest(obj -> obj != null && obj.getName() != null && obj.getName().equals("Energy rift"));
-			if (rift != null && !self.isMoving() && !self.isAnimationPlaying()) {
+			SceneObject rift = SceneObjects.closest(obj -> obj != null && (obj.getId() == 87306 || (obj.getName() != null && obj.getName().equals("Energy rift"))));
+			if (rift != null && !self.isAnimationPlaying()) {
 				state = "Inventory full. Clicking closest rift...";
 				rift.interact(Actions.MENU_EXECUTE_OBJECT1);
 				loopDelay += 2500;
 			}
 		} else {
 			state = "Finding closest " + config.name().toLowerCase() + " wisp...";
-			Npc wisp = Npcs.closest(npc -> config.getEnrichedNpcs().contains(npc.getId()));
+			Npc wisp = Npcs.closest(npc -> config.getEnrichedNpcs().contains(npc.getId()) || npc.getName().contains("Enriched"));
 			if (wisp == null)
 				wisp = Npcs.closest(npc -> config.getNormalNpcs().contains(npc.getId()));
 			

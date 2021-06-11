@@ -17,7 +17,7 @@ public enum DivConfig {
 	BRILLIANT(new Integer[] { 18165, 18188 }, new Integer[] { 18166 }),
 	RADIANT(new Integer[] { 18167, 18190 }, new Integer[] { 18168 }),
 	LUMINOUS(new Integer[] { 18169, 18192 }, new Integer[] { 18170 }),
-	INCANDESCENT(new Integer[] { 18171, 18194 }, new Integer[] { 18172 }),
+	INCANDESCENT(new Integer[] { 18171, 18194 }, new Integer[] { 38186 }),
 	CURSED(new Integer[] { 23159, 23160 }, new Integer[] { 23161, 23162 });
 	
 	private Set<Integer> normalNpcs;

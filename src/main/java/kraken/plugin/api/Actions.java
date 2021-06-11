@@ -36,7 +36,7 @@ public class Actions {
 
     public static void entity(SceneObject object, int type) {
         Vector3i pos = object.getGlobalPosition();
-        Actions.menu(type, object.getId(), pos.getX(), pos.getY(), 1);
+        Actions.menu(type, object.getId(), pos.getX()-1, pos.getY()-1, 1);
     }
 
     public static void entity(Npc npc, int type) {
