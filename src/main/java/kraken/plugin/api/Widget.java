@@ -1,5 +1,6 @@
 package kraken.plugin.api;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
@@ -39,7 +40,21 @@ public class Widget {
      *
      * @return The text being stored in this widget, or NULL if the widget has no text.
      */
-    public native String getText();
+    public native byte[] getTextBinary();
+
+    /**
+     * Retrieves the text being stored in this widget.
+     *
+     * @return The text being stored in this widget, or NULL if the widget has no text.
+     */
+    public String getText() {
+        byte[] bin = getTextBinary();
+        if (bin == null) {
+            return null;
+        }
+
+        return new String(bin, StandardCharsets.US_ASCII);
+    }
 
     /**
      * Retrieves the item being stored in this widget.

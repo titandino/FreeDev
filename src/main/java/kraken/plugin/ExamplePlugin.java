@@ -23,6 +23,28 @@ public class ExamplePlugin extends AbstractPlugin {
         return 8000;
     }
 
+    /**
+     * Prints all text in a widget recursively.
+     */
+    private void printWidgetText(Widget w) {
+        int type = w.getType();
+        if (type == Widget.TEXT) {
+            String text = w.getText();
+            if (text != null) {
+                ImGui.label("  -> " + text);
+            }
+        } else if (type == Widget.CONTAINER) {
+            Widget[] children = w.getChildren();
+            if (children != null) {
+                for (Widget child : children) {
+                    if (child != null) {
+                        printWidgetText(child);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void onPaint() {
         ImGui.checkbox("Checkbox", true);
@@ -90,6 +112,7 @@ public class ExamplePlugin extends AbstractPlugin {
             Widget[] widgets = bankWidget.getWidgets();
             for (Widget w : widgets) {
                 ImGui.label("  -> Type= " + w.getType());
+                printWidgetText(w);
             }
         }
 

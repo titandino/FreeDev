@@ -32,7 +32,12 @@ public class Entity {
      * @return The name of this entity.
      */
     public String getName() {
-        return new String(getNameBinary(), StandardCharsets.US_ASCII);
+        byte[] bin = getNameBinary();
+        if (bin == null) {
+            return "Unknown";
+        }
+
+        return new String(bin, StandardCharsets.US_ASCII);
     }
 
     /**
