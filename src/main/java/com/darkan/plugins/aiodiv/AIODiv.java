@@ -65,7 +65,7 @@ public class AIODiv extends AbstractPlugin {
 			if (wisp == null)
 				wisp = Npcs.closest(npc -> config.getNormalNpcs().contains(npc.getId()));
 			
-			if (wisp != null && !self.isMoving() && !self.isAnimationPlaying()) {
+			if (wisp != null && !self.isAnimationPlaying()) {
 				state = "Clicking closest " + config.name().toLowerCase() + " wisp...";
 				wisp.interact(Actions.MENU_EXECUTE_NPC1);
 				loopDelay += 2500;
