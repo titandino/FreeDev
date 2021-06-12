@@ -9,7 +9,6 @@ public class AIODiv extends AbstractPlugin {
 	
 	/**
 	 * TODO
-	 * Seren spirit support
 	 * Chronicle absorbtion prayer support
 	 * Better prioritization of enriched
 	 */
@@ -53,7 +52,7 @@ public class AIODiv extends AbstractPlugin {
 		
 		if (Inventory.isFull()) {
 			state = "Inventory full. Finding closest rift...";
-			SceneObject rift = SceneObjects.closest(obj -> obj != null && (obj.getId() == 87306 || (obj.getName() != null && obj.getName().equals("Energy rift"))));
+			SceneObject rift = SceneObjects.closest(obj -> obj != null && obj.getName() != null && obj.getName().equals("Energy rift"));
 			if (rift != null && !self.isAnimationPlaying()) {
 				state = "Inventory full. Clicking closest rift...";
 				rift.interact(Actions.MENU_EXECUTE_OBJECT1);
