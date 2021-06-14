@@ -1,7 +1,18 @@
 package com.darkan.plugins.aiodiv;
 
 import kraken.plugin.AbstractPlugin;
-import kraken.plugin.api.*;
+import kraken.plugin.api.Actions;
+import kraken.plugin.api.Client;
+import kraken.plugin.api.ImGui;
+import kraken.plugin.api.Inventory;
+import kraken.plugin.api.Npc;
+import kraken.plugin.api.Npcs;
+import kraken.plugin.api.Player;
+import kraken.plugin.api.Players;
+import kraken.plugin.api.PluginContext;
+import kraken.plugin.api.SceneObject;
+import kraken.plugin.api.SceneObjects;
+import kraken.plugin.api.Time;
 
 import java.time.LocalTime;
 
@@ -27,6 +38,7 @@ public class AIODiv extends AbstractPlugin {
 	private int startXp;
 	private long started;
 	private int startEnergy;
+	private String error = "Error: ";
 	
 	public boolean onLoaded(PluginContext context) {
 		context.setName("Trent AIO Divination");
@@ -34,57 +46,64 @@ public class AIODiv extends AbstractPlugin {
 	}
 
 	public int onLoop() {
-		Player self = Players.self();
-		if(self == null) {
-			state = "Finding local player...";
-			return 3600;
-		}
-		if (config == null) {
-			state = "Detecting location and starting...";
-			detectLocation();
-			startXp = Client.getStatById(Client.DIVINATION).getXp();
-			started = System.currentTimeMillis();
-			startEnergy = Util.invCount(ENERGIES);
-			return 3600;
-		}
-		
-		int loopDelay = 1500;
-		
-		Npc serenSpirit = Npcs.closest(npc -> npc.getName().equalsIgnoreCase("seren spirit"));
-		if (serenSpirit != null) {
-			serenSpirit.interact(Actions.MENU_EXECUTE_NPC1);
-			return Util.gaussian(loopDelay + 2500, GAUS_VARIANCE);
-		}
-		
-		if (Inventory.isFull()) {
-			state = "Inventory full. Finding closest rift...";
-			if (config == DivConfig.ELDER) {
-				state = "Inventory full. Clicking closest rift...";
-				ELDER_RIFT.interact(Actions.MENU_EXECUTE_OBJECT1);
-				if (LocalTime.now().getMinute() >= 0 && LocalTime.now().getMinute() <= 10)
-					ELDER_RIFT_CACHE.interact(Actions.MENU_EXECUTE_OBJECT1);
-				loopDelay += 2500;
-			} else {
-				SceneObject rift = SceneObjects.closest(obj -> obj != null && (obj.getId() == 87306 || obj.getId() == 93489 || obj.getId() == 66522)); //TODO API doesn't pick up 66522 for some reason..
-				if (rift != null && !self.isAnimationPlaying()) {
+		try {
+			Player self = Players.self();
+			if(self == null) {
+				state = "Finding local player...";
+				return 3600;
+			}
+			if (config == null) {
+				state = "Detecting location and starting...";
+				detectLocation();
+				startXp = Client.getStatById(Client.DIVINATION).getXp();
+				started = System.currentTimeMillis();
+				startEnergy = Inventory.count(ENERGIES);
+				return 3600;
+			}
+			
+			int loopDelay = 1500;
+			
+			Npc serenSpirit = Npcs.closest(npc -> npc.getName().equalsIgnoreCase("seren spirit"));
+			if (serenSpirit != null) {
+				serenSpirit.interact(Actions.MENU_EXECUTE_NPC1);
+				return Util.gaussian(loopDelay + 2500, GAUS_VARIANCE);
+			}
+			
+			if (Inventory.isFull()) {
+				state = "Inventory full. Finding closest rift...";
+				if (config == DivConfig.ELDER) {
 					state = "Inventory full. Clicking closest rift...";
-					rift.interact(Actions.MENU_EXECUTE_OBJECT1);
+					ELDER_RIFT.interact(Actions.MENU_EXECUTE_OBJECT1);
+					if (LocalTime.now().getMinute() >= 0 && LocalTime.now().getMinute() <= 10)
+						ELDER_RIFT_CACHE.interact(Actions.MENU_EXECUTE_OBJECT1);
+					loopDelay += 2500;
+				} else {
+					SceneObject rift = SceneObjects.closest(obj -> obj != null && (obj.getId() == 87306 || obj.getId() == 93489 || obj.getId() == 66522)); //TODO API doesn't pick up 66522 for some reason..
+					if (rift != null && !self.isAnimationPlaying()) {
+						state = "Inventory full. Clicking closest rift...";
+						rift.interact(Actions.MENU_EXECUTE_OBJECT1);
+						loopDelay += 2500;
+					}
+				}
+			} else {
+				state = "Finding closest " + config.name().toLowerCase() + " wisp...";
+				Npc wisp = Npcs.closest(npc -> config.getEnrichedNpcs().contains(npc.getId()) || npc.getName().contains("Enriched"));
+				if (wisp == null)
+					wisp = Npcs.closest(npc -> config.getNormalNpcs().contains(npc.getId()));
+				
+				if (wisp != null && !self.isAnimationPlaying()) {
+					state = "Clicking closest " + config.name().toLowerCase() + " wisp...";
+					wisp.interact(Actions.MENU_EXECUTE_NPC1);
 					loopDelay += 2500;
 				}
 			}
-		} else {
-			state = "Finding closest " + config.name().toLowerCase() + " wisp...";
-			Npc wisp = Npcs.closest(npc -> config.getEnrichedNpcs().contains(npc.getId()) || npc.getName().contains("Enriched"));
-			if (wisp == null)
-				wisp = Npcs.closest(npc -> config.getNormalNpcs().contains(npc.getId()));
-			
-			if (wisp != null && !self.isAnimationPlaying()) {
-				state = "Clicking closest " + config.name().toLowerCase() + " wisp...";
-				wisp.interact(Actions.MENU_EXECUTE_NPC1);
-				loopDelay += 2500;
-			}
+			return Util.gaussian(loopDelay, GAUS_VARIANCE);
+		} catch(Exception e) {
+			error = e.toString();
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			return Util.gaussian(2000, GAUS_VARIANCE);
 		}
-		return Util.gaussian(loopDelay, GAUS_VARIANCE);
 	}
 
 	public void onPaint() {
@@ -92,8 +111,10 @@ public class AIODiv extends AbstractPlugin {
 		ImGui.label("Trent AIO Divination - " + Time.formatTime(runtime));
 		ImGui.label(state);
 		
-		ImGui.label("Energy p/h: " + Time.perHour(runtime, Util.invCount(ENERGIES) - startEnergy));
+		ImGui.label("Energy p/h: " + Time.perHour(runtime, Inventory.count(ENERGIES) - startEnergy));
 		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.DIVINATION).getXp() - startXp));
+		
+		ImGui.label(error);
 	}
 	
 	public void detectLocation() {

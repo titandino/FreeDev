@@ -1,5 +1,9 @@
 package kraken.plugin.api;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Provides access to the local player's inventory.
  */
@@ -56,4 +60,15 @@ public class Inventory {
     public static boolean contains(int id) {
         return count(id) > 0;
     }
+
+	public static int count(int... ids) {
+		Set<Integer> itemIds = new HashSet<>(Arrays.asList(Arrays.stream(ids).boxed().toArray(Integer[]::new)));
+		int count = 0;
+		for (WidgetItem item : getItems()) {
+			if (item == null || !itemIds.contains(item.getId()))
+				continue;
+			count += item.getAmount();
+		}
+		return count;
+	}
 }
