@@ -4,6 +4,8 @@ import kraken.plugin.AbstractPlugin;
 import kraken.plugin.api.*;
 
 import com.darkan.kraken.Util;
+import com.darkan.kraken.world.WorldObject;
+import com.darkan.kraken.world.WorldTile;
 
 public class AIODiv extends AbstractPlugin {
 	
@@ -15,6 +17,7 @@ public class AIODiv extends AbstractPlugin {
 	
 	private static final int GAUS_VARIANCE = 4000;
 	private static final int[] ENERGIES = { 29313, 29314, 29315, 29316, 29317, 29318, 29319, 29320, 31312, 29321, 29322, 29323, 29324, 37941 };
+	private static final WorldObject ELDER_RIFT = new WorldObject(66522, new WorldTile(4273, 6318, 0));
 	
 	private DivConfig config;
 	private String state = "Initializing...";
@@ -52,11 +55,17 @@ public class AIODiv extends AbstractPlugin {
 		
 		if (Inventory.isFull()) {
 			state = "Inventory full. Finding closest rift...";
-			SceneObject rift = SceneObjects.closest(obj -> obj != null && (obj.getId() == 87306 || obj.getId() == 66522));
-			if (rift != null && !self.isAnimationPlaying()) {
+			if (config == DivConfig.ELDER) {
 				state = "Inventory full. Clicking closest rift...";
-				rift.interact(Actions.MENU_EXECUTE_OBJECT1);
+				ELDER_RIFT.interact(Actions.MENU_EXECUTE_OBJECT1);
 				loopDelay += 2500;
+			} else {
+				SceneObject rift = SceneObjects.closest(obj -> obj != null && (obj.getId() == 87306 || obj.getId() == 66522)); //TODO API doesn't pick up 66522 for some reason..
+				if (rift != null && !self.isAnimationPlaying()) {
+					state = "Inventory full. Clicking closest rift...";
+					rift.interact(Actions.MENU_EXECUTE_OBJECT1);
+					loopDelay += 2500;
+				}
 			}
 		} else {
 			state = "Finding closest " + config.name().toLowerCase() + " wisp...";

@@ -15,7 +15,7 @@ public enum DivConfig {
 	LUSTROUS(new Integer[] { 18163, 18186 }, new Integer[] { 18164 }),
 	ELDER(new Integer[] { 13614, 13616 }, new Integer[] { 13615, 13627 }),
 	BRILLIANT(new Integer[] { 18165, 18188 }, new Integer[] { 18166 }),
-	RADIANT(new Integer[] { 18167, 18190 }, new Integer[] { 18168 }),
+	RADIANT(new Integer[] { 18167, 18190 }, new Integer[] { 41407 }),
 	LUMINOUS(new Integer[] { 18169, 18192 }, new Integer[] { 18170 }),
 	INCANDESCENT(new Integer[] { 18171, 18194 }, new Integer[] { 38186 }),
 	CURSED(new Integer[] { 23159, 23160 }, new Integer[] { 23161, 23162 });
