@@ -1,6 +1,6 @@
 package kraken.plugin;
 
-import com.darkan.plugins.aiodiv.AIODiv;
+import com.darkan.plugins.aiowisp.AIOWispGathering;
 
 import kraken.plugin.api.*;
 
@@ -10,7 +10,7 @@ import kraken.plugin.api.*;
  */
 public class Entry {
 
-    private static final AbstractPlugin plugin = new AIODiv();
+    private static final AbstractPlugin plugin = new AIOWispGathering();
 
     public static boolean onLoaded(PluginContext pluginContext) {
         return plugin.onLoaded(pluginContext);

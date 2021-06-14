@@ -1,4 +1,4 @@
-package com.darkan.plugins.aiodiv;
+package com.darkan.plugins.aiowisp;
 
 import kraken.plugin.api.Actions;
 import kraken.plugin.api.Client;
@@ -17,11 +17,11 @@ import com.darkan.kraken.world.WorldObject;
 import com.darkan.kraken.world.WorldTile;
 import com.darkan.plugins.PluginSkeleton;
 
-public class AIODiv extends PluginSkeleton {
+public class AIOWispGathering extends PluginSkeleton {
 
 	/**
 	 * TODO
-	 * Chronicle absorbtion prayer support
+	 * Chronicle absorption prayer support
 	 * Better prioritization of enriched
 	 */
 	
@@ -29,12 +29,12 @@ public class AIODiv extends PluginSkeleton {
 	private static final WorldObject ELDER_RIFT = new WorldObject(66522, new WorldTile(4273, 6318, 0));
 	private static final WorldObject ELDER_RIFT_CACHE = new WorldObject(93494, new WorldTile(4273, 6318, 0));
 	
-	private DivConfig config;
+	private WispConfig config;
 	private int startXp;
 	private int startEnergy;
 	
-	public AIODiv() {
-		super("Trent AIO Divination", 1500);
+	public AIOWispGathering() {
+		super("AIO Wisp Gathering", 1500);
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class AIODiv extends PluginSkeleton {
 				
 		if (Inventory.isFull()) {
 			setState("Inventory full. Finding closest rift...");
-			if (config == DivConfig.ELDER) {
+			if (config == WispConfig.ELDER) {
 				setState("Inventory full. Clicking closest rift...");
 				ELDER_RIFT.interact(Actions.MENU_EXECUTE_OBJECT1);
 				if (LocalTime.now().getMinute() >= 0 && LocalTime.now().getMinute() <= 10)
@@ -86,7 +86,7 @@ public class AIODiv extends PluginSkeleton {
 	}
 	
 	public void detectLocation() {
-		for (DivConfig c : DivConfig.values()) {
+		for (WispConfig c : WispConfig.values()) {
 			Npc n = Npcs.closest(npc -> c.getNormalNpcs().contains(npc.getId()));
 			if (n != null) {
 				config = c;

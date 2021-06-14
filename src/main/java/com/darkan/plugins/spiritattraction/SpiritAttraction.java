@@ -23,7 +23,7 @@ public class SpiritAttraction extends PluginSkeleton {
 	private int spirits = 0;
 	
 	public SpiritAttraction() {
-		super("Trent Spirit Attraction", 2000);
+		super("Spirit Attraction", 2000);
 	}
 
 	@Override

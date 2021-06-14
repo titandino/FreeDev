@@ -1,10 +1,10 @@
-package com.darkan.plugins.aiodiv;
+package com.darkan.plugins.aiowisp;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public enum DivConfig {
+public enum WispConfig {
 	PALE(new Integer[] { 18150, 18173 }, new Integer[] { }),
 	FLICKERING(new Integer[] { 18151, 18174 }, new Integer[] { 18152 }),
 	BRIGHT(new Integer[] { 18153, 18176 }, new Integer[] { 18154 }),
@@ -23,7 +23,7 @@ public enum DivConfig {
 	private Set<Integer> normalNpcs;
 	private Set<Integer> enrichedNpcs;
 	
-	private DivConfig(Integer[] normalNpcs, Integer[] enrichedNpcs) {
+	private WispConfig(Integer[] normalNpcs, Integer[] enrichedNpcs) {
 		this.normalNpcs = new HashSet<>(Arrays.asList(normalNpcs));
 		this.enrichedNpcs = new HashSet<>(Arrays.asList(enrichedNpcs));
 	}

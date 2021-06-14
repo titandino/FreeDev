@@ -55,7 +55,7 @@ public abstract class PluginSkeleton extends AbstractPlugin {
 			Player self = Players.self();
 			if(self == null) {
 				state = "Finding local player...";
-				return 3600;
+				return 600;
 			}
 			
 			currDelay = loopDelay;
