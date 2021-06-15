@@ -38,17 +38,20 @@ public class AIOWispGathering extends PluginSkeleton {
 	}
 	
 	@Override
-	public void loop(Player self) {
+	public boolean onStart(Player self) {
 		if (config == null) {
 			setState("Detecting location and starting...");
 			detectLocation();
 			startXp = Client.getStatById(Client.DIVINATION).getXp();
 			startEnergy = Inventory.count(ENERGIES);
 			start();
-			sleep(3600);
-			return;
+			return false;
 		}
-				
+		return true;
+	}
+	
+	@Override
+	public void loop(Player self) {
 		if (Inventory.isFull()) {
 			setState("Inventory full. Finding closest rift...");
 			if (config == WispConfig.ELDER) {

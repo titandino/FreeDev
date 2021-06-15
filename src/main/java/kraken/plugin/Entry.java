@@ -1,7 +1,6 @@
 package kraken.plugin;
 
-import com.darkan.plugins.aiowisp.AIOWispGathering;
-
+import com.darkan.plugins.anachroniaagility.AnachroniaAgility;
 import kraken.plugin.api.*;
 
 /**
@@ -10,7 +9,7 @@ import kraken.plugin.api.*;
  */
 public class Entry {
 
-    private static final AbstractPlugin plugin = new AIOWispGathering();
+    private static final AbstractPlugin plugin = new AnachroniaAgility();
 
     public static boolean onLoaded(PluginContext pluginContext) {
         return plugin.onLoaded(pluginContext);

@@ -14,8 +14,13 @@ public class Area2di {
     }
 
     public Area2di(Vector2i begin, Vector2i end) {
-        this.begin = begin;
-        this.end = end;
+    	if (begin.getX() > end.getX() || begin.getY() > end.getY()) {
+	        this.begin = end;
+	        this.end = begin;
+    	} else {
+    		 this.begin = begin;
+ 	        this.end = end;
+    	}
     }
 
     /**

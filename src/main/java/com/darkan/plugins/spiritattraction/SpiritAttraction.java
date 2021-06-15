@@ -25,6 +25,11 @@ public class SpiritAttraction extends PluginSkeleton {
 	public SpiritAttraction() {
 		super("Spirit Attraction", 2000);
 	}
+	
+	@Override
+	public boolean onStart(Player self) {
+		return true;
+	}
 
 	@Override
 	public void loop(Player self) {

@@ -1,8 +1,16 @@
 package com.darkan.kraken.world;
 
+import com.darkan.kraken.util.Util;
+
+import kraken.plugin.api.Vector3i;
+
 public class WorldTile {
 	private short x, y;
 	private byte plane;
+	
+	public WorldTile(int x, int y) {
+		this(x, y, 0);
+	}
 
 	public WorldTile(int x, int y, int plane) {
 		this.x = (short) x;
@@ -134,6 +142,14 @@ public class WorldTile {
 
 	public boolean withinDistance(WorldTile tile) {
 		return withinDistance(tile, 14);
+	}
+	
+	public int getDistance(Vector3i tile) {
+		return Util.getDistanceI(getX(), getY(), tile.getX(), tile.getY());
+	}
+	
+	public int getDistance(WorldTile tile) {
+		return Util.getDistanceI(getX(), getY(), tile.getX(), tile.getY());
 	}
 
 	public int getCoordFaceX(int sizeX) {

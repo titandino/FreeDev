@@ -2,7 +2,6 @@ package kraken.plugin;
 
 import kraken.plugin.api.*;
 
-import static kraken.plugin.api.Actions.MENU_EXECUTE_NPC1;
 import static kraken.plugin.api.Client.MINING;
 import static kraken.plugin.api.Player.ADRENALINE;
 
