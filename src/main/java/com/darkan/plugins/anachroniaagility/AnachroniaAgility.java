@@ -1,5 +1,7 @@
 package com.darkan.plugins.anachroniaagility;
 
+import com.darkan.kraken.inter.Equipment;
+import com.darkan.kraken.util.Util;
 import com.darkan.plugins.PluginSkeleton;
 
 import kraken.plugin.api.Actions;
@@ -61,12 +63,13 @@ public class AnachroniaAgility extends PluginSkeleton {
 					return;
 				currNode.getObject().interact(Actions.MENU_EXECUTE_OBJECT1);
 			}
+			if (Util.random(25) == 0)
+				Equipment.clickSlot(3, Equipment.OFFHAND);
 			sleep(2500);
 		} else {
 			setState("Checking if we should move to "+next+"...");
 			if (next.getArea().inside(self.getGlobalPosition()))
 				currNode = next;
-				
 		}
 	}
 	

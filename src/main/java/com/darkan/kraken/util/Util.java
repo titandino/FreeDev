@@ -17,5 +17,14 @@ public class Util {
 		return ((int) Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)));
 	}
 
-
+	public static final int random(int min, int max) {
+		final int n = Math.abs(max - min);
+		return Math.min(min, max) + (n == 0 ? 0 : random(n));
+	}
+	
+	public static final int random(int maxValue) {
+		if (maxValue <= 0)
+			return 0;
+		return RANDOM.nextInt(maxValue);
+	}
 }
