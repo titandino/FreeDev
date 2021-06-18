@@ -43,7 +43,7 @@ public class ImGui {
     public static native void input(String text, byte[] input);
 
     /**
-     * Draws a text input box in the current UI context. This input box will be positioned automatically.
+     * Draws an integer input box in the current UI context. This input box will be positioned automatically.
      */
     public static native int intInput(String text, int v);
 
