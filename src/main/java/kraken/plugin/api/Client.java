@@ -106,4 +106,34 @@ public class Client {
      * @return The projected point, or NULL if projection failed.
      */
     public static native Vector2i worldToScreen(Vector3 vec);
+
+    /**
+     * Projects multiple world points to the screen.
+     *
+     * Good for projecting tile points, model points, etc.
+     *
+     * @param in The input vectors to project.
+     * @return If all points were successfully projected.
+     */
+    public static boolean multiWorldToScreen(Vector3[] in, Vector2i[] out) {
+        if (in.length != out.length) {
+            return false;
+        }
+
+        for (int i = 0; i < in.length; i++) {
+            Vector3 v = in[i];
+            if (v == null) {
+                return false;
+            }
+
+            Vector2i projected = worldToScreen(v);
+            if (projected == null) {
+                return false;
+            }
+
+            out[i] = projected;
+        }
+
+        return true;
+    }
 }
