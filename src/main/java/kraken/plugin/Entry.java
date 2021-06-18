@@ -1,6 +1,7 @@
 package kraken.plugin;
 
-import com.darkan.plugins.anachroniaagility.AnachroniaAgility;
+import com.darkan.plugins.pkavoider.PKAvoider;
+
 import kraken.plugin.api.*;
 
 /**
@@ -9,7 +10,7 @@ import kraken.plugin.api.*;
  */
 public class Entry {
 
-    private static final AbstractPlugin plugin = new AnachroniaAgility();
+    private static final AbstractPlugin plugin = new PKAvoider();
 
     public static boolean onLoaded(PluginContext pluginContext) {
         return plugin.onLoaded(pluginContext);
