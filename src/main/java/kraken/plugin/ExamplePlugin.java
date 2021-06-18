@@ -146,4 +146,11 @@ public class ExamplePlugin extends AbstractPlugin {
         }
     }
 
+    @Override
+    public void onPaintOverlay() {
+        ImGui.freeText("Free Text", new Vector2i(15, 15), 0xff0000ff);
+        ImGui.freeLine(new Vector2i(15, 15), new Vector2i(45, 45), 0xff0000ff);
+        ImGui.freePoly4(new Vector2i(150, 150), new Vector2i(158, 167), new Vector2i(132, 154), new Vector2i(128, 128), 0xff0000ff);
+    }
+
 }
