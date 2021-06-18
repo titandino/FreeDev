@@ -22,4 +22,8 @@ public class Entry {
         plugin.onPaint();
     }
 
+    public static void onPaintOverlay() {
+        plugin.onPaintOverlay();
+    }
+
 }

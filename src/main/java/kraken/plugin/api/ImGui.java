@@ -57,4 +57,8 @@ public class ImGui {
      */
     public static native void freeLine(Vector2i a, Vector2i b, int color);
 
+    /**
+     * Draws a 4-point polygon onto the screen.
+     */
+    public static native void freePoly4(Vector2i a, Vector2i b, Vector2i c, Vector2i d, int color);
 }

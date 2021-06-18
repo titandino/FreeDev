@@ -31,4 +31,11 @@ public abstract class AbstractPlugin {
 
     }
 
+    /**
+     * Called when the client's 3d overlay is being painted.
+     */
+    public void onPaintOverlay() {
+
+    }
+
 }
