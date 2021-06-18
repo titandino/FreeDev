@@ -79,6 +79,27 @@ public class Client {
     public static native int getCurrentHealth();
 
     /**
+     * Retrieves the maximum health of the local player.
+     *
+     * @return The maximum health of the local player.
+     */
+    public static native int getMaxHealth();
+
+    /**
+     * Retrieves the current prayer of the local player.
+     *
+     * @return The current prayer of the local player.
+     */
+    public static native int getCurrentPrayer();
+
+    /**
+     * Retrieves the maximum prayer of the local player.
+     *ac
+     * @return The maximum prayer of the local player.
+     */
+    public static native int getMaxPrayer();
+
+    /**
      * Projects a world point to the screen.
      *
      * @param vec The world point to project.
