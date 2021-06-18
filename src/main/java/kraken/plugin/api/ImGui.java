@@ -15,5 +15,6 @@ public class ImGui {
     public static native boolean button(String text);
     public static native void input(String text, byte[] input);
     public static native int intInput(String text, int v);
+    public static native void freeText(String text, Vector2i pos, int color);
 
 }

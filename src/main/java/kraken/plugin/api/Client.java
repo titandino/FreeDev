@@ -70,4 +70,19 @@ public class Client {
      * @return The found ConVar with the provided id, or NULL if one was not found.
      */
     public static native ConVar getConVarById(int id);
+
+    /**
+     * Retrieves the current health of the local player.
+     *
+     * @return The current health of the local player.
+     */
+    public static native int getCurrentHealth();
+
+    /**
+     * Projects a world point to the screen.
+     *
+     * @param vec The world point to project.
+     * @return The projected point, or NULL if projection failed.
+     */
+    public static native Vector2i worldToScreen(Vector3 vec);
 }
