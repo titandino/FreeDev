@@ -55,6 +55,6 @@ public class ImGui {
     /**
      * Draws a line onto the screen.
      */
-    public static native void freeLine(String text, Vector2i a, Vector2i b, int color);
+    public static native void freeLine(Vector2i a, Vector2i b, int color);
 
 }
