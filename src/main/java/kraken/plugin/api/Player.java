@@ -45,6 +45,27 @@ public class Player extends Entity {
      */
     public native boolean isAnimationPlaying();
 
+    /**
+     * Retrieves the server index of the entity being interacted with.
+     *
+     * @return The server index of the entity being interacted with.
+     */
+    public native int getInteractingIndex();
+
+    /**
+     * Retrieves the entity being interacted with.
+     *
+     * @return The entity being interacted with.
+     */
+    public Entity getInteracting() {
+        int index = getInteractingIndex();
+        if (index == -1) {
+            return null;
+        }
+
+        return Entities.byServerIndex(index);
+    }
+
     @Override
     public String toString() {
         return "Player{" +

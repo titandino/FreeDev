@@ -32,10 +32,38 @@ public class Npc extends Entity {
     public native int getHealth();
 
     /**
+     * Retrieves the server index of the entity being interacted with.
+     *
+     * @return The server index of the entity being interacted with.
+     */
+    public native int getInteractingIndex();
+
+    /**
      * Interacts with this NPC.
      */
     public void interact(int type) {
         Actions.entity(this, type);
+    }
+
+    /**
+     * Retrieves the entity being interacted with.
+     *
+     * @return The entity being interacted with.
+     */
+    public Entity getInteracting() {
+        int index = getInteractingIndex();
+        if (index == -1) {
+            return null;
+        }
+
+        return Entities.byServerIndex(index);
+    }
+
+    @Override
+    public String toString() {
+        return "Npc{" +
+                "serverIndex=" + getServerIndex() +
+                '}';
     }
 
 }

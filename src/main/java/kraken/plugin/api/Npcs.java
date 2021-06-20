@@ -15,4 +15,14 @@ public class Npcs {
      */
     public static native Npc closest(Filter<Npc> filter);
 
+    /**
+     * Finds a NPC by their server side index.
+     *
+     * @param index The server index to search for.
+     * @return The found NPC, or NULL if one was not found.
+     */
+    public static Npc byServerIndex(int index) {
+        return closest((n) -> n.getServerIndex() == index);
+    }
+
 }
