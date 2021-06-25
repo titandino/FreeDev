@@ -91,6 +91,11 @@ public class ExamplePlugin extends AbstractPlugin {
             ImGui.label(" -> GlobalPos= " + self.getGlobalPosition());
             ImGui.label(" -> ScenePos= " + self.getScenePosition());
             ImGui.label(" -> Adrenaline= " + self.getStatusBarFill(ADRENALINE));
+
+            Entity interacting = self.getInteracting();
+            if (interacting != null) {
+                ImGui.label(" -> Interacting= " + interacting.getName());
+            }
         }
 
         Npc firstNpc = Npcs.closest((npc) -> npc.getName() != null && !npc.getName().isEmpty());
@@ -101,6 +106,11 @@ public class ExamplePlugin extends AbstractPlugin {
             ImGui.label(" -> Health= " + firstNpc.getHealth());
             ImGui.label(" -> GlobalPos= " + firstNpc.getGlobalPosition());
             ImGui.label(" -> ScenePos= " + firstNpc.getScenePosition());
+
+            Entity interacting = firstNpc.getInteracting();
+            if (interacting != null) {
+                ImGui.label(" -> Interacting= " + interacting.getName());
+            }
         }
 
         SceneObject firstObj = SceneObjects.closest((obj) -> obj.getName() != null && !obj.getName().isEmpty());
