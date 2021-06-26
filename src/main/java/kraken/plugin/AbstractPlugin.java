@@ -1,5 +1,6 @@
 package kraken.plugin;
 
+import kraken.plugin.api.ConVar;
 import kraken.plugin.api.PluginContext;
 
 public abstract class AbstractPlugin {
@@ -35,6 +36,21 @@ public abstract class AbstractPlugin {
      * Called when the client's 3d overlay is being painted.
      */
     public void onPaintOverlay() {
+
+    }
+
+    /**
+     * Called when the value of a convar changes. Has up to 500ms delay.
+     */
+    public void onConVarChanged(ConVar conv, int oldValue, int newValue) {
+
+    }
+
+    /**
+     * Called when a widget is opened or closed. Has up to 500ms delay. A
+     * widget object is not accepted because the widget may be destroyed at this point.
+     */
+    public void onWidgetVisibilityChanged(int id, boolean visible) {
 
     }
 

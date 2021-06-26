@@ -58,4 +58,20 @@ public class Entry {
         }
     }
 
+    public static void onConVarChanged(ConVar conv, int oldValue, int newValue) {
+        try {
+            plugin.onConVarChanged(conv, oldValue, newValue);
+        } catch (Throwable t) {
+            printStackTrace("onPaintOverlay", t);
+        }
+    }
+
+    public static void onWidgetVisibilityChanged(int id, boolean visible) {
+        try {
+            plugin.onWidgetVisibilityChanged(id, visible);
+        } catch (Throwable t) {
+            printStackTrace("onPaintOverlay", t);
+        }
+    }
+
 }

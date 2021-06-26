@@ -163,4 +163,13 @@ public class ExamplePlugin extends AbstractPlugin {
         ImGui.freePoly4(new Vector2i(150, 150), new Vector2i(158, 167), new Vector2i(132, 154), new Vector2i(128, 128), 0xff0000ff);
     }
 
+    @Override
+    public void onConVarChanged(ConVar conv, int oldValue, int newValue) {
+        Debug.log("Connection variable changed! " + oldValue + " " + newValue);
+    }
+
+    @Override
+    public void onWidgetVisibilityChanged(int id, boolean visible) {
+        Debug.log("Widget visibility changed! " + id + " " + visible);
+    }
 }
