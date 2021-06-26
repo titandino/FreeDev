@@ -62,7 +62,7 @@ public class Entry {
         try {
             plugin.onConVarChanged(conv, oldValue, newValue);
         } catch (Throwable t) {
-            printStackTrace("onPaintOverlay", t);
+            printStackTrace("onConVarChanged", t);
         }
     }
 
@@ -70,7 +70,7 @@ public class Entry {
         try {
             plugin.onWidgetVisibilityChanged(id, visible);
         } catch (Throwable t) {
-            printStackTrace("onPaintOverlay", t);
+            printStackTrace("onWidgetVisibilityChanged", t);
         }
     }
 
