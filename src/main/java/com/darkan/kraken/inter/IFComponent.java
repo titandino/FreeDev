@@ -1,6 +1,8 @@
 package com.darkan.kraken.inter;
 
 import kraken.plugin.api.Actions;
+import kraken.plugin.api.Widget;
+import kraken.plugin.api.Widgets;
 
 public class IFComponent {
 	
@@ -12,11 +14,15 @@ public class IFComponent {
 		this.componentId = componentId;
 	}
 
-	public void click(int option, int slotId) {
+	public void clickComponent(int option, int slotId) {
 		Actions.menu(Actions.MENU_EXECUTE_WIDGET, option, slotId, getHash(), 1);
 	}
 	
 	public int getHash() {
 		return id << 16 | componentId;
+	}
+	
+	public Widget[] getChildren() {
+		return Widgets.getGroupById(id).getWidgets()[componentId].getChildren();
 	}
 }

@@ -3,7 +3,6 @@ package com.darkan.plugins.aiowisp;
 import kraken.plugin.api.Actions;
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Inventory;
 import kraken.plugin.api.Npc;
 import kraken.plugin.api.Npcs;
 import kraken.plugin.api.Player;
@@ -13,6 +12,7 @@ import kraken.plugin.api.Time;
 
 import java.time.LocalTime;
 
+import com.darkan.kraken.inter.Interfaces;
 import com.darkan.kraken.world.WorldObject;
 import com.darkan.kraken.world.WorldTile;
 import com.darkan.plugins.PluginSkeleton;
@@ -43,7 +43,7 @@ public class AIOWispGathering extends PluginSkeleton {
 			setState("Detecting location and starting...");
 			detectLocation();
 			startXp = Client.getStatById(Client.DIVINATION).getXp();
-			startEnergy = Inventory.count(ENERGIES);
+			startEnergy = Interfaces.getInventory().count(ENERGIES);
 			start();
 			return false;
 		}
@@ -52,7 +52,7 @@ public class AIOWispGathering extends PluginSkeleton {
 	
 	@Override
 	public void loop(Player self) {
-		if (Inventory.isFull()) {
+		if (Interfaces.getInventory().isFull()) {
 			setState("Inventory full. Finding closest rift...");
 			if (config == WispConfig.ELDER) {
 				setState("Inventory full. Clicking closest rift...");
@@ -84,7 +84,7 @@ public class AIOWispGathering extends PluginSkeleton {
 
 	@Override
 	public void paint(long runtime) {
-		ImGui.label("Energy p/h: " + Time.perHour(runtime, Inventory.count(ENERGIES) - startEnergy));
+		ImGui.label("Energy p/h: " + Time.perHour(runtime, Interfaces.getInventory().count(ENERGIES) - startEnergy));
 		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.DIVINATION).getXp() - startXp));
 	}
 	

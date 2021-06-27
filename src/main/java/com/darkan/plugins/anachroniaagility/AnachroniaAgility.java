@@ -1,19 +1,19 @@
 package com.darkan.plugins.anachroniaagility;
 
-import com.darkan.kraken.inter.Equipment;
-import com.darkan.kraken.util.Util;
+import com.darkan.kraken.entity.MyPlayer;
+import com.darkan.kraken.inter.Interfaces;
+import com.darkan.kraken.item.Item;
 import com.darkan.plugins.PluginSkeleton;
 
 import kraken.plugin.api.Actions;
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Inventory;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
 
 public class AnachroniaAgility extends PluginSkeleton {
 	
-	private static final int PAGE_ID = 47925;
+	public static final int PAGE_ID = 47925, ENHANCED_EXCALIBUR = 14632, AUGMENTED_ENHANCED_EXCALIBUR = 36619;
 	
 	private int startXp;
 	private int startPages;
@@ -28,7 +28,7 @@ public class AnachroniaAgility extends PluginSkeleton {
 	public boolean onStart(Player self) {
 		setState("Starting up...");
 		startXp = Client.getStatById(Client.AGILITY).getXp();
-		startPages = Inventory.count(PAGE_ID);
+		startPages = Interfaces.getInventory().count(PAGE_ID);
 		if (currNode == null) {
 			for (AgilityNode node : AgilityNode.values()) {
 				setState("Checking if "+node+" is good to start at...");
@@ -63,8 +63,11 @@ public class AnachroniaAgility extends PluginSkeleton {
 					return;
 				currNode.getObject().interact(Actions.MENU_EXECUTE_OBJECT1);
 			}
-			if (Util.random(25) == 0)
-				Equipment.clickSlot(3, Equipment.OFFHAND);
+			Item excal = Interfaces.getEquipment().getItemById(ENHANCED_EXCALIBUR, AUGMENTED_ENHANCED_EXCALIBUR);
+			if (excal != null && MyPlayer.getHealthPerc() < 40) {
+				excal.click(3);
+				sleep(5000);
+			}
 			sleep(2500);
 		} else {
 			setState("Checking if we should move to "+next+"...");
@@ -95,7 +98,7 @@ public class AnachroniaAgility extends PluginSkeleton {
 	public void paint(long runtime) {
 		ImGui.label("Current obstacle: " + currNode.name());
 		ImGui.label("Direction: " + (reverse ? "counter-clockwise" : "clockwise"));
-		ImGui.label("Pages p/h: " + Time.perHour(runtime, Inventory.count(PAGE_ID) - startPages));
+		ImGui.label("Pages p/h: " + Time.perHour(runtime, Interfaces.getInventory().count(PAGE_ID) - startPages));
 		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.AGILITY).getXp() - startXp));
 	}
 
