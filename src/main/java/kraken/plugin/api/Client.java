@@ -79,10 +79,61 @@ public class Client {
     public static native int getCurrentHealth();
 
     /**
+     * Retrieves the maximum health of the local player.
+     *
+     * @return The maximum health of the local player.
+     */
+    public static native int getMaxHealth();
+
+    /**
+     * Retrieves the current prayer of the local player.
+     *
+     * @return The current prayer of the local player.
+     */
+    public static native int getCurrentPrayer();
+
+    /**
+     * Retrieves the maximum prayer of the local player.
+     *ac
+     * @return The maximum prayer of the local player.
+     */
+    public static native int getMaxPrayer();
+
+    /**
      * Projects a world point to the screen.
      *
      * @param vec The world point to project.
      * @return The projected point, or NULL if projection failed.
      */
     public static native Vector2i worldToScreen(Vector3 vec);
+
+    /**
+     * Projects multiple world points to the screen.
+     *
+     * Good for projecting tile points, model points, etc.
+     *
+     * @param in The input vectors to project.
+     * @return If all points were successfully projected.
+     */
+    public static boolean multiWorldToScreen(Vector3[] in, Vector2i[] out) {
+        if (in.length != out.length) {
+            return false;
+        }
+
+        for (int i = 0; i < in.length; i++) {
+            Vector3 v = in[i];
+            if (v == null) {
+                return false;
+            }
+
+            Vector2i projected = worldToScreen(v);
+            if (projected == null) {
+                return false;
+            }
+
+            out[i] = projected;
+        }
+
+        return true;
+    }
 }

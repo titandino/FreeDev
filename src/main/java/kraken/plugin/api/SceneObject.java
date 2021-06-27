@@ -18,6 +18,13 @@ public class SceneObject extends Entity {
     public native int getId();
 
     /**
+     * Determines if this object has been hidden.
+     *
+     * @return If this object has been hidden.
+     */
+    public native boolean hidden();
+
+    /**
      * Interacts with this object.
      */
     public void interact(int type) {

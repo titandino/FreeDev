@@ -68,4 +68,5 @@ public class Entity {
     public int hashCode() {
         return Objects.hash(internal1, internal2, internal3);
     }
+
 }

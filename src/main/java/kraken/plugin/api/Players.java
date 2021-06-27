@@ -22,4 +22,13 @@ public class Players {
      */
     public static native Player closest(Filter<Player> filter);
 
+    /**
+     * Finds a player by their server side index.
+     *
+     * @param index The server index to search for.
+     * @return The found player, or NULL if one was not found.
+     */
+    public static Player byServerIndex(int index) {
+        return closest((p) -> p.getServerIndex() == index);
+    }
 }

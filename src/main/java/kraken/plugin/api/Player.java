@@ -26,6 +26,12 @@ public class Player extends Entity {
     public native boolean isMoving();
 
     /**
+     * Determines if a status bar is active.
+     * @return If the status bar with the provided id is active.
+     */
+    public native boolean isStatusBarActive(int id);
+
+    /**
      * Retrieves the fill of a status bar (0-1.)
      * @return The fill of a status bar.
      */
@@ -44,6 +50,27 @@ public class Player extends Entity {
      * @return If this player has an animation playing.
      */
     public native boolean isAnimationPlaying();
+
+    /**
+     * Retrieves the server index of the entity being interacted with.
+     *
+     * @return The server index of the entity being interacted with.
+     */
+    public native int getInteractingIndex();
+
+    /**
+     * Retrieves the entity being interacted with.
+     *
+     * @return The entity being interacted with.
+     */
+    public Entity getInteracting() {
+        int index = getInteractingIndex();
+        if (index == -1) {
+            return null;
+        }
+
+        return Entities.byServerIndex(index);
+    }
 
     @Override
     public String toString() {

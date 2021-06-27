@@ -26,6 +26,10 @@ public class Actions {
     public static final int MENU_EXECUTE_DIALOGUE = 16;
     public static final int MENU_EXECUTE_SELECTABLE = 17;
     public static final int MENU_EXECUTE_SELECT = 18;
+    public static final int MENU_EXECUTE_OBJECT3 = 19;
+    public static final int MENU_EXECUTE_OBJECT4 = 20;
+    public static final int MENU_EXECUTE_OBJECT5 = 21;
+    public static final int MENU_EXECUTE_OBJECT6 = 22;
 
     /**
      * Executes a synthetic menu action.

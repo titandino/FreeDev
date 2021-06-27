@@ -66,6 +66,11 @@ public class ExamplePlugin extends AbstractPlugin {
             ImGui.label(" -> GlobalPos= " + self.getGlobalPosition());
             ImGui.label(" -> ScenePos= " + self.getScenePosition());
             ImGui.label(" -> Adrenaline= " + self.getStatusBarFill(ADRENALINE));
+
+            Entity interacting = self.getInteracting();
+            if (interacting != null) {
+                ImGui.label(" -> Interacting= " + interacting.getName());
+            }
         }
 
         Npc firstNpc = Npcs.closest((npc) -> npc.getName() != null && !npc.getName().isEmpty());
@@ -76,6 +81,11 @@ public class ExamplePlugin extends AbstractPlugin {
             ImGui.label(" -> Health= " + firstNpc.getHealth());
             ImGui.label(" -> GlobalPos= " + firstNpc.getGlobalPosition());
             ImGui.label(" -> ScenePos= " + firstNpc.getScenePosition());
+
+            Entity interacting = firstNpc.getInteracting();
+            if (interacting != null) {
+                ImGui.label(" -> Interacting= " + interacting.getName());
+            }
         }
 
         SceneObject firstObj = SceneObjects.closest((obj) -> obj.getName() != null && !obj.getName().isEmpty());
@@ -121,4 +131,20 @@ public class ExamplePlugin extends AbstractPlugin {
         }
     }
 
+    @Override
+    public void onPaintOverlay() {
+        ImGui.freeText("Free Text", new Vector2i(15, 15), 0xff0000ff);
+        ImGui.freeLine(new Vector2i(15, 15), new Vector2i(45, 45), 0xff0000ff);
+        ImGui.freePoly4(new Vector2i(150, 150), new Vector2i(158, 167), new Vector2i(132, 154), new Vector2i(128, 128), 0xff0000ff);
+    }
+
+    @Override
+    public void onConVarChanged(ConVar conv, int oldValue, int newValue) {
+        Debug.log("Connection variable changed! " + oldValue + " " + newValue);
+    }
+
+    @Override
+    public void onWidgetVisibilityChanged(int id, boolean visible) {
+        Debug.log("Widget visibility changed! " + id + " " + visible);
+    }
 }
