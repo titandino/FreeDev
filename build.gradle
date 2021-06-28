@@ -2,13 +2,15 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'com.darkan'
+version '2.1'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-
+	implementation 'com.github.jponge:lzma-java:1.2'
+	implementation 'org.apache.commons:commons-compress:1.18'
+	implementation 'org.xerial:sqlite-jdbc:3.32.3.2'
 }
