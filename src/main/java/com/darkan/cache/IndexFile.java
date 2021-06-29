@@ -25,16 +25,6 @@ class IndexFile implements Closeable, AutoCloseable {
 			getMaxArchiveStmt = connection.prepareStatement("SELECT MAX(`KEY`) FROM `cache`;");
 			getArchiveDataStmt = connection.prepareStatement("SELECT `DATA` FROM `cache` WHERE `KEY` = ?;");
 			getReferenceDataStmt = connection.prepareStatement("SELECT `DATA` FROM `cache_index` WHERE `KEY` = 1;");
-			putArchiveDataStmt = connection.prepareStatement("INSERT INTO `cache`(`KEY`, `DATA`, `VERSION`, `CRC`) VALUES(?, ?, ?, ?) ON CONFLICT(`KEY`) DO UPDATE SET `DATA` = ?, `VERSION` = ?, `CRC` = ? WHERE `KEY` = ?;");
-			putReferenceDataStmt = connection.prepareStatement("INSERT INTO `cache_index`(`KEY`, `DATA`, `VERSION`, `CRC`) VALUES(1, ?, ?, ?) ON CONFLICT(`KEY`) DO UPDATE SET `DATA` = ?, `VERSION` = ?, `CRC` = ? WHERE `KEY` = 1;");
-		} catch (SQLException e) {
-			System.err.println("Error initializing index");
-			e.printStackTrace();
-		}
-	}
-
-	public void init() {
-		try {
 			connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cache`(`KEY` INTEGER PRIMARY KEY, `DATA` BLOB, `VERSION` INTEGER, `CRC` INTEGER);").executeUpdate();
 			connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cache_index`(`KEY` INTEGER PRIMARY KEY, `DATA` BLOB, `VERSION` INTEGER, `CRC` INTEGER);").executeUpdate();
 		} catch (SQLException e) {

@@ -31,7 +31,7 @@ class Container {
 			int decompressedSize = compression == Compression.NONE ? 0 : data.getInt();
 			byte[] compressed = new byte[size];
 			if (data.remaining() < compressed.length) {
-				System.out.println("Buffer underflow: " + data.remaining() + " -> " + compressed.length);
+				System.out.println("Buffer underflow: " + data.remaining() + " -> " + compressed.length + " -> " + decompressedSize);
 			}
 			data.get(compressed);
 			int version = data.remaining() >= 2 ? data.getShort() & 0xffff : -1;
