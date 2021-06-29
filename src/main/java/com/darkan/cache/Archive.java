@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-class Archive {
+public class Archive {
 		public int id;
 		public int name;
 		public int crc = 0;
@@ -14,9 +14,18 @@ class Archive {
 	    public int compressedSize = 0;
 	    public int hash = 0;
 
-	    private boolean loaded = false;
+	    public boolean loaded = false;
 	    public boolean requiresUpdate = false;
 	    public Map<Integer, ArchiveFile> files = new HashMap<>();
+	    
+	    public Archive(int id) {
+	    	this(id, 0);
+	    }
+	    
+	    public Archive(int id, int name) {
+	    	this.id = id;
+	    	this.name = name;
+	    }
 
 	    public void putFile(int id, byte[] data) {
 	        requiresUpdate = true;
@@ -37,66 +46,68 @@ class Archive {
 	        }
 
 	        buffer.position(buffer.limit() - 1);
-	        int numChunks = buffer.get().toInt() & 0xff;
+	        int numChunks = buffer.get() & 0xff;
 
 	        int size = files.size();
 	        int[][] chunkSizes = new int[numChunks][size];
-	        int sizes = IntArray(size);
-	        val offsets = IntArray(size);
-	        val ids = files.keys.sorted().toIntArray();
+	        int[] sizes = new int[size];
+	        int[] offsets = new int[size];
+	        int[] ids = files.keySet().stream().mapToInt(Integer::intValue).toArray();
 
 	        buffer.position(buffer.limit() - 1 - numChunks * (size * 4));
-	        for (chunk in 0 until numChunks) {
-	            var chunkSize = 0
-	            for (file in 0 until size) {
-	                val delta = buffer.int
-	                chunkSize += delta
+	        for (int chunk = 0;chunk < numChunks;chunk++) {
+	            int chunkSize = 0;
+	            for (int file = 0;file < size;file++) {
+	                int delta = buffer.getInt();
+	                chunkSize += delta;
 
-	                chunkSizes[chunk][file] = chunkSize
-	                sizes[file] += chunkSize
+	                chunkSizes[chunk][file] = chunkSize;
+	                sizes[file] += chunkSize;
 	            }
 	        }
 
-	        for (file in 0 until size) {
-	            files[ids[file]]!!.data = ByteArray(sizes[file])
+	        for (int file = 0;file < size;file++) {
+	            files.get(ids[file]).data = new byte[sizes[file]];
 	        }
 
-	        buffer.position(0)
+	        buffer.position(0);
 
-	        for (chunk in 0 until numChunks) {
-	            for (file in 0 until size) {
-	                val chunkSize = chunkSizes[chunk][file]
+	        for (int chunk = 0;chunk < numChunks;chunk++) {
+	        	for (int file = 0;file < size;file++) {
+	                int chunkSize = chunkSizes[chunk][file];
 
-	                val offset = offsets[file]
-	                buffer.get(files[ids[file]]!!.data, offset, chunkSize)
-	                offsets[file] += chunkSize
+	                int offset = offsets[file];
+	                buffer.get(files.get(ids[file]).data, offset, chunkSize);
+	                offsets[file] += chunkSize;
 	            }
 	        }
 	    }
 
-	    fun encode(): ByteBuffer {
-	        var size = 0
-	        files.values.forEach { size += it.data.size }
-	        val buffer = ByteBuffer.allocate(1 + size + files.size * 4)
-	        if (files.size == 1) {
-	            return ByteBuffer.wrap(files[files.firstKey()]?.data ?: ByteArray(0))
+	    public ByteBuffer encode() {
+	        int size = 0;
+	        for (ArchiveFile file : files.values())
+	        	size += file.data.length;
+	        ByteBuffer buffer = ByteBuffer.allocate(1 + size + files.size() * 4);
+	        if (files.size() == 1) {
+	            return ByteBuffer.wrap(files.values().stream().findFirst().isPresent() ? files.values().stream().findFirst().get().data : new byte[0]);
 	        } else {
-	            var last = 0
-	            files.forEach {
-	                if (last > it.key) throw IllegalStateException("out of order $last, ${it.key}")
-	                buffer.put(it.value.data)
-	                last = it.key
+	            int last = 0;
+	            for (ArchiveFile file : files.values()) {
+	            	if (last > file.id) 
+	            		throw new IllegalStateException("Out of order " + last + ", " + file.id);
+	                buffer.put(file.data);
+	                last = file.id;
 	            }
-	            val filesArray = files.values.toTypedArray()
-	            for (i in filesArray.indices) {
-	                val file = filesArray[i]
-	                val fileSize = file.data.size
-	                val previousSize = if (i == 0) 0 else filesArray[i - 1].data.size
-	                buffer.putInt(fileSize - previousSize)
+	            ArchiveFile[] filesArray = (ArchiveFile[]) files.values().stream().sorted().toArray();
+	            for (int i = 0;i < filesArray.length;i++) {
+	                ArchiveFile file = filesArray[i];
+	                int fileSize = file.data.length;
+	                int previousSize = i == 0 ? 0 : filesArray[i - 1].data.length;
+	                buffer.putInt(fileSize - previousSize);
 	            }
-	            buffer.put(1)
+	            buffer.put((byte) 1);
 	        }
-	        buffer.flip()
-	        return buffer
+	        buffer.flip();
+	        return buffer;
 	    }
 	}

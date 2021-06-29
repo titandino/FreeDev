@@ -7,293 +7,292 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.CRC32;
 
-class ReferenceTable {
+import com.darkan.cache.compression.Compression;
+import com.darkan.cache.util.Utils;
+import com.darkan.cache.util.Whirlpool;
+
+public class ReferenceTable {
 	public Cache cache;
 	public int version = 0;
 	public int format = 7;
 	public int mask = 0;
+	public int index;
 	public Map<Integer, Archive> archives = new HashMap<>();
-    
-    public ReferenceTable(Cache cache, int index) {
-    	this.cache = cache;
+
+	public ReferenceTable(Cache cache, int index) {
+		this.cache = cache;
+		this.index = index;
+	}
+
+	public void update() {
+		List<Archive> toUpdate = new ArrayList<>();
+		for (Archive archive : archives.values()) {
+			if (archive.requiresUpdate)
+				toUpdate.add(archive);
+		}
+		for (Archive archive : toUpdate) {
+			archive.version++;
+			archive.requiresUpdate = false;
+			Container container = new Container(archive.encode().array(), Compression.LZMA, archive.version);
+			byte[] compressed = container.compress().array();
+			CRC32 crc = new CRC32();
+			crc.update(compressed, 0, compressed.length - 2);
+			archive.crc = (int) crc.getValue();
+			cache.write(index, archive.id, compressed, archive.version, archive.crc);
+
+			if ((mask & 0x2) != 0)
+				archive.whirlpool = Whirlpool.getHash(compressed, 0, compressed.length - 2);
+
+			System.out.println("Updating archive $index:${archive.id}");
+		}
+
+		if (!toUpdate.isEmpty())
+			bumpVersion();
+	}
+
+	public void bumpVersion() {
+		version++;
+		Container data = new Container(encode().array(), Compression.GZIP, -1);
+		byte[] compressed = data.compress().array();
+		CRC32 crc = new CRC32();
+		crc.update(compressed);
+		cache.writeReferenceTable(index, compressed, version, (int) crc.getValue());
+
+		System.out.println("Updating reference table of index " + index);
+	}
+
+	public void writeFormatInt(ByteBuffer buffer, int value) {
+		if (format >= 7) {
+			Utils.putSmartInt(buffer, value);
+		} else {
+			buffer.putShort((short) value);
+		}
+	}
+
+	public int readFormatInt(ByteBuffer buffer) {
+		if (format >= 7)
+			return Utils.getSmartInt(buffer);
+		else
+			return buffer.getShort() & 0xffff;
+	}
+
+	public ByteBuffer encode() {
+		ByteBuffer buffer = ByteBuffer.allocate(4_000_000); // TODO Is this ever enough? Or not?
+		buffer.put((byte) format);
+		if (format >= 6)
+			buffer.putInt(version);
+		buffer.put((byte) mask); // TODO Generate hash based on files
+
+		boolean hasNames = (mask & 0x1) != 0;
+		boolean hasWhirlpools = (mask & 0x2) != 0;
+		boolean hasSizes = (mask & 0x4) != 0;
+		boolean hasHashes = (mask & 0x8) != 0;
+
+		int[] archiveIds = archives.keySet().stream().sorted().mapToInt(Integer::intValue).toArray();
+
+		writeFormatInt(buffer, archives.size());
+		for (int i = 0; i < archiveIds.length; i++)
+			writeFormatInt(buffer, archiveIds[i] - ((i == 0) ? 0 : archiveIds[i - 1]));
+
+		if (hasNames) {
+			for (int i : archiveIds)
+				buffer.putInt(archives.get(i).name);
+		}
+
+		for (int i : archiveIds)
+			buffer.putInt(archives.get(i).crc);
+
+		if (hasHashes) {
+			for (int i : archiveIds)
+				buffer.putInt(archives.get(i).hash);
+		}
+
+		if (hasWhirlpools) {
+			for (int i : archiveIds)
+				buffer.put(archives.get(i).whirlpool);
+		}
+
+		if (hasSizes) {
+			for (int i : archiveIds) {
+				Archive archive = archives.get(i);
+				if (archive == null)
+					throw new IllegalStateException("Invalid archive id " + i);
+
+				buffer.putInt(archive.compressedSize);
+				buffer.putInt(archive.uncompressedSize);
+			}
+		}
+
+		for (int i : archiveIds)
+			buffer.putInt(archives.get(i).version);
+
+		int[][] archiveFileIds = new int[archives.size()][];
+		for (int i = 0; i < archiveFileIds.length; i++)
+			archiveFileIds[i] = archives.get(archiveIds[i]).files.keySet().stream().sorted().mapToInt(Integer::intValue).toArray();
+
+		for (int i : archiveIds)
+			writeFormatInt(buffer, archives.get(i).files.size());
+
+		for (int i = 0; i < archiveIds.length; i++) {
+			int[] fileIds = archiveFileIds[i];
+			for (int j = 0; j < fileIds.length; j++)
+				writeFormatInt(buffer, fileIds[j] - ((j == 0) ? 0 : fileIds[j - 1]));
+		}
+
+		if (hasNames) {
+			for (int i = 0; i < archiveIds.length; i++) {
+				Archive archive = archives.get(archiveIds[i]);
+				if (archive == null)
+					throw new IllegalStateException("invalid archive id " + archiveIds[i]);
+				int[] fileIds = archiveFileIds[i];
+				for (int j = 0; j < fileIds.length; j++)
+					buffer.putInt(archive.files.get(fileIds[j]).name);
+			}
+		}
+
+		buffer.flip();
+		return buffer;
+	}
+
+	public void decode(ByteBuffer buffer) {
+        format = buffer.get();
+        if (format < 5 || format > 7)
+            throw new IllegalArgumentException("Reference table format not in range 5..7");
+        version = (format >= 6) ? buffer.getInt() : 0;
+        mask = buffer.get();
+
+        boolean hasNames = (mask & 0x1) != 0;
+        boolean hasWhirlpools = (mask & 0x2) != 0;
+        boolean hasSizes = (mask & 0x4) != 0;
+        boolean hasHashes = (mask & 0x8) != 0;
+
+        int[] archiveIds = new int[readFormatInt(buffer)];
+        for (int i = 0;i < archiveIds.length;i++) {
+            int archiveId = readFormatInt(buffer) + ((i == 0) ? 0 : archiveIds[i - 1]);
+            archiveIds[i] = archiveId;
+            archives.put(archiveId, new Archive(archiveId));
+        }
+
+        if (hasNames) {
+            for (int archiveId : archiveIds)
+                archives.get(archiveId).name = buffer.getInt();
+        }
+
+        for (int archiveId : archiveIds)
+            archives.get(archiveId).crc = buffer.getInt();
+
+        if (hasHashes) {
+        	for (int archiveId : archiveIds)
+                archives.get(archiveId).hash = buffer.getInt();
+        }
+
+        if (hasWhirlpools) {
+        	for (int archiveId : archiveIds) {
+                byte[] whirlpool = new byte[64];
+                buffer.get(whirlpool);
+                archives.get(archiveId).whirlpool = whirlpool;
+            }
+        }
+
+        if (hasSizes) {
+        	for (int archiveId : archiveIds) {
+                Archive archive = archives.get(archiveId);
+                archive.compressedSize = buffer.getInt();
+                archive.uncompressedSize = buffer.getInt();
+            }
+        }
+
+        for (int archiveId : archiveIds)
+            archives.get(archiveId).version = buffer.getInt();
+
+        int[][] archiveFileIds = new int[archives.size()][];
+        for (int i = 0;i < archiveFileIds.length;i++)
+        	archiveFileIds[i] = new int[readFormatInt(buffer)];
+
+        for (int i = 0;i < archiveIds.length;i++) {
+            Archive archive = archives.get(archiveIds[i]);
+            int[] fileIds = archiveFileIds[i];
+            int fileId = 0;
+            for (int j = 0;j < fileIds.length;j++) {
+                fileId += readFormatInt(buffer);
+                archive.files.put(fileId, new ArchiveFile(fileId));
+                fileIds[j] = fileId;
+            }
+        }
+
+        if (hasNames) {
+        	for (int i = 0;i < archiveIds.length;i++) {
+        		Archive archive = archives.get(archiveIds[i]);
+        		int[] fileIds = archiveFileIds[i];
+                for (int j = 0;j < fileIds.length;j++)
+                    archive.files.get(fileIds[j]).name = buffer.getInt();
+            }
+        }
     }
 
-    public void update() {
-    	List<Archive> toUpdate = new ArrayList<>();
-    	for (Archive archive : archives.values()) {
-    		if (archive.requiresUpdate)
-    			toUpdate.add(archive);
-    	}
-    	for (Archive archive : toUpdate) {
-    		archive.version++;
-            archive.requiresUpdate = false;
-            Container container = Container(archive.encode().array(), ContainerCompression.LZMA, archive.version);
-            byte[] compressed = container.compress().array();
-            int crc = CRC32();
-            crc.update(compressed, 0, compressed.size - 2);
-            archive.crc = crc.value.toInt();
-            filesystem.write(index, archive.id, compressed, archive.version, archive.crc);
+	public int highestEntry() {
+		if (archives.isEmpty())
+			return 0;
+		else
+			return archives.keySet().stream().reduce((first, second) -> second).orElse(null) + 1;
+	}
 
-            if (mask and 0x2 != 0)
-                archive.whirlpool = Whirlpool.getHash(compressed, 0, compressed.size - 2);
-
-            System.out.println("Updating archive $index:${archive.id}");
-    	}
-
-        if (!toUpdate.isEmpty())
-            bumpVersion();
+	public int archiveSize() {
+        if ((mask & 0x4) != 0) {
+            int sum = 0;
+            for (Archive a : archives.values())
+                sum += a.uncompressedSize;
+            return sum;
+        } else {
+        	int sum = 0;
+            for (int key : archives.keySet()) {
+                ByteBuffer data = cache.read(index, key);
+                Container container = Container.decode(data);
+                sum += container.data.length;
+            }
+            return sum;
+        }
     }
 
-//    internal fun bumpVersion() {
-//        version++
-//        val data = Container(encode().toByteArray(), ContainerCompression.GZIP)
-//        val compressed = data.compress().array()
-//        val crc = CRC32()
-//        crc.update(compressed)
-//        filesystem.writeReferenceTable(index, compressed, version, crc.value.toInt())
-//
-//        logger.trace("Updating reference table of index $index")
-//    }
-//
-//    fun encode(): ByteBuffer {
-//        val buffer = ByteBuffer.allocate(4_000_000) // TODO Is this ever enough? Or not?
-//        buffer.put(format.toByte())
-//        if (format >= 6) buffer.putInt(version)
-//        buffer.put(mask.toByte()) // TODO Generate hash based on files
-//
-//        val hasNames = mask and 0x1 != 0
-//        val hasWhirlpools = mask and 0x2 != 0
-//        val hasSizes = mask and 0x4 != 0
-//        val hasHashes = mask and 0x8 != 0
-//
-//        val writeFormatInt: (Int) -> Unit = { value ->
-//            if (format >= 7) {
-//                buffer.putSmartInt(value)
-//            } else {
-//                buffer.putShort(value.toShort())
-//            }
-//        }
-//
-//        val archiveIds = archives.keys.sorted().toIntArray()
-//
-//        writeFormatInt(archives.size)
-//        for (i in archiveIds.indices) {
-//            writeFormatInt(archiveIds[i] - if (i == 0) 0 else archiveIds[i - 1])
-//        }
-//
-//        if (hasNames) {
-//            archiveIds.forEach {
-//                buffer.putInt((archives[it] ?: throw IllegalStateException("invalid archive id $it")).name)
-//            }
-//        }
-//
-//        archiveIds.forEach {
-//            buffer.putInt((archives[it] ?: throw IllegalStateException("invalid archive id $it")).crc)
-//        }
-//
-//        if (hasHashes) {
-//            archiveIds.forEach {
-//                buffer.putInt((archives[it] ?: throw IllegalStateException("invalid archive id $it")).hash)
-//            }
-//        }
-//
-//        if (hasWhirlpools) {
-//            archiveIds.forEach {
-//                buffer.put((archives[it] ?: throw IllegalStateException("invalid archive id $it")).whirlpool)
-//            }
-//        }
-//
-//        if (hasSizes) {
-//            archiveIds.forEach {
-//                val archive = archives[it] ?: throw IllegalStateException("invalid archive id $it")
-//
-//                buffer.putInt(archive.compressedSize)
-//                buffer.putInt(archive.uncompressedSize)
-//            }
-//        }
-//
-//        archiveIds.forEach {
-//            buffer.putInt((archives[it] ?: throw IllegalStateException("invalid archive id $it")).version)
-//        }
-//
-//        val archiveFileIds = Array(archives.size) {
-//            (archives[archiveIds[it]] ?: throw IllegalStateException("invalid archive id $it")).files.keys
-//                .sorted()
-//                .toIntArray()
-//        }
-//
-//        archiveIds.forEach {
-//            writeFormatInt((archives[it] ?: throw IllegalStateException("invalid archive id $it")).files.size)
-//        }
-//
-//        for (i in archiveIds.indices) {
-//            val fileIds = archiveFileIds[i]
-//            for (j in fileIds.indices) {
-//                writeFormatInt(fileIds[j] - if (j == 0) 0 else fileIds[j - 1])
-//            }
-//        }
-//
-//        if (hasNames) {
-//            for (i in archiveIds.indices) {
-//                val archive =
-//                    archives[archiveIds[i]] ?: throw IllegalStateException("invalid archive id ${archiveIds[i]}")
-//                val fileIds = archiveFileIds[i]
-//                for (j in fileIds.indices) {
-//                    buffer.putInt(
-//                        (archive.files[fileIds[j]]
-//                            ?: throw IllegalStateException("invalid file id ${archiveIds[i]}:${fileIds[j]}")).name
-//                    )
-//                }
-//            }
-//        }
-//
-//        buffer.flip()
-//        return buffer
-//    }
-//
-//    fun decode(buffer: ByteBuffer) {
-//        format = buffer.get().toInt()
-//        if (format !in 5..7)
-//            throw IllegalArgumentException("reference table format not in range 5..7")
-//        version = if (format >= 6) buffer.int else 0
-//        mask = buffer.get().toInt()
-//
-//        val hasNames = mask and 0x1 != 0
-//        val hasWhirlpools = mask and 0x2 != 0
-//        val hasSizes = mask and 0x4 != 0
-//        val hasHashes = mask and 0x8 != 0
-//
-//        val readFormatInt: () -> Int = if (format >= 7) {
-//            { buffer.getSmartInt() }
-//        } else {
-//            { buffer.short.toInt() and 0xffff }
-//        }
-//
-//        val archiveIds = IntArray(readFormatInt())
-//        for (i in archiveIds.indices) {
-//            val archiveId = readFormatInt() + if (i == 0) 0 else archiveIds[i - 1]
-//            archiveIds[i] = archiveId
-//            archives[archiveId] = Archive(archiveId)
-//        }
-//
-//        if (hasNames) {
-//            archiveIds.forEach {
-//                (archives[it] ?: throw IllegalStateException("invalid archive id $it")).name = buffer.int
-//            }
-//        }
-//
-//        archiveIds.forEach {
-//            (archives[it] ?: throw IllegalStateException("invalid archive id $it")).crc = buffer.int
-//        }
-//
-//        if (hasHashes) {
-//            archiveIds.forEach {
-//                (archives[it] ?: throw IllegalStateException("invalid archive id $it")).hash = buffer.int
-//            }
-//        }
-//
-//        if (hasWhirlpools) {
-//            archiveIds.forEach {
-//                val whirlpool = ByteArray(64)
-//                buffer.get(whirlpool)
-//
-//                (archives[it] ?: throw IllegalStateException("invalid archive id $it")).whirlpool = whirlpool
-//            }
-//        }
-//
-//        if (hasSizes) {
-//            archiveIds.forEach {
-//                val archive = archives[it] ?: throw IllegalStateException("invalid archive id $it")
-//
-//                archive.compressedSize = buffer.int
-//                archive.uncompressedSize = buffer.int
-//            }
-//        }
-//
-//        archiveIds.forEach {
-//            (archives[it] ?: throw IllegalStateException("invalid archive id $it")).version = buffer.int
-//        }
-//
-//        val archiveFileIds = Array(archives.size) { IntArray(readFormatInt()) }
-//
-//        for (i in archiveIds.indices) {
-//            val archive = archives[archiveIds[i]]
-//                ?: throw IllegalStateException("invalid archive id ${archiveIds[i]}")
-//            val fileIds = archiveFileIds[i]
-//            var fileId = 0
-//            for (j in fileIds.indices) {
-//                fileId += readFormatInt()
-//                archive.files[fileId] = ArchiveFile(fileId)
-//                fileIds[j] = fileId
-//            }
-//        }
-//
-//        if (hasNames) {
-//            for (i in archiveIds.indices) {
-//                val archive = archives[archiveIds[i]]
-//                    ?: throw IllegalStateException("invalid archive id ${archiveIds[i]}")
-//                val fileIds = archiveFileIds[i]
-//                for (j in fileIds.indices) {
-//                    archive.files[fileIds[j]]!!.name = buffer.int
-//                }
-//            }
-//        }
-//    }
-//
-//    fun highestEntry(): Int = if (archives.isEmpty()) 0 else archives.lastKey() + 1
-//
-//    fun archiveSize(): Int {
-//        if (mask and 0x4 != 0) {
-//            var sum = 0
-//            for (value in archives.values)
-//                sum += value.uncompressedSize
-//            return sum
-//        } else {
-//            var sum = 0
-//            for (key in archives.keys) {
-//                val data = filesystem.read(index, key) ?: throw NullPointerException("$index, $key")
-//                val container = Container.decode(data)
-//                sum += container.data.size
-//            }
-//            return sum
-//        }
-//    }
-//
-//    fun totalCompressedSize(): Long {
-//        var sum = 0L
-//        for (value in archives.values)
-//            sum += value.compressedSize
-//        return sum
-//    }
-//
-//    fun loadArchive(id: Int): Archive? {
-//        val archive = archives[id] ?: return null
-//        if (archive.loaded) return archive
-//
-//        val raw = filesystem.read(index, id) ?: return null
-//        val file = ByteBuffer.wrap(Container.decode(raw).data)
-//        archive.decode(file)
-//
-//        return archive
-//    }
-//
-//    /**
-//     * If the archive theoretically exists but cannot be loaded this returns null.
-//     */
-//    fun loadOrCreateArchive(id: Int): Archive? {
-//        val archive = archives[id]
-//        if (archive == null) {
-//            val toReturn = Archive(id)
-//            toReturn.requiresUpdate = true
-//            return toReturn
-//        }
-//        if (archive.loaded) return archive
-//
-//        val raw = filesystem.read(index, id) ?: return null
-//        val file = ByteBuffer.wrap(Container.decode(raw).data)
-//        archive.decode(file)
-//
-//        return archive
-//    }
+	public long totalCompressedSize() {
+        long sum = 0L;
+        for (Archive a : archives.values())
+            sum += a.compressedSize;
+        return sum;
+    }
+
+	public Archive loadArchive(int id) {
+        Archive archive = archives.get(id);
+        if (archive == null)
+        	return null;
+        if (archive.loaded) 
+        	return archive;
+
+        ByteBuffer raw = cache.read(index, id);
+        ByteBuffer file = ByteBuffer.wrap(Container.decode(raw).data);
+        archive.decode(file);
+
+        return archive;
+    }
+
+	/**
+     * If the archive theoretically exists but cannot be loaded this returns null.
+     */
+    public Archive loadOrCreateArchive(int id) {
+        Archive archive = archives.get(id);
+        if (archive == null) {
+            Archive toReturn = new Archive(id);
+            toReturn.requiresUpdate = true;
+            return toReturn;
+        }
+        if (archive.loaded) 
+        	return archive;
+
+        ByteBuffer raw = cache.read(index, id);
+        ByteBuffer file = ByteBuffer.wrap(Container.decode(raw).data);
+        archive.decode(file);
+
+        return archive;
+    }
 
 }

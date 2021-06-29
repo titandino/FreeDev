@@ -10,4 +10,12 @@ public class ArchiveFile {
 		this.data = data;
 		this.name = name;
 	}
+	
+	public ArchiveFile(int id, byte[] data) {
+		this(id, data, 0);
+	}
+	
+	public ArchiveFile(int id) {
+		this(id, new byte[0]);
+	}
 }

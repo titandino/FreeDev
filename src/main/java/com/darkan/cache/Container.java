@@ -10,9 +10,9 @@ import com.darkan.cache.compression.LZMA;
 
 class Container {
 
-	private byte[] data;
-	private Compression compression = Compression.LZMA;
-	private int version = -1;
+	public byte[] data;
+	public Compression compression = Compression.LZMA;
+	public int version = -1;
 	
 	public Container(byte[] data, Compression compression, int version) {
 		this.data = data;
@@ -30,6 +30,9 @@ class Container {
 	
 			int decompressedSize = compression == Compression.NONE ? 0 : data.getInt();
 			byte[] compressed = new byte[size];
+			if (data.remaining() < compressed.length) {
+				System.out.println("Buffer underflow: " + data.remaining() + " -> " + compressed.length);
+			}
 			data.get(compressed);
 			int version = data.remaining() >= 2 ? data.getShort() & 0xffff : -1;
 	
@@ -108,16 +111,4 @@ class Container {
 			return null;
 		}
     }
-	
-	public byte[] getData() {
-		return data;
-	}
-
-	public Compression getCompression() {
-		return compression;
-	}
-
-	public int getVersion() {
-		return version;
-	}
 }

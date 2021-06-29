@@ -13,4 +13,5 @@ dependencies {
 	implementation 'com.github.jponge:lzma-java:1.2'
 	implementation 'org.apache.commons:commons-compress:1.18'
 	implementation 'org.xerial:sqlite-jdbc:3.32.3.2'
+	implementation 'it.unimi.dsi:fastutil:8.2.2'
 }
