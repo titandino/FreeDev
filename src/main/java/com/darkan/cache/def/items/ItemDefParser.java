@@ -2,13 +2,15 @@ package com.darkan.cache.def.items;
 
 public class ItemDefParser {
 /*
- * int opcode = buffer.get() & 0xFF;
+  			int opcode = buffer.get() & 0xFF;
             if (opcode == 0) {
                 break;
             } else if (opcode == 1) {
                 groundModel = BufferUtil.getSmartInt(buffer);
             } else if (opcode == 2) {
                 name = BufferUtil.readString(buffer);
+            } else if (opcode == 3) {
+                BufferUtil.readString(buffer);//examine
             } else if (opcode == 4) {
                 modelZoom = buffer.getShort() & 0xFFFF;
             } else if (opcode == 5) {
@@ -34,7 +36,7 @@ public class ItemDefParser {
             } else if (opcode == 14) {
                 equipmentType = buffer.get();
             } else if (opcode == 15) {
-                //TODO
+                //TODO bool
             } else if (opcode == 16) {
                 members = true;
             } else if (opcode == 18) {
@@ -138,38 +140,9 @@ public class ItemDefParser {
                 femaleModelOffsetX = buffer.get() << 2;
                 femaleModelOffsetY = buffer.get() << 2;
                 femaleModelOffsetZ = buffer.get() << 2;
-            } else if (opcode == 127) {
-                if (groundCursors == null) {
-                    groundCursors = new int[6];
-                    Arrays.fill(groundCursors, -1);
-                }
-                int groundCursorIdx1 = buffer.get() & 0xFF;
-                int groundCursorId1 = buffer.getShort() & 0xFFFF;
-                groundCursors[groundCursorIdx1] = groundCursorId1;
-            } else if (opcode == 128) {
-                if (groundCursors == null) {
-                    groundCursors = new int[6];
-                    Arrays.fill(groundCursors, -1);
-                }
-                int groundCursorIdx2 = buffer.get() & 0xFF;
-                int groundCursorId2 = buffer.getShort() & 0xFFFF;
-                groundCursors[groundCursorIdx2] = groundCursorId2;
-            } else if (opcode == 129) {
-                if (inventoryCursors == null) {
-                    inventoryCursors = new int[5];
-                    Arrays.fill(inventoryCursors, -1);
-                }
-                int invCursorIdx1 = buffer.get() & 0xFF;
-                int invCursorId1 = buffer.getShort() & 0xFFFF;
-                inventoryCursors[invCursorIdx1] = invCursorId1;
-            } else if (opcode == 130) {
-                if (inventoryCursors == null) {
-                    inventoryCursors = new int[5];
-                    Arrays.fill(inventoryCursors, -1);
-                }
-                int invCursorIdx2 = buffer.get() & 0xFF;
-                int invCursorId2 = buffer.getShort() & 0xFFFF;
-                inventoryCursors[invCursorIdx2] = invCursorId2;
+            } else if (opcode == 127 || opcode == 128 || opcode == 129 || opcode == 130) {
+                buffer.get();
+                buffer.getShort();
             } else if (opcode == 132) {
                 int count = buffer.get() & 0xFF;
                 questIds = new int[count];
@@ -196,6 +169,8 @@ public class ItemDefParser {
                     Arrays.fill(inventoryCursors, -1);
                 }
                 inventoryCursors[opcode - 150] = buffer.getShort() & 0xFFFF;
+            } else if (opcode == 157) {
+                //TODO bool
             } else if (opcode == 161) {
                 shardItemId = buffer.getShort() & 0xFFFF;
             } else if (opcode == 162) {
@@ -205,7 +180,11 @@ public class ItemDefParser {
             } else if (opcode == 164) {
                 BufferUtil.readString(buffer);//cs shard name
             } else if (opcode == 165) {
-                //TODO
+                //TODO bool
+            } else if (opcode == 167) {
+                //TODO bool
+            } else if (opcode == 168) {
+                //TODO bool
             } else if (opcode == 242) {
                 BufferUtil.getSmartInt(buffer);
                 BufferUtil.getSmartInt(buffer);
@@ -222,8 +201,6 @@ public class ItemDefParser {
                     Object value = bool ? BufferUtil.readString(buffer) : buffer.getInt();
                     params.put(key, value);
                 }
-            } else if (opcode == 250) {
-                buffer.get();
             }
  */
 }
