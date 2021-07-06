@@ -1,5 +1,6 @@
 package kraken.plugin;
 
+import com.darkan.kraken.inter.Interfaces;
 import com.darkan.plugins.pkavoider.PKAvoider;
 
 import kraken.plugin.api.*;
@@ -71,6 +72,7 @@ public class Entry {
     public static void onWidgetVisibilityChanged(int id, boolean visible) {
         try {
             plugin.onWidgetVisibilityChanged(id, visible);
+            Interfaces.setVisibility(id, visible);
         } catch (Throwable t) {
             printStackTrace("onWidgetVisibilityChanged", t);
         }

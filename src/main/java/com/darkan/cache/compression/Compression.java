@@ -1,22 +1,27 @@
 package com.darkan.cache.compression;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public enum Compression {
-	NONE,
-	BZIP2,
-	GZIP,
-	LZMA;
+	NONE((byte) 0),
+	BZIP((byte) 1),
+	GZIP((byte) 2),
+	ZLIB((byte) 'Z', (byte) 'L', (byte) 'B');
 	
-	private static Map<Integer, Compression> MAP = new HashMap<>();
+	private byte[] header;
 	
-	static {
-		for (Compression c : Compression.values())
-			MAP.put(c.ordinal(), c);
+	private Compression(byte... header) {
+		this.header = header;
 	}
 	
-	public static Compression forId(int type) {
-		return MAP.get(type);
+	public static Compression forData(byte[] data) {
+		for (Compression c : Compression.values()) {
+			boolean matches = true;
+			for (int i = 0;i < c.header.length;i++) {
+				if (data[i] != c.header[i])
+					matches = false;
+			}
+			if (matches)
+				return c;
+		}
+		return null;
 	}
 }

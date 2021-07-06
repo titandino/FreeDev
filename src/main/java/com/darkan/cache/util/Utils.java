@@ -1,6 +1,9 @@
 package com.darkan.cache.util;
 
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class Utils {
 
@@ -131,5 +134,46 @@ public class Utils {
 		if ((buffer.get(buffer.position()) & 0xff) < 128)
 			return buffer.get() & 0xff;
 		return (buffer.getShort() & 0xffff) - 0x8000;
+	}
+
+	public static int archiveId(int id, int size) {
+		return id >> size;
+	}
+
+	public static int fileId(int id, int size) {
+		return id & (1 << size) - 1;
+	}
+
+	public static int getTriByte(ByteBuffer buffer) {
+		return (buffer.get() & 0xff << 16) + (buffer.get() & 0xff << 8) + (buffer.get() & 0xff);
+	}
+
+	public static Object getFieldValue(Object object, Field field) throws Throwable {
+		field.setAccessible(true);
+		Class<?> type = field.getType();
+		if (type == int[][].class) {
+			return Arrays.deepToString((int[][]) field.get(object));
+		} else if (type == HashMap[].class) {
+			return Arrays.toString((HashMap[]) field.get(object));
+		} else if (type == byte[].class) {
+			return Arrays.toString((byte[]) field.get(object));
+		} else if (type == int[].class) {
+			return Arrays.toString((int[]) field.get(object));
+		} else if (type == byte[].class) {
+			return Arrays.toString((byte[]) field.get(object));
+		} else if (type == short[].class) {
+			return Arrays.toString((short[]) field.get(object));
+		} else if (type == double[].class) {
+			return Arrays.toString((double[]) field.get(object));
+		} else if (type == float[].class) {
+			return Arrays.toString((float[]) field.get(object));
+		} else if (type == boolean[].class) {
+			return Arrays.toString((boolean[]) field.get(object));
+		} else if (type == Object[].class) {
+			return Arrays.toString((Object[]) field.get(object));
+		} else if (type == String[].class) {
+			return Arrays.toString((String[]) field.get(object));
+		}
+		return field.get(object);
 	}
 }

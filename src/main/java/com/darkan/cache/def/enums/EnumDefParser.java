@@ -1,55 +1,36 @@
 package com.darkan.cache.def.enums;
 
 import java.nio.ByteBuffer;
-import java.util.Map;
 
-import com.darkan.cache.Archive;
-import com.darkan.cache.ArchiveFile;
-import com.darkan.cache.Cache;
-import com.darkan.cache.ReferenceTable;
-import com.darkan.cache.ResourceType;
+import com.darkan.cache.Index;
+import com.darkan.cache.def.CacheParser;
 import com.darkan.cache.def.vars.ScriptVarType;
 import com.darkan.cache.util.Utils;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
+public class EnumDefParser extends CacheParser<EnumDef> {
 
-public class EnumDefParser {
-	private static Map<Integer, EnumDef> CACHED = new Int2ObjectAVLTreeMap<>();
-
-	public static int getMaxId(Cache cache) {
-		ReferenceTable table = cache.getReferenceTable(17);
-		if (table == null)
-			return 0;
-		int maxArchive = table.highestEntry() - 1;
-		int files = table.archives.get(maxArchive).files.keySet().stream().reduce((first, second) -> second).orElse(null);
-		return maxArchive * 256 + files;
+	@Override
+	public Index getIndex() {
+		return Index.ENUM_DEF;
+	}
+	
+	@Override
+	public int getArchiveId(int id) {
+		return Utils.archiveId(id, 8);
 	}
 
-	public static Map<Integer, EnumDef> list(Cache cache) {
-		for (int i = 0; i < getMaxId(cache) + 1; i++) {
-			EnumDef def = get(cache, i);
-			if (def == null)
-				continue;
-			CACHED.put(i, def);
-		}
-		return CACHED;
+	@Override
+	public int getFileId(int id) {
+		return Utils.fileId(id, 8);
 	}
-
-	public static EnumDef get(Cache cache, int id) {
-		if (CACHED.get(id) != null)
-			return CACHED.get(id);
-		ReferenceTable table = cache.getReferenceTable(17);
-		Archive archive = table.loadArchive(ResourceType.getArchive(id, 8));
-		ArchiveFile file = archive.files.get(ResourceType.getFile(id, 8));
-
+	
+	@Override
+	public EnumDef decode(ByteBuffer buffer) {
 		EnumDef def = new EnumDef();
-		ByteBuffer buffer = ByteBuffer.wrap(file.data);
 		while (buffer.hasRemaining()) {
 			int opcode = buffer.get() & 0xff;
-			if (opcode == 0) {
-				CACHED.put(id, def);
-				return def;
-			}
+			if (opcode == 0)
+				break;
 
 			switch (opcode) {
 			case 1:
@@ -82,7 +63,6 @@ public class EnumDefParser {
 			case 101:
 				int type = Utils.getSmallSmartInt(buffer);
 				def.keyType = ScriptVarType.getById(type);
-
 				break;
 			case 102:
 				type = Utils.getSmallSmartInt(buffer);
@@ -93,7 +73,6 @@ public class EnumDefParser {
 				throw new IllegalArgumentException("Invalid EnumDefinition opcode " + opcode);
 			}
 		}
-		CACHED.put(id, def);
 		return def;
 	}
 }

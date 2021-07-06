@@ -28,7 +28,7 @@ public enum ScriptVarType {
     WRITEINV(19, "WRITEINV", 'V', BaseVarType.INTEGER, -1),
     MESH(20, "MESH", '^', BaseVarType.INTEGER, -1),
     MAPAREA(21, "MAPAREA", '`', BaseVarType.INTEGER, -1),
-    COORDGRID(22, "COORDGRID", 'c', BaseVarType.INTEGER, -1),
+    WORLDTILE(22, "COORDGRID", 'c', BaseVarType.INTEGER, -1),
     GRAPHIC(23, "GRAPHIC", 'd', BaseVarType.INTEGER, -1),
     CHATPHRASE(24, "CHATPHRASE", 'e', BaseVarType.INTEGER, -1),
     FONTMETRICS(25, "FONTMETRICS", 'f', BaseVarType.INTEGER, -1),
@@ -36,10 +36,10 @@ public enum ScriptVarType {
     TYPE_27(27, "TYPE_27", 'h', BaseVarType.INTEGER, -1), // TODO
     JINGLE(28, "JINGLE", 'j', BaseVarType.INTEGER, -1),
     CHATCAT(29, "CHATCAT", 'k', BaseVarType.INTEGER, -1),
-    LOC(30, "LOC", 'l', BaseVarType.INTEGER, -1),
+    OBJECT(30, "LOC", 'l', BaseVarType.INTEGER, -1),
     MODEL(31, "MODEL", 'm', BaseVarType.INTEGER, -1),
     NPC(32, "NPC", 'n', BaseVarType.INTEGER, -1),
-    OBJ(33, "OBJ", 'o', BaseVarType.INTEGER, -1),
+    ITEM(33, "OBJ", 'o', BaseVarType.INTEGER, -1),
     PLAYER_UID(34, "PLAYER_UID", 'p', BaseVarType.INTEGER, -1),
     TYPE_35(35, "TYPE_35", 'r', BaseVarType.LONG, -1L), // TODO
     STRING(36, "STRING", 's', BaseVarType.STRING, ""),

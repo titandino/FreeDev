@@ -1,14 +1,12 @@
 package com.darkan.cache;
 
-import com.darkan.cache.def.enums.EnumDef;
-import com.darkan.cache.def.enums.EnumDefParser;
+import com.darkan.cache.def.structs.StructDef;
 
 public class Main {
 
 	public static void main(String[] args) {
-		Cache cache = new Cache();
-		EnumDef def = EnumDefParser.get(cache, 108);
+		StructDef def = StructDef.get(103);
 		System.out.println(def);
 	}
-	
+
 }

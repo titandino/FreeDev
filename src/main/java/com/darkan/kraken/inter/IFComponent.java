@@ -5,7 +5,7 @@ import kraken.plugin.api.Widget;
 import kraken.plugin.api.Widgets;
 
 public class IFComponent {
-	
+
 	private int id;
 	private int componentId;
 	
@@ -24,5 +24,13 @@ public class IFComponent {
 	
 	public Widget[] getChildren() {
 		return Widgets.getGroupById(id).getWidgets()[componentId].getChildren();
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public int getComponentId() {
+		return componentId;
 	}
 }
