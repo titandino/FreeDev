@@ -537,7 +537,7 @@ public class Pathing {
 				int startX = Math.max(graphBaseX, transmitRegionX << 6), startY = Math.max(graphBaseY, transmitRegionY << 6);
 				int endX = Math.min(graphBaseX + GRAPH_SIZE, (transmitRegionX << 6) + 64), endY = Math.min(graphBaseY + GRAPH_SIZE, (transmitRegionY << 6) + 64);
 				RegionInfo region = Cache.getRegion(transmitRegionX << 8 | transmitRegionY);
-				if (region.masks == null) {
+				if (region == null || region.masks == null) {
 					for (int fillX = startX; fillX < endX; fillX++)
 						for (int fillY = startY; fillY < endY; fillY++)
 							clip[fillX - graphBaseX][fillY - graphBaseY] = -1;

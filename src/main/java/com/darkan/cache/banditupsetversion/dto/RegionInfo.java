@@ -9,6 +9,8 @@ public class RegionInfo {
 	private transient int[][][] maskArr;
 	
 	public int[][][] getMasks() {
+		if (masks == null)
+			return null;
 		if (maskArr == null) {
 			maskArr = new int[4][64][64];
 			for (int mask : masks.keySet()) {

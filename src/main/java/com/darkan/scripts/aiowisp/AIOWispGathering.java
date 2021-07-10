@@ -1,21 +1,18 @@
 package com.darkan.scripts.aiowisp;
 
-import java.time.LocalTime;
-
+import com.darkan.api.accessors.NPCs;
+import com.darkan.api.accessors.WorldObjects;
+import com.darkan.api.entity.NPC;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.world.WorldObject;
-import com.darkan.api.world.WorldTile;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
-import kraken.plugin.api.Actions;
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Npc;
 import kraken.plugin.api.Npcs;
 import kraken.plugin.api.Player;
-import kraken.plugin.api.SceneObject;
-import kraken.plugin.api.SceneObjects;
 import kraken.plugin.api.Time;
 
 @Script("AIO Wisp Gatherer")
@@ -28,8 +25,6 @@ public class AIOWispGathering extends ScriptSkeleton {
 	 */
 	
 	private static final int[] ENERGIES = { 29313, 29314, 29315, 29316, 29317, 29318, 29319, 29320, 31312, 29321, 29322, 29323, 29324, 37941 };
-	private static final WorldObject ELDER_RIFT = new WorldObject(66522, new WorldTile(4273, 6318, 0));
-	private static final WorldObject ELDER_RIFT_CACHE = new WorldObject(93494, new WorldTile(4273, 6318, 0));
 	
 	private WispConfig config;
 	private int startXp;
@@ -56,29 +51,20 @@ public class AIOWispGathering extends ScriptSkeleton {
 	public void loop(Player self) {
 		if (Interfaces.getInventory().isFull()) {
 			setState("Inventory full. Finding closest rift...");
-			if (config == WispConfig.ELDER) {
+			WorldObject rift = WorldObjects.getClosestReachable(obj -> obj.hasOption("Convert memories"));
+			if (rift != null && !self.isAnimationPlaying()) {
 				setState("Inventory full. Clicking closest rift...");
-				ELDER_RIFT.interact(Actions.MENU_EXECUTE_OBJECT1);
-				if (LocalTime.now().getMinute() >= 0 && LocalTime.now().getMinute() <= 10)
-					ELDER_RIFT_CACHE.interact(Actions.MENU_EXECUTE_OBJECT1);
+				rift.interact("Convert memories");
 				sleep(2500);
-			} else {
-				SceneObject rift = SceneObjects.closest(obj -> obj != null && (obj.getId() == 87306 || obj.getId() == 93489 || obj.getId() == 66522)); //TODO API doesn't pick up 66522 for some reason..
-				if (rift != null && !self.isAnimationPlaying()) {
-					setState("Inventory full. Clicking closest rift...");
-					rift.interact(Actions.MENU_EXECUTE_OBJECT1);
-					sleep(2500);
-				}
 			}
 		} else {
 			setState("Finding closest " + config.name().toLowerCase() + " wisp...");
-			Npc wisp = Npcs.closest(npc -> config.getEnrichedNpcs().contains(npc.getId()) || npc.getName().contains("Enriched"));
+			NPC wisp = NPCs.getClosestReachable(npc -> config.getEnrichedNpcs().contains(npc.getId()) || npc.getName().contains("Enriched"));
 			if (wisp == null)
-				wisp = Npcs.closest(npc -> config.getNormalNpcs().contains(npc.getId()));
-			
+				wisp = NPCs.getClosestReachable(npc -> config.getNormalNpcs().contains(npc.getId()));
 			if (wisp != null && !self.isAnimationPlaying()) {
 				setState("Clicking closest " + config.name().toLowerCase() + " wisp...");
-				wisp.interact(Actions.MENU_EXECUTE_NPC1);
+				wisp.interact("Harvest");
 				sleep(2500);
 			}
 		}
