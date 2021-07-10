@@ -6,7 +6,6 @@ import com.darkan.api.item.Item;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
-import kraken.plugin.api.Actions;
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Player;
