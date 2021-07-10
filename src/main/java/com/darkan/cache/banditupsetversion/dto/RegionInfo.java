@@ -1,22 +1,20 @@
 package com.darkan.cache.banditupsetversion.dto;
 
+import java.util.List;
 import java.util.Map;
 
 public class RegionInfo {
 	public int id;
-	public Map<Short, Integer> masks;
+	public Map<Integer, List<Short>> masks;
 	private transient int[][][] maskArr;
 	
 	public int[][][] getMasks() {
 		if (maskArr == null) {
 			maskArr = new int[4][64][64];
-			for (int plane = 0;plane < 4;plane++) {
-				for (int x = 0;x < 64;x++) {
-					for (int y = 0;y < 64;y++) {
-						short key = (short) ((plane << 12) + (y << 6) + x);
-						maskArr[plane][x][y] = masks.get(key) == null ? 0 : masks.get(key);
-					}
-				}
+			for (int mask : masks.keySet()) {
+				List<Short> tileHashes = masks.get(mask);
+				for (short tile : tileHashes)
+					maskArr[tile >> 12][tile & 0x3F][tile >> 6 & 0x3F] = mask;
 			}
 		}
 		return maskArr;

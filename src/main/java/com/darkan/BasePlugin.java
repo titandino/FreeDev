@@ -2,14 +2,14 @@ package com.darkan;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.darkan.api.inter.Interfaces;
+import com.darkan.api.util.Util;
 import com.darkan.cache.banditupsetversion.Cache;
+import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
-import com.darkan.scripts.aiorunespan.AIORunespan;
-import com.darkan.scripts.aiowisp.AIOWispGathering;
-
 import kraken.plugin.AbstractPlugin;
 import kraken.plugin.api.ConVar;
 import kraken.plugin.api.Debug;
@@ -28,18 +28,17 @@ public final class BasePlugin extends AbstractPlugin {
         return true;
     }
     
-    private void loadScripts() {
-    	scriptTypes.put("AIO Energy Gatherer", AIOWispGathering.class);
-    	scriptTypes.put("AIO Runespan", AIORunespan.class);
-//    	try {
-//	    	List<Class<?>> classes = Utils.getClassesWithAnnotation("", Script.class);
-//	    	Debug.log(classes.toString());
-//			for (Class<?> clazz : classes)
-//				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
-//    	} catch (Exception e) {
-//    		Debug.log("Failed to load scripts: " + e.getMessage());
-//    		e.printStackTrace();
-//    	}
+    @SuppressWarnings("unchecked")
+	private void loadScripts() {
+    	try {
+	    	List<Class<?>> classes = Util.getClassesWithAnnotation("", Script.class);
+	    	Debug.log(classes.toString());
+			for (Class<?> clazz : classes)
+				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
+    	} catch (Exception e) {
+    		Debug.log("Failed to load scripts: " + e.getMessage());
+    		e.printStackTrace();
+    	}
 	}
 
 	public int onLoop() {
