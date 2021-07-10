@@ -34,7 +34,7 @@ public class PKAvoider extends ScriptSkeleton {
 			return;
 		Player player = Players.closest(p -> !p.getName().equals(self.getName()));
 		if (player != null) {
-			if (Interfaces.getEquipment().clickItem(RING_OF_FORTUNE, 2))
+			if (Interfaces.getEquipment().clickItem(RING_OF_FORTUNE, "Grand Exchange"))
 				sleep(600);
 		}
 	}

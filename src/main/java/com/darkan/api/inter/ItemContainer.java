@@ -84,4 +84,13 @@ public class ItemContainer extends IFComponent {
 		}
 		return false;
 	}
+	
+	public boolean clickItem(int itemId, String option) {
+		Item item = getItemById(itemId);
+		if (item != null) {
+			item.click(option);
+			return true;
+		}
+		return false;
+	}
 }
