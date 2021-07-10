@@ -1,6 +1,9 @@
 package com.darkan.api.item;
 
 import com.darkan.api.inter.IFComponent;
+import com.darkan.api.inter.Interfaces;
+import com.darkan.cache.banditupsetversion.Cache;
+import com.darkan.cache.banditupsetversion.dto.ItemInfo;
 
 public class Item {
 	
@@ -28,4 +31,17 @@ public class Item {
 		container.clickComponent(option, slot);
 	}
 	
+	public void click(String option) {
+		int op = -1;
+		if (container == Interfaces.getEquipment())
+			op = getDef().getEquipOpIdForName(option);
+		if (container == Interfaces.getInventory())
+			op = getDef().getInvOpIdForName(option);
+		if (op != -1)
+			click(op);
+	}	
+	
+	public ItemInfo getDef() {
+		return Cache.getItem(id);
+	}
 }

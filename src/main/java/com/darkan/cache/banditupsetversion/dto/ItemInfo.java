@@ -15,25 +15,15 @@ public class ItemInfo {
 		
 	}
 	
-	public boolean containsEquipmentOption(int optionId, String option) {
-		if (params == null)
-			return false;
-		Object wearingOption = params.get(528 + optionId);
-		if (wearingOption != null && wearingOption instanceof String)
-			return wearingOption.equals(option);
-		return false;
-	}
-
-	public String getEquipmentOption(int optionId) {
-		if (params == null)
-			return "null";
-		Object wearingOption = params.get(optionId == 4 ? 1211 : (528 + optionId));
-		if (wearingOption != null && wearingOption instanceof String)
-			return (String) wearingOption;
-		return "null";
+	public int getInvOpIdForName(String opName) {
+		for (int i = 0;i < 5;i++) {
+			if (containsInvOp(i, opName))
+				return i;
+		}
+		return -1;
 	}
 	
-	public String getInventoryOption(int optionId) {
+	public String getInvOp(int optionId) {
 		switch(id) {
 		case 6099:
 		case 6100:
@@ -60,20 +50,55 @@ public class ItemInfo {
 		return inventoryActions[optionId];
 	}
 	
-	public boolean containsOption(int i, String option) {
+	public boolean containsInvOp(int i, String option) {
 		if (inventoryActions == null || inventoryActions[i] == null || inventoryActions.length <= i)
 			return false;
-		return inventoryActions[i].equals(option);
+		return getInvOp(i).equalsIgnoreCase(option);
 	}
 
-	public boolean containsOption(String option) {
+	public boolean containsInvOp(String option) {
 		if (inventoryActions == null)
 			return false;
 		for (String o : inventoryActions) {
-			if (o == null || !o.equals(option))
+			if (o == null || !o.equalsIgnoreCase(option))
 				continue;
 			return true;
 		}
+		return false;
+	}
+	
+	public int getEquipOpIdForName(String opName) {
+		for (int i = 0;i < 5;i++) {
+			if (containsEquipOp(i, opName))
+				return i;
+		}
+		return -1;
+	}
+	
+	public String getEquipOp(int optionId) {
+		if (params == null)
+			return "null";
+		Object wearingOption = params.get(optionId == 4 ? 1211 : (528 + optionId));
+		if (wearingOption != null && wearingOption instanceof String)
+			return (String) wearingOption;
+		return "null";
+	}
+	
+	public boolean containsEquipOp(String option) {
+		if (params == null)
+			return false;
+		for (int i = 0;i < 5;i++)
+			if (containsEquipOp(i, option))
+				return true;
+		return false;
+	}
+	
+	public boolean containsEquipOp(int optionId, String option) {
+		if (params == null)
+			return false;
+		String equipOp = getEquipOp(optionId);
+		if (equipOp != null && !equipOp.equals("null") && equipOp.equalsIgnoreCase(option))
+			return true;
 		return false;
 	}
 	

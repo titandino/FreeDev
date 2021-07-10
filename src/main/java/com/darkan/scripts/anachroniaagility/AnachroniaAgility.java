@@ -57,17 +57,19 @@ public class AnachroniaAgility extends ScriptSkeleton {
 				if (next == AgilityNode.END)
 					return;
 				if (next.getReverseObj() != null)
-					next.getReverseObj().interact(Actions.MENU_EXECUTE_OBJECT1);
+					next.getReverseObj().interact(0);
 				else
-					next.getObject().interact(Actions.MENU_EXECUTE_OBJECT1);
+					next.getObject().interact(0);
 			} else {
 				if (currNode == AgilityNode.END)
 					return;
-				currNode.getObject().interact(Actions.MENU_EXECUTE_OBJECT1);
+				currNode.getObject().interact(0);
 			}
 			Item excal = Interfaces.getEquipment().getItemById(ENHANCED_EXCALIBUR, AUGMENTED_ENHANCED_EXCALIBUR);
+			if (excal == null)
+				excal = Interfaces.getInventory().getItemById(ENHANCED_EXCALIBUR, AUGMENTED_ENHANCED_EXCALIBUR);
 			if (excal != null && MyPlayer.getHealthPerc() < 40) {
-				excal.click(3);
+				excal.click("Activate");
 				sleep(5000);
 			}
 			sleep(2500);
