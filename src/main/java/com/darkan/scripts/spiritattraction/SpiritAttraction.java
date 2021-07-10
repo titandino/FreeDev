@@ -4,13 +4,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.darkan.api.accessors.NPCs;
+import com.darkan.api.entity.NPC;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
-import kraken.plugin.api.Actions;
 import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Npc;
-import kraken.plugin.api.Npcs;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
 
@@ -36,10 +35,10 @@ public class SpiritAttraction extends ScriptSkeleton {
 	@Override
 	public void loop(Player self) {
 		setState("Waiting for spirit...");
-		Npc serenSpirit = Npcs.closest(npc -> SPIRIT_NAMES.contains(npc.getName()));
+		NPC serenSpirit = NPCs.getClosestReachable(npc -> SPIRIT_NAMES.contains(npc.getName()));
 		if (serenSpirit != null) {
 			setState("Interacting with spirit...");
-			serenSpirit.interact(Actions.MENU_EXECUTE_NPC1);
+			serenSpirit.interact(0);
 			spirits++;
 			sleep(2500);
 		}
