@@ -1,6 +1,6 @@
 package com.darkan.scripts;
 
-import com.darkan.kraken.util.Util;
+import com.darkan.api.util.Util;
 
 import kraken.plugin.api.Client;
 import kraken.plugin.api.Debug;

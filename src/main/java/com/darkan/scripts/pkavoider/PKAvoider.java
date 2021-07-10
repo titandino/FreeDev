@@ -1,8 +1,8 @@
 package com.darkan.scripts.pkavoider;
 
-import com.darkan.kraken.inter.Interfaces;
-import com.darkan.kraken.util.Area;
-import com.darkan.kraken.world.WorldTile;
+import com.darkan.api.inter.Interfaces;
+import com.darkan.api.util.Area;
+import com.darkan.api.world.WorldTile;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 

@@ -1,6 +1,6 @@
 package com.darkan.scripts.aiorunespan;
 
-import com.darkan.kraken.world.WorldTile;
+import com.darkan.api.world.WorldTile;
 
 public enum PlatformConnection {
 	EARTH_1(3983, 6112, 3978, 6117), 

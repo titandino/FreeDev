@@ -4,7 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.darkan.kraken.inter.Interfaces;
+import com.darkan.api.inter.Interfaces;
+import com.darkan.cache.banditupsetversion.Cache;
 import com.darkan.scripts.ScriptSkeleton;
 import com.darkan.scripts.aiorunespan.AIORunespan;
 import com.darkan.scripts.aiowisp.AIOWispGathering;
@@ -23,6 +24,7 @@ public final class BasePlugin extends AbstractPlugin {
     public boolean onLoaded(PluginContext pluginContext) {
     	pluginContext.setName("Darkan Scripts");
     	loadScripts();
+    	Cache.loadCache();
         return true;
     }
     

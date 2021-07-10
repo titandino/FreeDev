@@ -1,5 +1,6 @@
 package com.darkan.cache.banditupsetversion;
 
+import com.darkan.cache.banditupsetversion.dto.CacheFile;
 import com.darkan.cache.banditupsetversion.dto.ItemInfo;
 import com.darkan.cache.banditupsetversion.dto.NPCInfo;
 import com.darkan.cache.banditupsetversion.dto.ObjectInfo;
@@ -13,20 +14,26 @@ import com.darkan.cache.banditupsetversion.dto.RegionInfo;
  * @author trent
  */
 public class Cache {
+	
+	private static CacheFile cache;
 
 	public static NPCInfo getNPC(int id) {
-		return null; //TODO
+		return cache.NPCS.get(id);
 	}
 	
 	public static ItemInfo getItem(int id) {
-		return null; //TODO
+		return cache.ITEMS.get(id);
 	}
 	
 	public static ObjectInfo getObject(int id) {
-		return null; //TODO
+		return cache.OBJECTS.get(id);
 	}
 	
 	public static RegionInfo getRegion(int id) {
-		return null; //TODO
+		return cache.REGIONS.get(id);
+	}
+
+	public static void loadCache() {
+		
 	}
 }

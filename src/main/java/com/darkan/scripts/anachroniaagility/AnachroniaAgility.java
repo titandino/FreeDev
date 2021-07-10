@@ -1,8 +1,8 @@
 package com.darkan.scripts.anachroniaagility;
 
-import com.darkan.kraken.entity.MyPlayer;
-import com.darkan.kraken.inter.Interfaces;
-import com.darkan.kraken.item.Item;
+import com.darkan.api.entity.MyPlayer;
+import com.darkan.api.inter.Interfaces;
+import com.darkan.api.item.Item;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 

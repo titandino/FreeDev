@@ -2,9 +2,9 @@ package com.darkan.scripts.aiowisp;
 
 import java.time.LocalTime;
 
-import com.darkan.kraken.inter.Interfaces;
-import com.darkan.kraken.world.WorldObject;
-import com.darkan.kraken.world.WorldTile;
+import com.darkan.api.inter.Interfaces;
+import com.darkan.api.world.WorldObject;
+import com.darkan.api.world.WorldTile;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 

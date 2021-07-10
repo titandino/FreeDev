@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.darkan.kraken.accessors.NPCs;
-import com.darkan.kraken.accessors.WorldObjects;
-import com.darkan.kraken.entity.NPC;
-import com.darkan.kraken.inter.Interfaces;
-import com.darkan.kraken.world.Interactable;
+import com.darkan.api.accessors.NPCs;
+import com.darkan.api.accessors.WorldObjects;
+import com.darkan.api.entity.NPC;
+import com.darkan.api.inter.Interfaces;
+import com.darkan.api.world.Interactable;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 

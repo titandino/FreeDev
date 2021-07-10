@@ -1,8 +1,8 @@
 package com.darkan.scripts.anachroniaagility;
 
-import com.darkan.kraken.util.Area;
-import com.darkan.kraken.world.WorldObject;
-import com.darkan.kraken.world.WorldTile;
+import com.darkan.api.util.Area;
+import com.darkan.api.world.WorldObject;
+import com.darkan.api.world.WorldTile;
 
 public enum AgilityNode {
 	CLIFF(new WorldObject(113738, new WorldTile(5428, 2384)), new Area(new WorldTile(5417, 2330), new WorldTile(5454, 2383))),
