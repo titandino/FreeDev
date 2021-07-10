@@ -1,0 +1,24 @@
+plugins {
+	id 'java'
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+group 'com.darkan'
+version '1.0.4'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'com.google.guava:guava:27.0.1-jre'
+	implementation 'org.apache.commons:commons-compress:1.18'
+}
+
+shadowJar {
+	archiveBaseName.set('DarkanScripts')
+	archiveClassifier.set('')
+	archiveVersion.set('')
+}
+
+build.dependsOn(shadowJar)
