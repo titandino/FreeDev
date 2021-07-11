@@ -63,7 +63,7 @@ public class AIOWispGathering extends ScriptSkeleton {
 			if (wisp != null && !self.isAnimationPlaying()) {
 				setState("Clicking closest " + config.name().toLowerCase() + " wisp...");
 				wisp.interact("Harvest");
-				sleepWhile(70000, () -> !Interfaces.getInventory().isFull());
+				sleepWhile(70000, () -> self.isAnimationPlaying() && !Interfaces.getInventory().isFull());
 			}
 		}
 	}
