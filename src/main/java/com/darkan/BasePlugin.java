@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
+import com.darkan.api.util.Logger;
 import com.darkan.api.util.Util;
-import com.darkan.cache.Cache;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 import kraken.plugin.AbstractPlugin;
@@ -24,7 +25,6 @@ public final class BasePlugin extends AbstractPlugin {
     public boolean onLoaded(PluginContext pluginContext) {
     	pluginContext.setName("FreeDev Scripts");
     	loadScripts();
-    	Cache.loadCache();
         return true;
     }
     
@@ -32,12 +32,12 @@ public final class BasePlugin extends AbstractPlugin {
 	private void loadScripts() {
     	try {
 	    	List<Class<?>> classes = Util.getClassesWithAnnotation("com.darkan.scripts", Script.class);
-	    	Debug.log(classes.toString());
 			for (Class<?> clazz : classes)
 				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
+			Debug.log("Parsed scripts: " + scriptTypes.keySet().toString());
     	} catch (Exception e) {
     		Debug.log("Failed to load scripts: " + e.getMessage());
-    		e.printStackTrace();
+    		Logger.handle(e);
     	}
 	}
 
@@ -83,10 +83,11 @@ public final class BasePlugin extends AbstractPlugin {
 
     public void onConVarChanged(ConVar conv, int oldValue, int newValue) {
     	Debug.log("Var changed: " + conv.getId() + " from " + oldValue + " -> " + newValue);
+    	MyPlayer.getVars().setVar(conv.getId(), newValue);
     }
 
     public void onWidgetVisibilityChanged(int id, boolean visible) {
-    	Debug.log("Interface visibility: " + id + " -> " + visible);
+    	//Debug.log("Interface visibility: " + id + " -> " + visible);
     	Interfaces.setVisibility(id, visible);
     }
 }

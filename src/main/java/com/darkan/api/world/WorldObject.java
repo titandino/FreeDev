@@ -1,8 +1,8 @@
 package com.darkan.api.world;
 
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.util.Util;
-import com.darkan.cache.Cache;
-import com.darkan.cache.dto.ObjectInfo;
+import com.darkan.cache.def.objects.ObjectDef;
 
 import kraken.plugin.api.Actions;
 
@@ -79,8 +79,8 @@ public class WorldObject extends WorldTile implements Interactable {
 			interact(op);
 	}
 
-	public ObjectInfo getDef() {
-		return Cache.getObject(id);
+	public ObjectDef getDef() {
+		return ObjectDef.get(id, MyPlayer.getVars());
 	}
 
 	public String getName() {

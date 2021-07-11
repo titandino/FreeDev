@@ -11,7 +11,6 @@ import com.darkan.api.pathing.EntityStrategy;
 import com.darkan.api.pathing.Pathing;
 import com.darkan.api.world.WorldTile;
 
-import kraken.plugin.api.Debug;
 import kraken.plugin.api.Filter;
 import kraken.plugin.api.Npcs;
 import kraken.plugin.api.Player;
@@ -22,7 +21,6 @@ public class NPCs {
 	public static NPC getClosestReachable(Filter<NPC> filter) {
 		Map<Integer, NPC> distanceMap = new TreeMap<Integer, NPC>();
 		List<NPC> npcs = getNearby(filter);
-		Debug.log(npcs.toString());
 		for (NPC npc : npcs) {
 			if (npc != null) {
 				int distance = getDistanceTo(npc);
@@ -33,7 +31,6 @@ public class NPCs {
 		if (distanceMap.isEmpty())
 			return null;
 		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
-		Debug.log(sortedKeys.toString());
 		Collections.sort(sortedKeys);
 		return distanceMap.get(sortedKeys.get(0));
 	}

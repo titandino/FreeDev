@@ -1,7 +1,6 @@
 package com.darkan.api.pathing;
 
-import com.darkan.cache.Cache;
-import com.darkan.cache.dto.RegionInfo;
+import com.darkan.cache.def.maps.Region;
 
 public class Pathing {
 	private static final int GRAPH_SIZE = 128;
@@ -536,13 +535,13 @@ public class Pathing {
 			for (int transmitRegionY = graphBaseY >> 6; transmitRegionY <= (graphBaseY + (GRAPH_SIZE - 1)) >> 6; transmitRegionY++) {
 				int startX = Math.max(graphBaseX, transmitRegionX << 6), startY = Math.max(graphBaseY, transmitRegionY << 6);
 				int endX = Math.min(graphBaseX + GRAPH_SIZE, (transmitRegionX << 6) + 64), endY = Math.min(graphBaseY + GRAPH_SIZE, (transmitRegionY << 6) + 64);
-				RegionInfo region = Cache.getRegion(transmitRegionX << 8 | transmitRegionY);
-				if (region == null || region.masks == null) {
+				Region region = Region.getRegion(transmitRegionX << 8 | transmitRegionY);
+				if (region == null || region.getClipMap() == null || region.getClipMap().getMasks() == null) {
 					for (int fillX = startX; fillX < endX; fillX++)
 						for (int fillY = startY; fillY < endY; fillY++)
 							clip[fillX - graphBaseX][fillY - graphBaseY] = -1;
 				} else {
-					int[][] masks = region.getMasks()[z];
+					int[][] masks = region.getClipMap().getMasks()[z];
 					for (int fillX = startX; fillX < endX; fillX++) {
 						for (int fillY = startY; fillY < endY; fillY++) {
 							clip[fillX - graphBaseX][fillY - graphBaseY] = masks[fillX & 0x3F][fillY & 0x3F];

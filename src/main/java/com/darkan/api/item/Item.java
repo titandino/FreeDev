@@ -2,8 +2,7 @@ package com.darkan.api.item;
 
 import com.darkan.api.inter.IFComponent;
 import com.darkan.api.inter.Interfaces;
-import com.darkan.cache.Cache;
-import com.darkan.cache.dto.ItemInfo;
+import com.darkan.cache.def.items.ItemDef;
 
 public class Item {
 	
@@ -41,7 +40,7 @@ public class Item {
 			click(op);
 	}	
 	
-	public ItemInfo getDef() {
-		return Cache.getItem(id);
+	public ItemDef getDef() {
+		return ItemDef.get(id);
 	}
 }

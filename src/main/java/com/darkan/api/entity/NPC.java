@@ -3,9 +3,7 @@ package com.darkan.api.entity;
 import com.darkan.api.util.Util;
 import com.darkan.api.world.Interactable;
 import com.darkan.api.world.WorldTile;
-import com.darkan.cache.Cache;
-import com.darkan.cache.dto.NPCInfo;
-
+import com.darkan.cache.def.npcs.NPCDef;
 import kraken.plugin.api.Actions;
 import kraken.plugin.api.Npc;
 
@@ -34,8 +32,8 @@ public class NPC extends Entity implements Interactable {
 		return id;
 	}
 
-	public NPCInfo getDef() {
-		return Cache.getNPC(id);
+	public NPCDef getDef() {
+		return NPCDef.get(id, MyPlayer.getVars());
 	}
 
 	@Override

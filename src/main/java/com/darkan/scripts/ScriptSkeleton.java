@@ -1,5 +1,6 @@
 package com.darkan.scripts;
 
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.util.Util;
 
 import kraken.plugin.api.Client;
@@ -52,6 +53,7 @@ public abstract class ScriptSkeleton {
 			if (!enabled) {
 				if (Client.getStatById(Client.HITPOINTS).getXp() <= 100)
 					return 0;
+				MyPlayer.getVars().clearSynced();
 				boolean started = onStart(self);
 				if (started) {
 					start();
