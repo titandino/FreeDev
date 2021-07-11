@@ -3,12 +3,12 @@ package com.darkan.cache.def.params;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import com.darkan.api.util.Utils;
 import com.darkan.cache.Cache;
-import com.darkan.cache.def.Def;
 import com.darkan.cache.def.vars.ScriptVarType;
-import com.darkan.cache.util.Utils;
 
-public class ParamDef extends Def {
+public class ParamDef {
+	public int id;
 	public int defaultInt;
 	public boolean autoDisable = true;
 	public int typeId;

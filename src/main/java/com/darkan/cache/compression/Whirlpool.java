@@ -1,4 +1,4 @@
-package com.darkan.cache.util;
+package com.darkan.cache.compression;
 
 import java.util.Arrays;
 

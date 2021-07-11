@@ -3,6 +3,7 @@ package com.darkan.api.inter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import com.darkan.api.item.Item;
 
@@ -65,6 +66,42 @@ public class ItemContainer extends IFComponent {
 		return count;
 	}
 
+	public boolean containsAny(String... exactNames) {
+		Set<String> names = new HashSet<>(Arrays.asList(Arrays.stream(exactNames).toArray(String[]::new)));
+		for (Item item : getItems())
+			if (item != null && names.contains(item.getDef().name))
+				return true;
+		return false;
+	}
+	
+	public int count(String... exactNames) {
+		Set<String> names = new HashSet<>(Arrays.asList(Arrays.stream(exactNames).toArray(String[]::new)));
+		int count = 0;
+		for (Item item : getItems()) {
+			if (item == null || !names.contains(item.getDef().name))
+				continue;
+			count += item.getAmount();
+		}
+		return count;
+	}
+	
+	public boolean containsAnyReg(String regex) {
+		for (Item item : getItems())
+			if (item != null && Pattern.matches(regex, item.getDef().name))
+				return true;
+		return false;
+	}
+	
+	public int countReg(String regex) {
+		int count = 0;
+		for (Item item : getItems()) {
+			if (item == null || !Pattern.matches(regex, item.getDef().name))
+				continue;
+			count += item.getAmount();
+		}
+		return count;
+	}
+	
 	public boolean isFull() {
 		for (Item item : getItems())
 			if (item == null)

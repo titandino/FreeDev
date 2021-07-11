@@ -3,7 +3,7 @@ package com.darkan.cache.def.vars;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.darkan.cache.util.Utils;
+import com.darkan.api.util.Utils;
 
 public enum ScriptVarType {
 	INT(0, "INT", 'i', BaseVarType.INTEGER, 0),

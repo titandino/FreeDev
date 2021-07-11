@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.darkan.api.entity.MyPlayer;
+import com.darkan.api.entity.VarManager;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Logger;
-import com.darkan.api.util.Util;
+import com.darkan.api.util.Utils;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 import kraken.plugin.AbstractPlugin;
@@ -25,13 +26,14 @@ public final class BasePlugin extends AbstractPlugin {
     public boolean onLoaded(PluginContext pluginContext) {
     	pluginContext.setName("FreeDev Scripts");
     	loadScripts();
+    	VarManager.linkVarbits();
         return true;
     }
     
     @SuppressWarnings("unchecked")
 	private void loadScripts() {
     	try {
-	    	List<Class<?>> classes = Util.getClassesWithAnnotation("com.darkan.scripts", Script.class);
+	    	List<Class<?>> classes = Utils.getClassesWithAnnotation("com.darkan.scripts", Script.class);
 			for (Class<?> clazz : classes)
 				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
 			Debug.log("Parsed scripts: " + scriptTypes.keySet().toString());

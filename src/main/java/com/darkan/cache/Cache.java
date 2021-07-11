@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import com.darkan.api.util.Logger;
-import com.darkan.cache.util.Utils;
+import com.darkan.api.util.Utils;
 
 public class Cache {
 	private static final Path PATH = Paths.get("C:/ProgramData/Jagex/RuneScape/");

@@ -2,10 +2,10 @@ package com.darkan.cache.def.enums;
 
 import java.nio.ByteBuffer;
 
+import com.darkan.api.util.Utils;
 import com.darkan.cache.Index;
 import com.darkan.cache.def.CacheParser;
 import com.darkan.cache.def.vars.ScriptVarType;
-import com.darkan.cache.util.Utils;
 
 public class EnumDefParser extends CacheParser<EnumDef> {
 

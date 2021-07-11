@@ -3,9 +3,9 @@ package com.darkan.cache.def.npcs;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import com.darkan.api.util.Utils;
 import com.darkan.cache.Index;
 import com.darkan.cache.def.CacheParser;
-import com.darkan.cache.util.Utils;
 
 public class NPCDefParser extends CacheParser<NPCDef> {
 

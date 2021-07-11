@@ -1,6 +1,6 @@
 package com.darkan.api.world;
 
-import com.darkan.api.util.Util;
+import com.darkan.api.util.Utils;
 
 import kraken.plugin.api.Vector3i;
 
@@ -151,11 +151,11 @@ public class WorldTile {
 	}
 	
 	public int getDistance(Vector3i tile) {
-		return Util.getDistanceI(getX(), getY(), tile.getX(), tile.getY());
+		return Utils.getDistanceI(getX(), getY(), tile.getX(), tile.getY());
 	}
 	
 	public int getDistance(WorldTile tile) {
-		return Util.getDistanceI(getX(), getY(), tile.getX(), tile.getY());
+		return Utils.getDistanceI(getX(), getY(), tile.getX(), tile.getY());
 	}
 
 	public int getCoordFaceX(int sizeX) {

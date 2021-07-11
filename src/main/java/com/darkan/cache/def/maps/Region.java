@@ -1,10 +1,13 @@
 package com.darkan.cache.def.maps;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.darkan.api.util.Logger;
+import com.darkan.api.util.Utils;
 import com.darkan.api.world.ObjectType;
 import com.darkan.api.world.WorldObject;
 import com.darkan.cache.Archive;
@@ -12,7 +15,6 @@ import com.darkan.cache.ArchiveFile;
 import com.darkan.cache.Cache;
 import com.darkan.cache.Index;
 import com.darkan.cache.def.objects.ObjectDef;
-import com.darkan.cache.util.Utils;
 
 public class Region {
 	
@@ -24,6 +26,7 @@ public class Region {
 	private ClipMap clipMapProj;
 	
 	public WorldObject[][][][] objects;
+	public List<WorldObject> objectList;
 	public int[][][] overlayIds;
 	public int[][][] underlayIds;
 	public byte[][][] overlayPathShapes;
@@ -223,6 +226,9 @@ public class Region {
 	public void spawnObject(WorldObject obj, int plane, int localX, int localY) {
 		if (objects == null)
             objects = new WorldObject[4][64][64][4];
+		if (objectList == null)
+			objectList = new ArrayList<>();
+		objectList.add(obj);
         objects[plane][localX][localY][obj.getSlot()] = obj;
         clip(obj, localX, localY);
 	}
@@ -382,5 +388,26 @@ public class Region {
 		if (clipMapProj == null)
 			clipMapProj = new ClipMap(regionId, true);
 		return clipMapProj;
+	}
+	
+	public List<WorldObject> getObjectList() {
+		return objectList;
+	}
+
+	public static void validateObjCoords(WorldObject object) {
+		if (object.getDef() != null && object.getDef().sizeX <= 1 && object.getDef().sizeY <= 1)
+			return;
+		Region region = Region.getRegion(object.getRegionId());
+		List<WorldObject> realObjects = region.getObjectList();
+		if (realObjects == null || realObjects.size() <= 0)
+			return;
+		for (WorldObject real : realObjects) {
+			if (real.getId() != object.getId())
+				continue;
+			if (Utils.getDistanceTo(object, real) <= 1) {
+				object.setLocation(real.getX(), real.getY(), real.getPlane());
+				return;
+			}
+		}
 	}
 }

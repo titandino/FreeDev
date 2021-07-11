@@ -3,10 +3,10 @@ package com.darkan.cache.def.objects;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import com.darkan.api.util.Utils;
 import com.darkan.api.world.ObjectType;
 import com.darkan.cache.Index;
 import com.darkan.cache.def.CacheParser;
-import com.darkan.cache.util.Utils;
 
 public class ObjectDefParser extends CacheParser<ObjectDef> {
 

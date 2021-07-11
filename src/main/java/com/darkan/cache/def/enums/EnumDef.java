@@ -6,13 +6,13 @@ import java.util.Map;
 import com.darkan.api.world.WorldTile;
 import com.darkan.cache.Cache;
 import com.darkan.cache.Constants;
-import com.darkan.cache.def.Def;
 import com.darkan.cache.def.items.ItemDef;
 import com.darkan.cache.def.npcs.NPCDef;
 import com.darkan.cache.def.structs.StructDef;
 import com.darkan.cache.def.vars.ScriptVarType;
 
-public class EnumDef extends Def {
+public class EnumDef {
+	public int id;
 	public ScriptVarType keyType = ScriptVarType.INT;
 	public ScriptVarType valueType = ScriptVarType.INT;
 	public int defaultInt = 0;

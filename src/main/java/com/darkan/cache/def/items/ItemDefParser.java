@@ -3,9 +3,9 @@ package com.darkan.cache.def.items;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import com.darkan.api.util.Utils;
 import com.darkan.cache.Index;
 import com.darkan.cache.def.CacheParser;
-import com.darkan.cache.util.Utils;
 
 public class ItemDefParser extends CacheParser<ItemDef> {
 	

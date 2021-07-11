@@ -1,6 +1,6 @@
 package com.darkan.api.entity;
 
-import com.darkan.api.util.Util;
+import com.darkan.api.util.Utils;
 import com.darkan.api.world.Interactable;
 import com.darkan.api.world.WorldTile;
 import com.darkan.cache.def.npcs.NPCDef;
@@ -38,7 +38,7 @@ public class NPC extends Entity implements Interactable {
 
 	@Override
 	public void interact(String string) {
-		int op = getDef().getOption(string);
+		int op = getDef().getOpIdForName(string);
 		if (op != -1)
 			interact(op);
 	}
@@ -47,16 +47,19 @@ public class NPC extends Entity implements Interactable {
 	public void interact(int option) {
 		if (option < 0 || option > 5)
 			return;
-		Actions.menu(Actions.MENU_EXECUTE_NPC1 + option, memNpc.getServerIndex(), 0, 0, Util.random(0, Integer.MAX_VALUE));
+		Actions.menu(Actions.MENU_EXECUTE_NPC1 + option, memNpc.getServerIndex(), 0, 0, Utils.random(0, Integer.MAX_VALUE));
 	}
 
 	public String getName() {
-		return getDef().name;
+		NPCDef def = getDef();
+		if (def == null)
+			return "";
+		return def.name;
 	}
 
 	@Override
 	public boolean hasOption(String string) {
-		return getDef().hasOption(string);
+		return getDef().containsOp(string);
 	}
 	
 	@Override

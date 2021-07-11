@@ -1,10 +1,9 @@
 package com.darkan.cache.def.vars.impl.varbits;
 
 import com.darkan.cache.Cache;
-import com.darkan.cache.def.Def;
 import com.darkan.cache.def.vars.VarDomain;
 
-public class VarbitDef extends Def {
+public class VarbitDef {
 	
 	private static VarbitDefParser PARSER = new VarbitDefParser();
 	
@@ -16,6 +15,7 @@ public class VarbitDef extends Def {
 		return PARSER;
 	}
 	
+	public int id;
 	public byte unk;
 	public int baseVar;
 	public int startBit;

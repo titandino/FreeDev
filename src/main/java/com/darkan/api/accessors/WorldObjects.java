@@ -6,24 +6,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.darkan.api.pathing.ObjectStrategy;
-import com.darkan.api.pathing.Pathing;
+import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
-
 import kraken.plugin.api.Filter;
-import kraken.plugin.api.Player;
 import kraken.plugin.api.Players;
 import kraken.plugin.api.SceneObjects;
 
 public class WorldObjects {
-
-	public static WorldObject getClosestReachable(Filter<WorldObject> filter) {
+	
+	public static WorldObject getClosest(Filter<WorldObject> filter) {
 		Map<Integer, WorldObject> distanceMap = new TreeMap<Integer, WorldObject>();
 		List<WorldObject> objects = getNearby(filter);
+		WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
 		for (WorldObject object : objects) {
 			if (object != null) {
-				int distance = getDistanceTo(object);
+				int distance = Utils.getDistanceTo(pTile, object);
 				if (distance != -1)
 					distanceMap.put(distance, object);
 			}
@@ -34,11 +32,23 @@ public class WorldObjects {
 		Collections.sort(sortedKeys);
 		return distanceMap.get(sortedKeys.get(0));
 	}
-	
-	private static int getDistanceTo(WorldObject object) {
-		Player player = Players.self();
-		WorldTile pTile = new WorldTile(player.getGlobalPosition());
-		return Pathing.getStepsTo(pTile.getX(), pTile.getY(), pTile.getPlane(), 1, new ObjectStrategy(object), false);
+
+	public static WorldObject getClosestReachable(Filter<WorldObject> filter) {
+		Map<Integer, WorldObject> distanceMap = new TreeMap<Integer, WorldObject>();
+		List<WorldObject> objects = getNearby(filter);
+		WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
+		for (WorldObject object : objects) {
+			if (object != null) {
+				int distance = Utils.getRouteDistanceTo(pTile, object);
+				if (distance != -1)
+					distanceMap.put(distance, object);
+			}
+		}
+		if (distanceMap.isEmpty())
+			return null;
+		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
+		Collections.sort(sortedKeys);
+		return distanceMap.get(sortedKeys.get(0));
 	}
 
 	public static List<WorldObject> getNearby(Filter<WorldObject> filter) {
@@ -64,9 +74,10 @@ public class WorldObjects {
 	public static List<WorldObject> getNearbyReachable() {
 		List<WorldObject> reachable = new ArrayList<>();
 		List<WorldObject> objects = getNearby();
+		WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
 		for (WorldObject object : objects) {
 			if (object != null) {
-				int distance = getDistanceTo(object);
+				int distance = Utils.getRouteDistanceTo(pTile, object);
 				if (distance != -1)
 					reachable.add(object);
 			}

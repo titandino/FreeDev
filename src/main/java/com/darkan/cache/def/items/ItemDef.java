@@ -3,12 +3,12 @@ package com.darkan.cache.def.items;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import com.darkan.api.util.Utils;
 import com.darkan.cache.Cache;
-import com.darkan.cache.def.Def;
 import com.darkan.cache.def.params.Params;
-import com.darkan.cache.util.Utils;
 
-public class ItemDef extends Def {
+public class ItemDef {
+	public int id;
 	public int modelId;
 	public String name = "";
 	public String examine;

@@ -1,7 +1,9 @@
 package com.darkan.scripts;
 
+import java.util.function.Supplier;
+
 import com.darkan.api.entity.MyPlayer;
-import com.darkan.api.util.Util;
+import com.darkan.api.util.Utils;
 
 import kraken.plugin.api.Client;
 import kraken.plugin.api.Debug;
@@ -24,6 +26,9 @@ public abstract class ScriptSkeleton {
 	
 	private int loopDelay;
 	private int currDelay;
+	
+	private Supplier<Boolean> sleepConstraint;
+	private long constraintTimeout = -1;
 	
 	private int localPlayerAtt = 0;
 	
@@ -62,14 +67,25 @@ public abstract class ScriptSkeleton {
 				return 0;
 			}
 			
+			if (sleepConstraint != null) {
+				if (!sleepConstraint.get() || System.currentTimeMillis() >= constraintTimeout)
+					sleepConstraint = null;
+				return loopDelay;
+			}
+			
 			currDelay = loopDelay;
 			loop(self);
-			return Util.gaussian(currDelay, gausVariance);
+			return Utils.gaussian(currDelay, gausVariance);
 		} catch(Exception e) {
 			error = e.toString();
 			Debug.logErr(e);
-			return Util.gaussian(2000, gausVariance);
+			return Utils.gaussian(2000, gausVariance);
 		}
+	}
+	
+	public void sleepWhile(long timeoutMillis, Supplier<Boolean> constraint) {
+		sleepConstraint = constraint;
+		constraintTimeout = System.currentTimeMillis() + timeoutMillis;
 	}
 
 	public void onPaint() {
@@ -90,7 +106,7 @@ public abstract class ScriptSkeleton {
 	}
 	
 	public final void sleep(int ms) {
-		currDelay += Util.gaussian(ms, gausVariance);
+		currDelay += Utils.gaussian(ms, gausVariance);
 	}
 	
 	public final void start() {

@@ -1,7 +1,8 @@
 package com.darkan.api.world;
 
 import com.darkan.api.entity.MyPlayer;
-import com.darkan.api.util.Util;
+import com.darkan.api.util.Utils;
+import com.darkan.cache.def.maps.Region;
 import com.darkan.cache.def.objects.ObjectDef;
 
 import kraken.plugin.api.Actions;
@@ -70,11 +71,15 @@ public class WorldObject extends WorldTile implements Interactable {
 	public void interact(int action) {
 		if (action < 0 || action >= MENU_OPS.length)
 			return;
-		Actions.menu(MENU_OPS[action], getId(), getX(), getY(), Util.random(0, Integer.MAX_VALUE));
+		
+		//TODO remove this once cracksmoke fixes his object coordinates
+		Region.validateObjCoords(this);
+		
+		Actions.menu(MENU_OPS[action], getId(), getX(), getY(), Utils.random(0, Integer.MAX_VALUE));
 	}
 	
 	public void interact(String action) {
-		int op = getDef().getOption(action);
+		int op = getDef().getOpIdForName(action);
 		if (op != -1)
 			interact(op);
 	}
@@ -89,6 +94,11 @@ public class WorldObject extends WorldTile implements Interactable {
 
 	@Override
 	public boolean hasOption(String string) {
-		return getDef().hasOption(string);
+		return getDef().containsOp(string);
+	}
+	
+	@Override
+	public String toString() {
+		return "[" + id + " (" + getName() + "), " + type + ", " + rotation + ", " + super.toString() + "]";
 	}
 }

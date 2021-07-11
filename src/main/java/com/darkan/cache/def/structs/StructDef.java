@@ -1,10 +1,10 @@
 package com.darkan.cache.def.structs;
 
 import com.darkan.cache.Cache;
-import com.darkan.cache.def.Def;
 import com.darkan.cache.def.params.Params;
 
-public class StructDef extends Def {
+public class StructDef {
+	public int id;
 	public Params params = new Params();
 	
 	private static StructDefParser PARSER = new StructDefParser();

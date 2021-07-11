@@ -5,13 +5,12 @@ import java.lang.reflect.Modifier;
 import java.util.Map;
 
 import com.darkan.api.entity.VarManager;
+import com.darkan.api.util.Utils;
 import com.darkan.cache.Cache;
-import com.darkan.cache.def.Def;
 import com.darkan.cache.def.npcs.NPCDefParser.MovementType;
 import com.darkan.cache.def.params.Params;
-import com.darkan.cache.util.Utils;
 
-public class NPCDef extends Def {
+public class NPCDef {
 	
 	private static NPCDefParser PARSER = new NPCDefParser();
 	
@@ -30,28 +29,8 @@ public class NPCDef extends Def {
 			def = NPCDef.get(def.getIdForPlayer(vars));
 		return def;
 	}
-	
-	public int getIdForPlayer(VarManager vars) {
-		if (transformTo == null || transformTo.length == 0)
-			return id;
-		if (vars == null) {
-			int varIdx = transformTo[transformTo.length - 1];
-			return varIdx;
-		}
-		int index = -1;
-		if (varpBit != -1) {
-			index = vars.getVarBit(varpBit);
-		} else if (varp != -1) {
-			index = vars.getVar(varp);
-		}
-		if (index >= 0 && index < transformTo.length - 1 && transformTo[index] != -1) {
-			return transformTo[index];
-		} else {
-			int varIdx = transformTo[transformTo.length - 1];
-			return varIdx;
-		}
-	}
 
+	public int id;
 	public Params params = new Params();
 	public int[] modelIds;
 	public String name = "";
@@ -119,6 +98,62 @@ public class NPCDef extends Def {
 	public boolean aBool4920 = true;
 	public int[] actionCursors;
 	
+	public int getIdForPlayer(VarManager vars) {
+		if (transformTo == null || transformTo.length == 0)
+			return id;
+		if (vars == null) {
+			int varIdx = transformTo[transformTo.length - 1];
+			return varIdx;
+		}
+		int index = -1;
+		if (varpBit != -1) {
+			index = vars.getVarBit(varpBit);
+		} else if (varp != -1) {
+			index = vars.getVar(varp);
+		}
+		if (index >= 0 && index < transformTo.length - 1 && transformTo[index] != -1) {
+			return transformTo[index];
+		} else {
+			int varIdx = transformTo[transformTo.length - 1];
+			return varIdx;
+		}
+	}
+	
+	public int getOpIdForName(String opName) {
+		for (int i = 0;i < 5;i++) {
+			if (containsOp(i, opName))
+				return i;
+		}
+		return -1;
+	}
+	
+	public String getOp(int optionId) {
+		if (options == null)
+			return "null";
+		if (optionId >= options.length)
+			return "null";
+		if (options[optionId] == null)
+			return "null";
+		return options[optionId];
+	}
+	
+	public boolean containsOp(int i, String option) {
+		if (options == null || options[i] == null || options.length <= i)
+			return false;
+		return getOp(i).equalsIgnoreCase(option);
+	}
+
+	public boolean containsOp(String option) {
+		if (options == null)
+			return false;
+		for (String o : options) {
+			if (o == null || !o.equalsIgnoreCase(option))
+				continue;
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder();
@@ -148,26 +183,5 @@ public class NPCDef extends Def {
 		result.append("}");
 
 		return result.toString();
-	}
-	
-	public int getOption(String action) {
-		if (options == null)
-			return -1;
-		for (int i = 0;i < options.length;i++) {
-			if (options[i] != null && options[i].equalsIgnoreCase(action))
-				return i;
-		}
-		return -1;
-	}
-	
-	public boolean hasOption(String option) {
-		if (options == null)
-			return false;
-		for (String o : options) {
-			if (o == null || !o.equalsIgnoreCase(option))
-				continue;
-			return true;
-		}
-		return false;
 	}
 }

@@ -7,23 +7,40 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.darkan.api.entity.NPC;
-import com.darkan.api.pathing.EntityStrategy;
-import com.darkan.api.pathing.Pathing;
+import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldTile;
 
 import kraken.plugin.api.Filter;
 import kraken.plugin.api.Npcs;
-import kraken.plugin.api.Player;
 import kraken.plugin.api.Players;
 
 public class NPCs {
+	
+	public static NPC getClosest(Filter<NPC> filter) {
+		Map<Integer, NPC> distanceMap = new TreeMap<Integer, NPC>();
+		List<NPC> npcs = getNearby(filter);
+		WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
+		for (NPC npc : npcs) {
+			if (npc != null) {
+				int distance = Utils.getDistanceTo(pTile, npc.getPosition());
+				if (distance != -1)
+					distanceMap.put(distance, npc);
+			}
+		}
+		if (distanceMap.isEmpty())
+			return null;
+		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
+		Collections.sort(sortedKeys);
+		return distanceMap.get(sortedKeys.get(0));
+	}
 
 	public static NPC getClosestReachable(Filter<NPC> filter) {
 		Map<Integer, NPC> distanceMap = new TreeMap<Integer, NPC>();
 		List<NPC> npcs = getNearby(filter);
+		WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
 		for (NPC npc : npcs) {
 			if (npc != null) {
-				int distance = getDistanceTo(npc);
+				int distance = Utils.getRouteDistanceTo(pTile, npc);
 				if (distance != -1)
 					distanceMap.put(distance, npc);
 			}
@@ -35,12 +52,6 @@ public class NPCs {
 		return distanceMap.get(sortedKeys.get(0));
 	}
 	
-	private static int getDistanceTo(NPC object) {
-		Player player = Players.self();
-		WorldTile pTile = new WorldTile(player.getGlobalPosition());
-		return Pathing.getStepsTo(pTile.getX(), pTile.getY(), pTile.getPlane(), 1, new EntityStrategy(object), false);
-	}
-
 	public static List<NPC> getNearby(Filter<NPC> filter) {
 		List<NPC> list = new ArrayList<>();
 		Npcs.closest(n -> {
@@ -64,9 +75,10 @@ public class NPCs {
 	public static List<NPC> getNearbyReachable() {
 		List<NPC> reachable = new ArrayList<>();
 		List<NPC> objects = getNearby();
+		WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
 		for (NPC npc : objects) {
 			if (npc != null) {
-				int distance = getDistanceTo(npc);
+				int distance = Utils.getRouteDistanceTo(pTile, npc);
 				if (distance != -1)
 					reachable.add(npc);
 			}

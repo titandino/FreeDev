@@ -4,12 +4,12 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.darkan.api.util.Utils;
 import com.darkan.cache.Archive;
 import com.darkan.cache.ArchiveFile;
 import com.darkan.cache.Cache;
 import com.darkan.cache.Index;
 import com.darkan.cache.ReferenceTable;
-import com.darkan.cache.util.Utils;
 
 public abstract class CacheParser<T> {
 	private Map<Integer, T> CACHED = new HashMap<>();

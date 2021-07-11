@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.darkan.cache.util.Utils;
+import com.darkan.api.util.Utils;
 
 public class ReferenceTable {
 	public Cache cache;

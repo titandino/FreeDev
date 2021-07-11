@@ -4,13 +4,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import com.darkan.api.entity.VarManager;
+import com.darkan.api.util.Utils;
 import com.darkan.api.world.ObjectType;
 import com.darkan.cache.Cache;
-import com.darkan.cache.def.Def;
 import com.darkan.cache.def.params.Params;
-import com.darkan.cache.util.Utils;
 
-public class ObjectDef extends Def {
+public class ObjectDef {
 	
 	private static ObjectDefParser PARSER = new ObjectDefParser();
 	
@@ -29,6 +28,7 @@ public class ObjectDef extends Def {
 		return def;
 	}
 
+	public int id;
 	public ObjectType[] types;
 	public int[][] modelIds;
 	public String name = "";
@@ -109,7 +109,31 @@ public class ObjectDef extends Def {
 	public int[] actionCursors;
 	
 
-	public boolean hasOption(String option) {
+	public int getOpIdForName(String opName) {
+		for (int i = 0;i < 5;i++) {
+			if (containsOp(i, opName))
+				return i;
+		}
+		return -1;
+	}
+	
+	public String getOp(int optionId) {
+		if (options == null)
+			return "null";
+		if (optionId >= options.length)
+			return "null";
+		if (options[optionId] == null)
+			return "null";
+		return options[optionId];
+	}
+	
+	public boolean containsOp(int i, String option) {
+		if (options == null || options[i] == null || options.length <= i)
+			return false;
+		return getOp(i).equalsIgnoreCase(option);
+	}
+
+	public boolean containsOp(String option) {
 		if (options == null)
 			return false;
 		for (String o : options) {
@@ -118,16 +142,6 @@ public class ObjectDef extends Def {
 			return true;
 		}
 		return false;
-	}
-	
-	public int getOption(String action) {
-		if (options == null)
-			return -1;
-		for (int i = 0;i < options.length;i++) {
-			if (options[i] != null && options[i].equalsIgnoreCase(action))
-				return i;
-		}
-		return -1;
 	}
 	
 	public int getIdForPlayer(VarManager vars) {
