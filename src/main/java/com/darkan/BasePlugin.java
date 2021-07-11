@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Util;
-import com.darkan.cache.banditupsetversion.Cache;
+import com.darkan.cache.Cache;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 import kraken.plugin.AbstractPlugin;

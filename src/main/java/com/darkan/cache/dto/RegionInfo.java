@@ -1,4 +1,4 @@
-package com.darkan.cache.banditupsetversion.dto;
+package com.darkan.cache.dto;
 
 import java.util.List;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package com.darkan.api.pathing;
 
-import com.darkan.cache.banditupsetversion.Cache;
-import com.darkan.cache.banditupsetversion.dto.RegionInfo;
+import com.darkan.cache.Cache;
+import com.darkan.cache.dto.RegionInfo;
 
 public class Pathing {
 	private static final int GRAPH_SIZE = 128;

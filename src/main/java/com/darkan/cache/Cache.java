@@ -1,4 +1,4 @@
-package com.darkan.cache.banditupsetversion;
+package com.darkan.cache;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -18,15 +18,13 @@ import javax.swing.JProgressBar;
 import javax.swing.WindowConstants;
 
 import com.darkan.api.util.JsonFileManager;
-import com.darkan.cache.banditupsetversion.dto.ItemInfo;
-import com.darkan.cache.banditupsetversion.dto.NPCInfo;
-import com.darkan.cache.banditupsetversion.dto.ObjectInfo;
-import com.darkan.cache.banditupsetversion.dto.RegionInfo;
+import com.darkan.cache.dto.ItemInfo;
+import com.darkan.cache.dto.NPCInfo;
+import com.darkan.cache.dto.ObjectInfo;
+import com.darkan.cache.dto.RegionInfo;
 
 /**
- * Remote API for pulling information from Trent's cache library. When I am
- * allowed back into the community, I will open source the actual source of this
- * data so other people can keep it updated instead of me.
+ * Remote API for pulling information from Trent's cache library.
  * 
  * @author trent
  */

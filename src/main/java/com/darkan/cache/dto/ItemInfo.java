@@ -1,4 +1,4 @@
-package com.darkan.cache.banditupsetversion.dto;
+package com.darkan.cache.dto;
 
 import java.util.HashMap;
 import java.util.Map;

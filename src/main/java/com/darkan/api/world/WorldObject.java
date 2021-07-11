@@ -1,8 +1,8 @@
 package com.darkan.api.world;
 
 import com.darkan.api.util.Util;
-import com.darkan.cache.banditupsetversion.Cache;
-import com.darkan.cache.banditupsetversion.dto.ObjectInfo;
+import com.darkan.cache.Cache;
+import com.darkan.cache.dto.ObjectInfo;
 
 import kraken.plugin.api.Actions;
 

@@ -2,8 +2,8 @@ package com.darkan.api.item;
 
 import com.darkan.api.inter.IFComponent;
 import com.darkan.api.inter.Interfaces;
-import com.darkan.cache.banditupsetversion.Cache;
-import com.darkan.cache.banditupsetversion.dto.ItemInfo;
+import com.darkan.cache.Cache;
+import com.darkan.cache.dto.ItemInfo;
 
 public class Item {
 	

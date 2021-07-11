@@ -3,8 +3,8 @@ package com.darkan.api.entity;
 import com.darkan.api.util.Util;
 import com.darkan.api.world.Interactable;
 import com.darkan.api.world.WorldTile;
-import com.darkan.cache.banditupsetversion.Cache;
-import com.darkan.cache.banditupsetversion.dto.NPCInfo;
+import com.darkan.cache.Cache;
+import com.darkan.cache.dto.NPCInfo;
 
 import kraken.plugin.api.Actions;
 import kraken.plugin.api.Npc;
