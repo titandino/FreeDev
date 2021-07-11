@@ -54,12 +54,7 @@ public class AIOWispGathering extends ScriptSkeleton {
 			if (rift != null && !self.isAnimationPlaying()) {
 				setState("Inventory full. Clicking closest rift...");
 				rift.interact("Convert memories");
-				sleepWhile(50000, () -> {
-					boolean contains = Interfaces.getInventory().containsAnyReg(" memory");
-					Debug.log(""+contains);
-					return contains;
-				});
-			}
+				sleepWhile(50000, () -> Interfaces.getInventory().containsAnyReg(" memory"));
 		} else {
 			setState("Finding closest " + config.name().toLowerCase() + " wisp...");
 			NPC wisp = NPCs.getClosestReachable(npc -> config.getEnrichedNpcs().contains(npc.getId()) || npc.getName().contains("Enriched"));
