@@ -52,6 +52,52 @@ public class NPCs {
 		return distanceMap.get(sortedKeys.get(0));
 	}
 	
+    public static boolean interactClosestReachable(String option, Filter<NPC> filter) {
+         Map<Integer, NPC> distanceMap = new TreeMap<Integer, NPC>();
+         List<NPC> npcs = getNearby(filter);
+         WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
+         for (NPC npc : npcs) {
+             if (npc != null) {
+                 int distance = Utils.getRouteDistanceTo(pTile, npc);
+                 if (distance != -1)
+                     distanceMap.put(distance, npc);
+             }
+         }
+         if (distanceMap.isEmpty())
+             return false;
+         List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
+         Collections.sort(sortedKeys);
+         
+        NPC closest = distanceMap.get(sortedKeys.get(0));
+         if (closest == null)
+             return false;
+         closest.interact(option);
+         return true;
+     }
+   
+     public static boolean interactClosestReachable(int option, Filter<NPC> filter) {
+        Map<Integer, NPC> distanceMap = new TreeMap<Integer, NPC>();
+        List<NPC> npcs = getNearby(filter);
+        WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
+        for (NPC npc : npcs) {
+            if (npc != null) {
+                int distance = Utils.getRouteDistanceTo(pTile, npc);
+                if (distance != -1)
+                    distanceMap.put(distance, npc);
+            }
+        }
+        if (distanceMap.isEmpty())
+            return false;
+        List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
+        Collections.sort(sortedKeys);
+        
+        NPC closest = distanceMap.get(sortedKeys.get(0));
+        if (closest == null)
+            return false;
+        closest.interact(option);
+        return true;
+    }
+	
 	public static List<NPC> getNearby(Filter<NPC> filter) {
 		List<NPC> list = new ArrayList<>();
 		Npcs.closest(n -> {
