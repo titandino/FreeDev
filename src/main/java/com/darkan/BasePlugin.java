@@ -22,7 +22,7 @@ public final class BasePlugin extends AbstractPlugin {
 	private Map<Class<? extends ScriptSkeleton>, ScriptSkeleton> scripts = new HashMap<>();
 
     public boolean onLoaded(PluginContext pluginContext) {
-    	pluginContext.setName("Darkan Scripts");
+    	pluginContext.setName("FreeDev Scripts");
     	loadScripts();
     	Cache.loadCache();
         return true;
