@@ -13,6 +13,7 @@ import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Client;
+import kraken.plugin.api.Debug;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
@@ -67,6 +68,7 @@ public class AIORunespan extends ScriptSkeleton {
 
 	private NodeInfo getBestNearbyNode() {
 		List<NodeInfo> sorted = NodeInfo.bestNodesForLevel(members, Client.getStatById(Client.RUNECRAFTING).getCurrent());
+		Debug.log(sorted.toString());
 		Set<Integer> reachableNpcs = NPCs.getNearbyReachable().stream().map(n -> n.getId()).collect(Collectors.toSet());
 		Set<Integer> reachableObjects = WorldObjects.getNearbyReachable().stream().map(o -> o.getId()).collect(Collectors.toSet());
 		

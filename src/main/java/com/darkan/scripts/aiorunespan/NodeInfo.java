@@ -24,20 +24,20 @@ public enum NodeInfo {
 	LIVING_SOUL(true, false, 70470, 90, Rune.SOUL),
 	UNDEAD_SOUL(true, false, 70471, 95, Rune.DEATH, Rune.SOUL),
 	
-	AIR_ESSLING(false, true, 15403, Rune.AIR, 1),
-	MIND_ESSLING(false, true, 15404, Rune.MIND, 1),
-	WATER_ESSLING(false, true, 15405, Rune.WATER, 5),
-	EARTH_ESSLING(false, true, 15406, Rune.EARTH, 9),
-	FIRE_ESSLING(false, true, 15407, Rune.FIRE, 14),
-	BODY_ESSHOUND(false, true, 15408, Rune.BODY, 20),
-	COSMIC_ESSHOUND(true, true, 15409, Rune.COSMIC, 27),
-	CHOAS_ESSHOUND(true, true, 15410, Rune.CHAOS, 35),
-	ASTRAL_ESSHOUND(true, true, 15411, Rune.ASTRAL, 40),
-	NATURE_ESSHOUND(true, true, 15412, Rune.NATURE, 44),
-	LAW_ESSHOUND(true, true, 15413, Rune.LAW, 54),
-	DEATH_ESSWRAITH(true, true, 15414, Rune.DEATH, 65),
-	BLOOD_ESSWRAITH(true, true, 15415, Rune.BLOOD, 77),
-	SOUL_ESSWRAITH(true, true, 15416, Rune.SOUL, 90);
+	AIR_ESSLING(false, true, 15403, 1, Rune.AIR),
+	MIND_ESSLING(false, true, 15404, 1, Rune.MIND),
+	WATER_ESSLING(false, true, 15405, 5, Rune.WATER),
+	EARTH_ESSLING(false, true, 15406, 9, Rune.EARTH),
+	FIRE_ESSLING(false, true, 15407, 14, Rune.FIRE),
+	BODY_ESSHOUND(false, true, 15408, 20, Rune.BODY),
+	COSMIC_ESSHOUND(true, true, 15409, 27, Rune.COSMIC),
+	CHOAS_ESSHOUND(true, true, 15410, 35, Rune.CHAOS),
+	ASTRAL_ESSHOUND(true, true, 15411, 40, Rune.ASTRAL),
+	NATURE_ESSHOUND(true, true, 15412, 44, Rune.NATURE),
+	LAW_ESSHOUND(true, true, 15413, 54, Rune.LAW),
+	DEATH_ESSWRAITH(true, true, 15414, 65, Rune.DEATH),
+	BLOOD_ESSWRAITH(true, true, 15415, 77, Rune.BLOOD),
+	SOUL_ESSWRAITH(true, true, 15416, 90, Rune.SOUL);
 	
 	private static Map<Integer, NodeInfo> MAP = new HashMap<>();
 	
