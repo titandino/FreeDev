@@ -53,7 +53,7 @@ public class AIOWispGathering extends ScriptSkeleton {
 			if (rift != null && !self.isAnimationPlaying()) {
 				setState("Inventory full. Clicking closest rift...");
 				rift.interact("Convert memories");
-				sleepWhile(50000, () -> Interfaces.getInventory().containsAnyReg(" memory"));
+				sleepWhile(3500, 50000, () -> Interfaces.getInventory().containsAnyReg(" memory"));
 			}
 		} else {
 			setState("Finding closest " + config.name().toLowerCase() + " wisp...");
@@ -63,7 +63,7 @@ public class AIOWispGathering extends ScriptSkeleton {
 			if (wisp != null && !self.isAnimationPlaying()) {
 				setState("Clicking closest " + config.name().toLowerCase() + " wisp...");
 				wisp.interact("Harvest");
-				sleepWhile(70000, () -> self.isAnimationPlaying() && !Interfaces.getInventory().isFull());
+				sleepWhile(3500, 70000, () -> self.isAnimationPlaying() && !Interfaces.getInventory().isFull());
 			}
 		}
 	}

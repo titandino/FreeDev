@@ -28,7 +28,8 @@ public abstract class ScriptSkeleton {
 	private int currDelay;
 	
 	private Supplier<Boolean> sleepConstraint;
-	private long constraintTimeout = -1;
+	private long sleepWhileMax = -1;
+	private long sleepWhileMin = -1;
 	
 	private int localPlayerAtt = 0;
 	
@@ -68,7 +69,7 @@ public abstract class ScriptSkeleton {
 			}
 			
 			if (sleepConstraint != null) {
-				if (!sleepConstraint.get() || System.currentTimeMillis() >= constraintTimeout)
+				if (System.currentTimeMillis() <= sleepWhileMin && (!sleepConstraint.get() || System.currentTimeMillis() >= sleepWhileMax))
 					sleepConstraint = null;
 				return loopDelay;
 			}
@@ -83,9 +84,14 @@ public abstract class ScriptSkeleton {
 		}
 	}
 	
-	public void sleepWhile(long timeoutMillis, Supplier<Boolean> constraint) {
+	public void sleepWhile(long maxTime, Supplier<Boolean> constraint) {
+		sleepWhile(-1, maxTime, constraint);
+	}
+	
+	public void sleepWhile(long minTime, long maxTime, Supplier<Boolean> constraint) {
 		sleepConstraint = constraint;
-		constraintTimeout = System.currentTimeMillis() + timeoutMillis;
+		sleepWhileMin = System.currentTimeMillis() + minTime;
+		sleepWhileMax = System.currentTimeMillis() + maxTime;
 	}
 
 	public void onPaint() {
