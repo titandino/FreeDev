@@ -24,7 +24,7 @@ public class AIORunespan extends ScriptSkeleton {
 	}
 
 	private int startXp;
-	private boolean members = false;
+	private boolean members = true;
 
 	@Override
 	public boolean onStart(Player self) {
@@ -81,6 +81,7 @@ public class AIORunespan extends ScriptSkeleton {
 
 	@Override
 	public void paintImGui(long runtime) {
+		members = ImGui.checkbox("Members", members);
 		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.RUNECRAFTING).getXp() - startXp));
 	}
 

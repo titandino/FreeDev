@@ -17,7 +17,7 @@ dependencies {
 }
 
 shadowJar {
-	archiveBaseName.set('DarkanScripts')
+	archiveBaseName.set("DarkanScripts ${version}")
 	archiveClassifier.set('')
 	archiveVersion.set('')
 }
