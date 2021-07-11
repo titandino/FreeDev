@@ -9,6 +9,7 @@ import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Client;
+import kraken.plugin.api.Debug;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Npc;
 import kraken.plugin.api.Npcs;
@@ -29,7 +30,7 @@ public class AIOWispGathering extends ScriptSkeleton {
 	private int startEnergy;
 	
 	public AIOWispGathering() {
-		super("AIO Wisp Gathering", 600);
+		super("AIO Wisp Gathering", 1000);
 	}
 	
 	@Override
@@ -53,7 +54,11 @@ public class AIOWispGathering extends ScriptSkeleton {
 			if (rift != null && !self.isAnimationPlaying()) {
 				setState("Inventory full. Clicking closest rift...");
 				rift.interact("Convert memories");
-				sleepWhile(50000, () -> Interfaces.getInventory().containsAnyReg(" memory"));
+				sleepWhile(50000, () -> {
+					boolean contains = Interfaces.getInventory().containsAnyReg(" memory");
+					Debug.log(""+contains);
+					return contains;
+				});
 			}
 		} else {
 			setState("Finding closest " + config.name().toLowerCase() + " wisp...");
@@ -63,7 +68,7 @@ public class AIOWispGathering extends ScriptSkeleton {
 			if (wisp != null && !self.isAnimationPlaying()) {
 				setState("Clicking closest " + config.name().toLowerCase() + " wisp...");
 				wisp.interact("Harvest");
-				sleepWhile(50000, () -> self.isAnimationPlaying() && !Interfaces.getInventory().isFull());
+				sleepWhile(70000, () -> !Interfaces.getInventory().isFull());
 			}
 		}
 	}

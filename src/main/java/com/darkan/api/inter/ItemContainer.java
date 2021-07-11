@@ -86,16 +86,17 @@ public class ItemContainer extends IFComponent {
 	}
 	
 	public boolean containsAnyReg(String regex) {
-		for (Item item : getItems())
-			if (item != null && Pattern.matches(regex, item.getDef().name))
+		for (Item item : getItems()) {
+			if (item != null && Pattern.compile(regex).matcher(item.getDef().name).find())
 				return true;
+		}
 		return false;
 	}
 	
 	public int countReg(String regex) {
 		int count = 0;
 		for (Item item : getItems()) {
-			if (item == null || !Pattern.matches(regex, item.getDef().name))
+			if (item == null || !Pattern.compile(regex).matcher(item.getDef().name).find())
 				continue;
 			count += item.getAmount();
 		}
