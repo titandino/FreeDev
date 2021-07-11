@@ -22,7 +22,7 @@ dependencies {
 }
 
 shadowJar {
-	archiveBaseName.set('DarkanScripts')
+	archiveBaseName.set('FreeDevScripts')
 }
 
 build.dependsOn(shadowJar)
