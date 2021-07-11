@@ -9,7 +9,6 @@ import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Client;
-import kraken.plugin.api.Debug;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Npc;
 import kraken.plugin.api.Npcs;
@@ -55,6 +54,7 @@ public class AIOWispGathering extends ScriptSkeleton {
 				setState("Inventory full. Clicking closest rift...");
 				rift.interact("Convert memories");
 				sleepWhile(50000, () -> Interfaces.getInventory().containsAnyReg(" memory"));
+			}
 		} else {
 			setState("Finding closest " + config.name().toLowerCase() + " wisp...");
 			NPC wisp = NPCs.getClosestReachable(npc -> config.getEnrichedNpcs().contains(npc.getId()) || npc.getName().contains("Enriched"));
