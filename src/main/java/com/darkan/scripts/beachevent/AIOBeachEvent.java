@@ -17,7 +17,11 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	private static Map<String, BeachActivity> ACTIVITIES = new HashMap<>();
 	
 	static {
-		ACTIVITIES.put("Sand Castles", new SandCastles());
+		ACTIVITIES.put("Construction", new SandCastles());
+		ACTIVITIES.put("Dungeoneering", new DungeoneeringHole());
+		ACTIVITIES.put("Cooking", new Barbeques());
+		ACTIVITIES.put("Farming", new PalmTrees());
+		ACTIVITIES.put("Fishing", new RockPools());
 	}
 	
 	private BeachActivity activity = ACTIVITIES.get("Sand Castles");
@@ -35,7 +39,8 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	@Override
 	public void loop(Player self) {
 		if (killClawdia && MyPlayer.getHealthPerc() > 20.0 && NPCs.interactClosest("Attack", n -> n.getName().contains("Clawdia"))) {
-			sleepWhile(3500, 50000, () -> MyPlayer.getHealthPerc() > 20.0 && NPCs.getClosest(n -> n.getName().contains("Clawdia") && n.hasOption("Attack")) != null);
+			setState("Attacking Clawdia...");
+			sleepWhile(3500, Long.MAX_VALUE, () -> getTimeSinceLastAnimation() < 4000 && MyPlayer.getHealthPerc() > 20.0 && NPCs.getClosest(n -> n.getName().contains("Clawdia") && n.hasOption("Attack")) != null);
 			return;
 		}
 		
@@ -52,7 +57,14 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	public void paintImGui(long runtime) {
 		killClawdia = ImGui.checkbox("Kill Clawdia", killClawdia);
 		
-		ImGui.label("Current activity: " + activity.getClass().getSimpleName());
+		ImGui.label("Choose skill to train:");
+		for (String name : ACTIVITIES.keySet()) {
+			boolean currActive = activity == ACTIVITIES.get(name);
+			boolean active = ImGui.checkbox(name, currActive);
+			if (active != currActive)
+				activity = ACTIVITIES.get(name);
+		}
+		
 		printGenericXpGain(runtime);
 	}
 
