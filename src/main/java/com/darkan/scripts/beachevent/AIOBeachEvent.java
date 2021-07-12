@@ -42,7 +42,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	public void loop(Player self) {
 		if (iceCreamAtts >= 7)
 			return;
-		if (getTemp() == 220) {
+		if (getTemp() == 220 && !getHighlight().contains("Happy Hour")) {
 			if (Interfaces.getInventory().clickItem("Ice cream", "Eat")) {
 				iceCreamAtts++;
 				sleep(5000);
@@ -59,6 +59,14 @@ public class AIOBeachEvent extends ScriptSkeleton {
 			activity.loop(this, self);
 	}
 	
+	public String getHighlight() {
+		try {
+			return Interfaces.getComponent(1642, 5).getText().replace("Spotlight Plot:<br>", "");
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+	}
+	
 	public int getTemp() {
 		return MyPlayer.getVars().getVarBit(28441);
 	}
@@ -72,7 +80,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	public void paintImGui(long runtime) {
 		killClawdia = ImGui.checkbox("Kill Clawdia", killClawdia);
 		
-		ImGui.label("Choose skill to train:");
+		ImGui.label("Choose skill to train: " + getHighlight());
 		for (String name : ACTIVITIES.keySet()) {
 			boolean currActive = activity == ACTIVITIES.get(name);
 			boolean active = ImGui.checkbox(name, currActive);

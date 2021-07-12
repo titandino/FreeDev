@@ -39,6 +39,10 @@ public class Interfaces {
 		return EQUIPMENT;
 	}
 
+	public static Interface get(int interfaceId) {
+		return new Interface(interfaceId);
+	}
+
 	public static IFComponent getComponent(int interfaceId, int componentId) {
 		return new IFComponent(interfaceId, componentId);
 	}

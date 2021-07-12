@@ -50,4 +50,9 @@ public class IFComponent {
 	public int getComponentId() {
 		return componentId;
 	}
+	
+	@Override
+	public String toString() {
+		return "[(" + id + "," + componentId + ") '" + getText() + "']";
+	}
 }
