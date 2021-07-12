@@ -84,8 +84,8 @@ public class WorldObjects {
 		}
 		return reachable;
 	}
-
-    public static boolean interactClosestReachable(String option, Filter<WorldObject> filter) {
+    
+    public static boolean interactClosestReachable(int option, Filter<WorldObject> filter) {
         WorldObject obj = getClosestReachable(filter);
         if (obj == null)
             return false;
@@ -93,7 +93,15 @@ public class WorldObjects {
         return true;
     }
     
-    public static boolean interactClosestReachable(int option, Filter<WorldObject> filter) {
+    public static boolean interactClosestReachable(String option) {
+        WorldObject obj = getClosestReachable(o -> o.hasOption(option));
+        if (obj == null)
+            return false;
+        obj.interact(option);
+        return true;
+    }
+
+    public static boolean interactClosestReachable(String option, Filter<WorldObject> filter) {
         WorldObject obj = getClosestReachable(filter);
         if (obj == null)
             return false;
