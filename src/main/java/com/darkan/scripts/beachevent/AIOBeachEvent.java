@@ -51,7 +51,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 		}
 		if (killClawdia && NPCs.interactClosest("Attack", n -> n.getName().contains("Clawdia"))) {
 			setState("Attacking Clawdia...");
-			sleepWhile(3500, Long.MAX_VALUE, () -> getTimeSinceLastAnimation() < 4000 && MyPlayer.getHealthPerc() > 20.0 && NPCs.getClosest(n -> n.getName().contains("Clawdia") && n.hasOption("Attack")) != null);
+			sleepWhile(3500, Long.MAX_VALUE, () -> getTimeSinceLastAnimation() < 4000 && NPCs.getClosest(n -> n.getName().contains("Clawdia") && n.hasOption("Attack")) != null);
 			return;
 		}
 		
