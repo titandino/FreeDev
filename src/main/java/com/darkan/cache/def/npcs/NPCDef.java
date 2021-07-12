@@ -21,12 +21,16 @@ public class NPCDef {
 	public static NPCDef get(int id) {
 		return PARSER.get(Cache.get(), id);
 	}
-	
 
 	public static NPCDef get(int id, VarManager vars) {
 		NPCDef def = get(id);
 		if (def != null)
 			def = NPCDef.get(def.getIdForPlayer(vars));
+		if (def == null) {
+			NPCDef empty = new NPCDef();
+			empty.id = id;
+			return def;
+		}
 		return def;
 	}
 

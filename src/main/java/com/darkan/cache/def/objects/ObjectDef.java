@@ -25,6 +25,11 @@ public class ObjectDef {
 		ObjectDef def = get(id);
 		if (def != null)
 			def = ObjectDef.get(def.getIdForPlayer(vars));
+		if (def == null) {
+			ObjectDef empty = new ObjectDef();
+			empty.id = id;
+			return def;
+		}
 		return def;
 	}
 
