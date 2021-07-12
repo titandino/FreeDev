@@ -25,6 +25,8 @@ public abstract class ScriptSkeleton {
 	private boolean enabled = false;
 	private int gausVariance = 4000;
 	
+	private long lastMyPlayerAnim;
+	
 	private long loopTimer;
 	private long lastLoop;
 	
@@ -59,6 +61,8 @@ public abstract class ScriptSkeleton {
 				state = "Finding local player... " + localPlayerAtt++;
 				return 0;
 			}
+			if (self.isAnimationPlaying())
+				lastMyPlayerAnim = System.currentTimeMillis();
 			localPlayerAtt = 0;
 			if (!enabled) {
 				if (Client.getStatById(Client.HITPOINTS).getXp() <= 100)
@@ -88,6 +92,10 @@ public abstract class ScriptSkeleton {
 			Debug.logErr(e);
 			return Utils.gaussian(2000, gausVariance);
 		}
+	}
+	
+	public long getTimeSinceLastAnimation() {
+		return System.currentTimeMillis() - lastMyPlayerAnim;
 	}
 	
 	public void sleepWhile(long maxTime, Supplier<Boolean> constraint) {
