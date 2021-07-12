@@ -13,14 +13,18 @@ public class Barbeques extends BeachActivity {
     private final Random random = new Random();
 	
 	@Override
-	public void loop(ScriptSkeleton ctx, Player self) {
+	public void loop(ScriptSkeleton ctx, Player self) {  
 	    if (cookingOption.equals("")) {
             if (random.nextBoolean())
                 cookingOption = "Use";
             else
                 cookingOption = "Chop";
 	    }
-	    if (!self.isAnimationPlaying())
-	        WorldObjects.interactClosestReachable(cookingOption);
+	    if (!self.isAnimationPlaying() && !self.isMoving()) {
+	        WorldObjects.interactClosestReachable(cookingOption, object -> cookingOption.equals("Use") ? object.getName().equals("Grill") : object.getName().equals("Large Chopping Board"));
+	        ctx.setState(cookingOption.equals("Use") ? "Grilling at the barbeques... " : "Chopping at the cutting boards...");
+	    }
+        ctx.sleepWhile(2400, Integer.MAX_VALUE, () -> self.isAnimationPlaying());
+
 	}
 }

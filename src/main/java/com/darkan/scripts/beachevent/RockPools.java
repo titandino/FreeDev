@@ -11,10 +11,15 @@ public class RockPools extends BeachActivity {
     
 	@Override
 	public void loop(ScriptSkeleton ctx, Player self) {
-	    if (!Interfaces.getInventory().isFull())
-	        NPCs.interactClosestReachable("Lure");
-	    else
+	    if (!Interfaces.getInventory().isFull()) {
+	        if (!self.isAnimationPlaying() && !self.isMoving()) {
+	            NPCs.interactClosestReachable("Lure");
+	            ctx.setState("Fishing at the rock pools!");
+	        }
+	    } else {
 	        WorldObjects.interactClosestReachable("Deposit fish");
-	    ctx.sleepWhile(3000, 30000, () -> self.isAnimationPlaying() || self.isMoving());
+	        ctx.setState("Depositing inventory of fish.");
+	    }
+	    ctx.sleepWhile(3000, Integer.MAX_VALUE, () -> self.isAnimationPlaying() || self.isMoving());
 	}
 }
