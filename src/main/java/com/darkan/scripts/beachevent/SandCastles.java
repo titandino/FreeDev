@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
+import com.darkan.api.util.Utils;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Player;
@@ -28,7 +29,7 @@ public class SandCastles extends BeachActivity {
 			if (NPCs.getClosest(n -> npcId == n.getId()) != null) {
 				if (WorldObjects.interactClosestReachable("Build", o -> o.getName().equals(SAND_CASTLE_MAP.get(npcId)))) {
 					currentNpc = npcId;
-					ctx.sleepWhile(3500, 50000, () -> ctx.getTimeSinceLastAnimation() > 5000 && NPCs.getClosest(n -> currentNpc == n.getId()) != null);
+					ctx.sleepWhile(3500, 50000, () -> ctx.getTimeSinceLastAnimation() < Utils.gaussian(3000, 2500) && NPCs.getClosest(n -> currentNpc == n.getId()) != null);
 					break;
 				}
 			}

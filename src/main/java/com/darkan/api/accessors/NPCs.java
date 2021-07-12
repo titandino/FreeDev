@@ -75,6 +75,30 @@ public class NPCs {
         closest.interact(option);
         return true;
     }
+     
+     public static boolean interactClosest(String option) {
+         NPC closest = getClosest(n -> n.hasOption(option));
+         if (closest == null)
+             return false;
+         closest.interact(option);
+         return true;
+     }
+	
+    public static boolean interactClosest(String option, Filter<NPC> filter) {
+         NPC closest = getClosest(n -> filter.accept(n) && n.hasOption(option));
+         if (closest == null)
+             return false;
+         closest.interact(option);
+         return true;
+     }
+   
+     public static boolean interactClosest(int option, Filter<NPC> filter) {
+    	 NPC closest = getClosest(filter);
+         if (closest == null)
+             return false;
+        closest.interact(option);
+        return true;
+    }
 	
 	public static List<NPC> getNearby(Filter<NPC> filter) {
 		List<NPC> list = new ArrayList<>();
