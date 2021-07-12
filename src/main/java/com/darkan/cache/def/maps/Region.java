@@ -17,14 +17,14 @@ import com.darkan.cache.Index;
 import com.darkan.cache.def.objects.ObjectDef;
 
 public class Region {
-	
+
 	public static final int OBJECTS = 0, UNDERWATER = 1, NPCS = 2, TILES = 3, WATER_TILES = 4;
 	private static Map<Integer, Region> REGIONS = new HashMap<>();
-	
+
 	private int regionId;
 	private ClipMap clipMap;
 	private ClipMap clipMapProj;
-	
+
 	public WorldObject[][][][] objects;
 	public List<WorldObject> objectList;
 	public int[][][] overlayIds;
@@ -39,15 +39,16 @@ public class Region {
 		if (load)
 			load();
 	}
-	
+
 	public Region(int regionId) {
 		this(regionId, true);
 	}
-	
+
 	public void load() {
 		int regionX = regionId >> 8;
 		int regionY = regionId & 0xff;
-		//System.out.println("Loading region " + regionId + "(" + regionX + ", " + regionY + ")");
+		// System.out.println("Loading region " + regionId + "(" + regionX + ", " +
+		// regionY + ")");
 		Archive archive = Cache.get().getArchive(Index.MAPSV2, regionX | regionY << 7);
 		if (archive == null)
 			return;
@@ -65,18 +66,18 @@ public class Region {
 		if (data == null)
 			return;
 		ByteBuffer stream = ByteBuffer.wrap(data);
-		//System.out.println("Decoding tile data... Data len: " + stream.remaining());
+		// System.out.println("Decoding tile data... Data len: " + stream.remaining());
 		overlayIds = new int[4][64][64];
 		underlayIds = new int[4][64][64];
 		overlayPathShapes = new byte[4][64][64];
 		overlayRotations = new byte[4][64][64];
 		tileFlags = new byte[4][64][64];
-		
+
 		for (int plane = 0; plane < 4; plane++) {
 			for (int x = 0; x < 64; x++) {
 				for (int y = 0; y < 64; y++) {
 					int flags = stream.get() & 0xff;
-					
+
 					if ((flags & 0x10) != 0)
 						System.err.println("Flag 0x10 found for tile (" + x + ", " + y + ", " + plane + ") at region " + regionId);
 					if ((flags & 0x20) != 0)
@@ -85,7 +86,7 @@ public class Region {
 						System.err.println("Flag 0x40 found for tile (" + x + ", " + y + ", " + plane + ") at region " + regionId);
 					if ((flags & 0x80) != 0)
 						System.err.println("Flag 0x80 found for tile (" + x + ", " + y + ", " + plane + ") at region " + regionId);
-					
+
 					if ((flags & 0x1) != 0) {
 						int shapeHash = stream.get() & 0xff;
 						overlayIds[plane][x][y] = Utils.getUnsignedSmart(stream);
@@ -99,7 +100,7 @@ public class Region {
 						underlayIds[plane][x][y] = Utils.getUnsignedSmart(stream);
 					}
 					if ((flags & 0x8) != 0) {
-						//tile heights (unsigned)
+						// tile heights (unsigned)
 						stream.get();
 					}
 				}
@@ -177,7 +178,7 @@ public class Region {
 						}
 //						if (print)
 //							System.err.println("3 float flag: " + f1 + ", " + f2 + ", " + f3);
-						
+
 						f1 = f2 = f3 = 1.0f;
 						print = false;
 						if ((metaDataFlag & 0x10) != 0) {
@@ -222,17 +223,17 @@ public class Region {
 			objects = null;
 		}
 	}
-	
+
 	public void spawnObject(WorldObject obj, int plane, int localX, int localY) {
 		if (objects == null)
-            objects = new WorldObject[4][64][64][4];
+			objects = new WorldObject[4][64][64][4];
 		if (objectList == null)
 			objectList = new ArrayList<>();
 		objectList.add(obj);
-        objects[plane][localX][localY][obj.getSlot()] = obj;
-        clip(obj, localX, localY);
+		objects[plane][localX][localY][obj.getSlot()] = obj;
+		clip(obj, localX, localY);
 	}
-	
+
 	public void clip(WorldObject object, int x, int y) {
 		if (object.getId() == -1)
 			return;
@@ -246,11 +247,11 @@ public class Region {
 		if (x < 0 || y < 0 || x >= clipMap.getMasks()[plane].length || y >= clipMap.getMasks()[plane][x].length)
 			return;
 		ObjectDef defs = ObjectDef.get(object.getId());
-		
+
 		if (defs.clipType == 0)
 			return;
-		
-		switch(type) {
+
+		switch (type) {
 		case WALL_STRAIGHT:
 		case WALL_DIAGONAL_CORNER:
 		case WALL_WHOLE_CORNER:
@@ -296,9 +297,9 @@ public class Region {
 
 	public void unclip(int plane, int x, int y) {
 		if (clipMap == null)
-		    clipMap = new ClipMap(regionId, false);
+			clipMap = new ClipMap(regionId, false);
 		if (clipMapProj == null)
-		    clipMapProj = new ClipMap(regionId, true);
+			clipMapProj = new ClipMap(regionId, true);
 		clipMap.setFlag(plane, x, y, 0);
 	}
 
@@ -314,12 +315,12 @@ public class Region {
 		int rotation = object.getRotation();
 		if (x < 0 || y < 0 || x >= clipMap.getMasks()[plane].length || y >= clipMap.getMasks()[plane][x].length)
 			return;
-		ObjectDef defs = ObjectDef.get(object.getId()); 
-		
+		ObjectDef defs = ObjectDef.get(object.getId());
+
 		if (defs.clipType == 0)
 			return;
-		
-		switch(type) {
+
+		switch (type) {
 		case WALL_STRAIGHT:
 		case WALL_DIAGONAL_CORNER:
 		case WALL_WHOLE_CORNER:
@@ -362,7 +363,7 @@ public class Region {
 			break;
 		}
 	}
-	
+
 	public static Region getRegion(int regionId) {
 		return getRegion(regionId, true);
 	}
@@ -389,7 +390,7 @@ public class Region {
 			clipMapProj = new ClipMap(regionId, true);
 		return clipMapProj;
 	}
-	
+
 	public List<WorldObject> getObjectList() {
 		return objectList;
 	}
@@ -404,7 +405,7 @@ public class Region {
 		for (WorldObject real : realObjects) {
 			if (real.getId() != object.getId())
 				continue;
-			if (Utils.getDistanceTo(object, real) <= Utils.larger(object.getDef().sizeX, object.getDef().sizeY)/2) {
+			if (Utils.getDistanceTo(object, real) <= Utils.larger(object.getDef().sizeX, object.getDef().sizeY) / 2) {
 				object.setLocation(real.getX(), real.getY(), real.getPlane());
 				return;
 			}
