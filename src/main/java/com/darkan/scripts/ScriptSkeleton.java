@@ -1,7 +1,10 @@
 package com.darkan.scripts;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
+import com.darkan.Constants;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.util.Utils;
 
@@ -16,6 +19,7 @@ public abstract class ScriptSkeleton {
 	
 	private String name;
 	private long started = 0;
+	private Map<Integer, Integer> startXps = new HashMap<>();
 	private String state = "Initializing...";
 	private String error = "";
 	private boolean enabled = false;
@@ -60,6 +64,8 @@ public abstract class ScriptSkeleton {
 				if (Client.getStatById(Client.HITPOINTS).getXp() <= 100)
 					return 0;
 				MyPlayer.getVars().clearSynced();
+				for (int i = 0;i < Constants.SKILL_NAME.length;i++)
+					startXps.put(i, Client.getStatById(i).getXp());
 				boolean started = onStart(self);
 				if (started) {
 					start();
@@ -92,6 +98,14 @@ public abstract class ScriptSkeleton {
 		sleepConstraint = constraint;
 		sleepWhileMin = System.currentTimeMillis() + minTime;
 		sleepWhileMax = System.currentTimeMillis() + maxTime;
+	}
+	
+	public void printGenericXpGain(long runtime) {
+		for (int skillId : startXps.keySet()) {
+			int gainedXp = Client.getStatById(skillId).getXp() - startXps.get(skillId);
+			if (gainedXp > 1)
+				ImGui.label(Constants.SKILL_NAME[skillId] + " XP p/h: " + Time.perHour(runtime, gainedXp));
+		}
 	}
 
 	public void onPaint() {

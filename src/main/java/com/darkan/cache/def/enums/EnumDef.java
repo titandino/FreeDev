@@ -3,9 +3,9 @@ package com.darkan.cache.def.enums;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.darkan.Constants;
 import com.darkan.api.world.WorldTile;
 import com.darkan.cache.Cache;
-import com.darkan.cache.Constants;
 import com.darkan.cache.def.items.ItemDef;
 import com.darkan.cache.def.npcs.NPCDef;
 import com.darkan.cache.def.structs.StructDef;
