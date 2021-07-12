@@ -46,15 +46,14 @@ public class HallOfMemories extends ScriptSkeleton {
 		if (!Interfaces.getInventory().isFull() && !self.isAnimationPlaying()) {
 		    if (WorldObjects.interactClosestReachable("Take-from", object -> object.getName().equals("Jar depot"))) {
 		        setState("Gathering empty jars.");
-                sleep(2400);
-                return;
+                sleepWhile(2400, 25000, () -> self.isAnimationPlaying() || self.isMoving());
 		    }
         }
         if ((Interfaces.getInventory().contains(MEMORY_JAR_EMPTY, 1) || Interfaces.getInventory().contains(MEMORY_JAR_PARTIAL, 1)) && Interfaces.getInventory().isFull()) {
             if (!Interfaces.getInventory().isFull() || Interfaces.getInventory().contains(CORE_MEMORY_FRAGMENT_ITEM, 1)) {
                 if (NPCs.interactClosestReachable("Capture", npc -> npc.getName().equals("Core memory fragment"))) {
                     setState("Getting core memory fragment.");
-                    sleep(1200);
+                    sleepWhile(3000, 12000, () -> self.isAnimationPlaying() || self.isMoving());
                     return;
                 }
             }
@@ -71,8 +70,7 @@ public class HallOfMemories extends ScriptSkeleton {
             if (!self.isAnimationPlaying()) {
                 UNSTABLE_RIFT.interact("Offer-memory");
                 setState("Depositing memory jars.");
-                sleep(1200);
-                return;
+                sleepWhile(5000, 75000, () -> self.isAnimationPlaying() || self.isMoving());
             }
         }
     }
