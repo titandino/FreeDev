@@ -394,8 +394,12 @@ public class Region {
 	public List<WorldObject> getObjectList() {
 		return objectList;
 	}
-
+	
 	public static boolean validateObjCoords(WorldObject object) {
+		return validateObjCoords(object, Utils.larger(object.getDef().sizeX, object.getDef().sizeY) / 2);
+	}
+
+	public static boolean validateObjCoords(WorldObject object, int distance) {
 		if (object.getDef() != null && object.getDef().sizeX <= 1 && object.getDef().sizeY <= 1)
 			return false;
 		Region region = Region.getRegion(object.getRegionId());
@@ -403,9 +407,9 @@ public class Region {
 		if (realObjects == null || realObjects.size() <= 0)
 			return false;
 		for (WorldObject real : realObjects) {
-			if (real.getId() != object.getId())
+			if (object.getPlane() != real.getPlane() && real.getId() != object.getId())
 				continue;
-			if (Utils.getDistanceTo(object, real) <= Utils.larger(object.getDef().sizeX, object.getDef().sizeY) / 2) {
+			if (Utils.getDistanceTo(object, real) <= distance) {
 				object.setLocation(real.getX(), real.getY(), real.getPlane());
 				return true;
 			}

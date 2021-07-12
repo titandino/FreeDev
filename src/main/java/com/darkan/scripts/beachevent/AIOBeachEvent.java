@@ -6,6 +6,7 @@ import java.util.Map;
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
+import com.darkan.api.util.Utils;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
@@ -27,6 +28,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	
 	private BeachActivity activity = null;
 	private boolean killClawdia = true;
+	private int iceCreamAtts = 0;
 			
 	public AIOBeachEvent() {
 		super("AIO Beach Event", 1000);
@@ -39,6 +41,15 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	
 	@Override
 	public void loop(Player self) {
+		if (iceCreamAtts >= 7)
+			return;
+		if (getTemp() == 220) {
+			if (Interfaces.getInventory().clickItem("Ice cream", "Eat")) {
+				iceCreamAtts++;
+				sleep(5000);
+			}
+			return;
+		}
 		if (killClawdia && MyPlayer.getHealthPerc() > 20.0 && NPCs.interactClosest("Attack", n -> n.getName().contains("Clawdia"))) {
 			setState("Attacking Clawdia...");
 			sleepWhile(3500, Long.MAX_VALUE, () -> getTimeSinceLastAnimation() < 4000 && MyPlayer.getHealthPerc() > 20.0 && NPCs.getClosest(n -> n.getName().contains("Clawdia") && n.hasOption("Attack")) != null);
@@ -50,13 +61,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	}
 	
 	public int getTemp() {
-		//varbit 28441 220 -> 0 when eating ice cream?
-		try {
-			String tempDesc = Interfaces.getComponent(1486, 23).getText();
-			return Integer.valueOf(tempDesc.substring(tempDesc.indexOf('(')+1, tempDesc.indexOf('%')));
-		} catch(Exception e) {
-			return 0;
-		}
+		return MyPlayer.getVars().getVarBit(28441);
 	}
 
 	@Override
@@ -68,7 +73,6 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	public void paintImGui(long runtime) {
 		killClawdia = ImGui.checkbox("Kill Clawdia", killClawdia);
 		
-		ImGui.label("Temperature: " + getTemp());
 		ImGui.label("Choose skill to train:");
 		for (String name : ACTIVITIES.keySet()) {
 			boolean currActive = activity == ACTIVITIES.get(name);

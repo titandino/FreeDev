@@ -39,6 +39,17 @@ public class ItemContainer extends IFComponent {
 		return null;
 	}
 	
+
+	private Item getItemByName(String... exactNames) {
+		Set<String> names = new HashSet<>(Arrays.asList(Arrays.stream(exactNames).toArray(String[]::new)));
+		for (Item item : getItems()) {
+			if (item == null || !names.contains(item.getDef().name))
+				continue;
+			return item;
+		}
+		return null;
+	}
+	
 	public boolean contains(int itemId, int amount) {
 		int amt = 0;
 		for (Item item : getItems())
@@ -125,6 +136,15 @@ public class ItemContainer extends IFComponent {
 	
 	public boolean clickItem(int itemId, String option) {
 		Item item = getItemById(itemId);
+		if (item != null) {
+			item.click(option);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean clickItem(String name, String option) {
+		Item item = getItemByName(name);
 		if (item != null) {
 			item.click(option);
 			return true;

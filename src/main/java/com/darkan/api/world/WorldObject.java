@@ -16,6 +16,7 @@ public class WorldObject extends WorldTile implements Interactable {
 	protected int id;
 	protected ObjectType type;
 	protected int rotation;
+	protected boolean validated;
 	
 	public WorldObject(int id, WorldTile tile) {
 		super(tile);
