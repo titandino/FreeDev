@@ -6,7 +6,6 @@ import java.util.Map;
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
-import com.darkan.api.util.Utils;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
@@ -50,7 +49,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 			}
 			return;
 		}
-		if (killClawdia && MyPlayer.getHealthPerc() > 20.0 && NPCs.interactClosest("Attack", n -> n.getName().contains("Clawdia"))) {
+		if (killClawdia && NPCs.interactClosest("Attack", n -> n.getName().contains("Clawdia"))) {
 			setState("Attacking Clawdia...");
 			sleepWhile(3500, Long.MAX_VALUE, () -> getTimeSinceLastAnimation() < 4000 && MyPlayer.getHealthPerc() > 20.0 && NPCs.getClosest(n -> n.getName().contains("Clawdia") && n.hasOption("Attack")) != null);
 			return;
