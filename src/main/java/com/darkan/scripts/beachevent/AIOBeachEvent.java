@@ -23,6 +23,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 		ACTIVITIES.put("Cooking", new Barbeques());
 		ACTIVITIES.put("Farming", new PalmTrees());
 		ACTIVITIES.put("Fishing", new RockPools());
+	    ACTIVITIES.put("Hunter", new HookADuck());
 	}
 	
 	private BeachActivity activity = null;
@@ -80,7 +81,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	public void paintImGui(long runtime) {
 		killClawdia = ImGui.checkbox("Kill Clawdia", killClawdia);
 		
-		ImGui.label("Choose skill to train: " + getHighlight());
+		ImGui.label("Choose a skill to train. Current spotlight: " + getHighlight());
 		for (String name : ACTIVITIES.keySet()) {
 			boolean currActive = activity == ACTIVITIES.get(name);
 			boolean active = ImGui.checkbox(name, currActive);

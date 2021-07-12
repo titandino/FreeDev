@@ -45,7 +45,7 @@ public class PalmTrees extends BeachActivity {
 	        }
 
 	        currentTree.interact("Pick coconut");
-	        ctx.setState("Picking coconut from: " + currentTree.getId() + ", " + currentTree.getName() + ", " + currentTree.getX() + ", " + currentTree.getY() + ", " + currentTree.getPlane());
+	        ctx.setState("Picking coconuts from: " + currentTree.getId() + ", " + currentTree.getName() + ", " + currentTree.getX() + ", " + currentTree.getY() + ", " + currentTree.getPlane());
 	    }
         ctx.sleepWhile(Integer.MAX_VALUE, () -> ctx.getTimeSinceLastAnimation() < Utils.gaussian(3500, 5000) || self.isAnimationPlaying() || self.isMoving());
 	}
