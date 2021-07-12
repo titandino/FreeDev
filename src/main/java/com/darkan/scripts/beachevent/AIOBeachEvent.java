@@ -24,7 +24,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 		ACTIVITIES.put("Fishing", new RockPools());
 	}
 	
-	private BeachActivity activity = ACTIVITIES.get("Sand Castles");
+	private BeachActivity activity = null;
 	private boolean killClawdia = true;
 			
 	public AIOBeachEvent() {
@@ -62,7 +62,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 			boolean currActive = activity == ACTIVITIES.get(name);
 			boolean active = ImGui.checkbox(name, currActive);
 			if (active != currActive)
-				activity = ACTIVITIES.get(name);
+				activity = active ? ACTIVITIES.get(name) : null;
 		}
 		
 		printGenericXpGain(runtime);
