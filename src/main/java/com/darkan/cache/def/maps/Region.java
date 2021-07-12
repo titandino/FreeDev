@@ -404,7 +404,7 @@ public class Region {
 		for (WorldObject real : realObjects) {
 			if (real.getId() != object.getId())
 				continue;
-			if (Utils.getDistanceTo(object, real) <= 1) {
+			if (Utils.getDistanceTo(object, real) <= Utils.larger(object.getDef().sizeX, object.getDef().sizeY)/2) {
 				object.setLocation(real.getX(), real.getY(), real.getPlane());
 				return;
 			}

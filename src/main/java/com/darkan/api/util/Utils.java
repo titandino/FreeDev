@@ -306,4 +306,10 @@ private static final Random RANDOM = new SecureRandom();
 	public static int getDistanceTo(WorldTile start, WorldTile destination) {
 		return start.getDistance(destination);
 	}
+
+	public static int larger(int v1, int v2) {
+		if (v1 > v2)
+			return v1;
+		return v2;
+	}
 }

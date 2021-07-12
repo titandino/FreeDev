@@ -53,7 +53,7 @@ public class AIOWispGathering extends ScriptSkeleton {
 	public void loop(Player self) {
 		if (Interfaces.getInventory().isFull()) {
 			setState("Inventory full. Finding closest rift...");
-			WorldObject rift = WorldObjects.getClosest(obj -> obj.hasOption("Convert memories"));
+			WorldObject rift = WorldObjects.getClosestReachable(obj -> obj.hasOption("Convert memories"));
 			if (rift != null && !self.isAnimationPlaying()) {
 				setState("Inventory full. Clicking closest rift...");
 				rift.interact("Convert memories");
