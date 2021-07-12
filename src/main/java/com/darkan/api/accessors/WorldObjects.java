@@ -86,21 +86,7 @@ public class WorldObjects {
 	}
 
     public static boolean interactClosestReachable(String option, Filter<WorldObject> filter) {
-        Map<Integer, WorldObject> distanceMap = new TreeMap<Integer, WorldObject>();
-        List<WorldObject> objects = getNearby(filter);
-        WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
-        for (WorldObject object : objects) {
-            if (object != null) {
-                int distance = Utils.getRouteDistanceTo(pTile, object);
-                if (distance != -1)
-                    distanceMap.put(distance, object);
-            }
-        }
-        if (distanceMap.isEmpty())
-            return false;
-        List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
-        Collections.sort(sortedKeys);
-        WorldObject obj = distanceMap.get(sortedKeys.get(0));
+        WorldObject obj = getClosestReachable(filter);
         if (obj == null)
             return false;
         obj.interact(option);
@@ -108,21 +94,7 @@ public class WorldObjects {
     }
     
     public static boolean interactClosestReachable(int option, Filter<WorldObject> filter) {
-        Map<Integer, WorldObject> distanceMap = new TreeMap<Integer, WorldObject>();
-        List<WorldObject> objects = getNearby(filter);
-        WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
-        for (WorldObject object : objects) {
-            if (object != null) {
-                int distance = Utils.getRouteDistanceTo(pTile, object);
-                if (distance != -1)
-                    distanceMap.put(distance, object);
-            }
-        }
-        if (distanceMap.isEmpty())
-            return false;
-        List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
-        Collections.sort(sortedKeys);
-        WorldObject obj = distanceMap.get(sortedKeys.get(0));
+        WorldObject obj = getClosestReachable(filter);
         if (obj == null)
             return false;
         obj.interact(option);

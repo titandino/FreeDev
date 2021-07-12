@@ -69,7 +69,7 @@ public abstract class ScriptSkeleton {
 			}
 			
 			if (sleepConstraint != null) {
-				if (System.currentTimeMillis() <= sleepWhileMin && (!sleepConstraint.get() || System.currentTimeMillis() >= sleepWhileMax))
+				if (System.currentTimeMillis() >= sleepWhileMin && (!sleepConstraint.get() || System.currentTimeMillis() >= sleepWhileMax))
 					sleepConstraint = null;
 				return loopDelay;
 			}

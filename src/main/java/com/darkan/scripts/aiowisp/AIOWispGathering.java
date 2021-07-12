@@ -1,9 +1,12 @@
 package com.darkan.scripts.aiowisp;
 
+import java.awt.Color;
+
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.NPC;
 import com.darkan.api.inter.Interfaces;
+import com.darkan.api.util.Paint;
 import com.darkan.api.world.WorldObject;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
@@ -14,6 +17,7 @@ import kraken.plugin.api.Npc;
 import kraken.plugin.api.Npcs;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
+import kraken.plugin.api.Vector2i;
 
 @Script("AIO Wisp Gatherer")
 public class AIOWispGathering extends ScriptSkeleton {
@@ -70,7 +74,9 @@ public class AIOWispGathering extends ScriptSkeleton {
 
 	@Override
 	public void paintOverlay(long runtime) {
-		
+		Paint.rect(0, 0, 300, 150, Color.GREEN);
+		Paint.rect(5, 5, 290, 140, Color.DARK_GRAY);
+		ImGui.freeText("Energy p/h: " + Time.perHour(runtime, Interfaces.getInventory().countReg(" energy") - startEnergy), new Vector2i(15, 20), Color.GREEN.getRGB());
 	}
 
 	@Override
