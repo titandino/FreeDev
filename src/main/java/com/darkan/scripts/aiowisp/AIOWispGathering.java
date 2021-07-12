@@ -35,10 +35,10 @@ public class AIOWispGathering extends ScriptSkeleton {
 	
 	@Override
 	public void loop(Player self) {
-		if (Interfaces.getInventory().isFull() && !self.isAnimationPlaying() && WorldObjects.interactClosestReachable("Convert memories")) {
+		if (Interfaces.getInventory().isFull() && WorldObjects.interactClosestReachable("Convert memories")) {
 			setState("Converting memories...");
 			sleepWhile(3500, 51526, () -> Interfaces.getInventory().containsAnyReg(" memory"));
-		} else if (!Interfaces.getInventory().containsAnyReg(" memory") && !self.isAnimationPlaying()) {
+		} else if (!Interfaces.getInventory().isFull()) {
 			setState("Finding closest wisp...");
 			if (NPCs.interactClosestReachable("Harvest", npc -> npc.getName().contains("Enriched"))) {
 				setState("Harvesting closest enriched wisp...");
