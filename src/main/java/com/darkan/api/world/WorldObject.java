@@ -6,7 +6,6 @@ import com.darkan.cache.def.maps.Region;
 import com.darkan.cache.def.objects.ObjectDef;
 
 import kraken.plugin.api.Actions;
-import kraken.plugin.api.Debug;
 
 public class WorldObject extends WorldTile implements Interactable {
 	private static final int[] MENU_OPS = { 
