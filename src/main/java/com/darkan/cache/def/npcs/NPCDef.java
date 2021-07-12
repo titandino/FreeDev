@@ -29,7 +29,7 @@ public class NPCDef {
 		if (def == null) {
 			NPCDef empty = new NPCDef();
 			empty.id = id;
-			return def;
+			return empty;
 		}
 		return def;
 	}
