@@ -38,4 +38,8 @@ public class Interfaces {
 	public static ItemContainer getEquipment() {
 		return EQUIPMENT;
 	}
+
+	public static IFComponent getComponent(int interfaceId, int componentId) {
+		return new IFComponent(interfaceId, componentId);
+	}
 }

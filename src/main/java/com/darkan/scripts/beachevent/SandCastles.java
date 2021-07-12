@@ -31,7 +31,7 @@ public class SandCastles extends BeachActivity {
 				if (WorldObjects.interactClosestReachable("Build", o -> o.getName().equals(SAND_CASTLE_MAP.get(npcId)))) {
 					currentNpc = npcId;
 					ctx.setState("Helping " + NPCDef.get(npcId).name + " build the " + SAND_CASTLE_MAP.get(npcId) + "...");
-					ctx.sleepWhile(3500, Long.MAX_VALUE, () -> ctx.getTimeSinceLastAnimation() < Utils.gaussian(3000, 2500) && NPCs.getClosest(n -> currentNpc == n.getId()) != null);
+					ctx.sleepWhile(3500, Integer.MAX_VALUE, () -> ctx.getTimeSinceLastAnimation() < Utils.gaussian(3000, 2500) && NPCs.getClosest(n -> currentNpc == n.getId()) != null);
 					break;
 				}
 			}

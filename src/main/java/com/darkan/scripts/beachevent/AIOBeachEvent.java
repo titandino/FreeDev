@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.entity.MyPlayer;
+import com.darkan.api.inter.Interfaces;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
@@ -47,6 +48,16 @@ public class AIOBeachEvent extends ScriptSkeleton {
 		if (activity != null)
 			activity.loop(this, self);
 	}
+	
+	public int getTemp() {
+		//varbit 28441 220 -> 0 when eating ice cream?
+		try {
+			String tempDesc = Interfaces.getComponent(1486, 23).getText();
+			return Integer.valueOf(tempDesc.substring(tempDesc.indexOf('(')+1, tempDesc.indexOf('%')));
+		} catch(Exception e) {
+			return 0;
+		}
+	}
 
 	@Override
 	public void paintOverlay(long runtime) {
@@ -57,6 +68,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	public void paintImGui(long runtime) {
 		killClawdia = ImGui.checkbox("Kill Clawdia", killClawdia);
 		
+		ImGui.label("Temperature: " + getTemp());
 		ImGui.label("Choose skill to train:");
 		for (String name : ACTIVITIES.keySet()) {
 			boolean currActive = activity == ACTIVITIES.get(name);
