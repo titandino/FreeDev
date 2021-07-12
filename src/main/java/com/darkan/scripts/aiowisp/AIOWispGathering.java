@@ -8,8 +8,6 @@ import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Npc;
-import kraken.plugin.api.Npcs;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
 
@@ -21,7 +19,6 @@ public class AIOWispGathering extends ScriptSkeleton {
 	 * Chronicle absorption prayer support
 	 */
 		
-	private WispConfig config;
 	private int startXp;
 	private int startEnergy;
 	
@@ -31,14 +28,8 @@ public class AIOWispGathering extends ScriptSkeleton {
 	
 	@Override
 	public boolean onStart(Player self) {
-		if (config == null) {
-			setState("Detecting location and starting...");
-			detectLocation();
-			startXp = Client.getStatById(Client.DIVINATION).getXp();
-			startEnergy = Interfaces.getInventory().countReg(" energy");
-			start();
-			return false;
-		}
+		startXp = Client.getStatById(Client.DIVINATION).getXp();
+		startEnergy = Interfaces.getInventory().countReg(" energy");
 		return true;
 	}
 	
@@ -48,12 +39,12 @@ public class AIOWispGathering extends ScriptSkeleton {
 			setState("Converting memories...");
 			sleepWhile(3500, 51526, () -> Interfaces.getInventory().containsAnyReg(" memory"));
 		} else if (!Interfaces.getInventory().containsAnyReg(" memory") && !self.isAnimationPlaying()) {
-			setState("Finding closest " + config.name().toLowerCase() + " wisp...");
-			if (NPCs.interactClosestReachable("Harvest", npc -> config.getEnrichedNpcs().contains(npc.getId()) || npc.getName().contains("Enriched"))) {
-				setState("Harvesting closest enriched " + config.name().toLowerCase() + " wisp...");
+			setState("Finding closest wisp...");
+			if (NPCs.interactClosestReachable("Harvest", npc -> npc.getName().contains("Enriched"))) {
+				setState("Harvesting closest enriched wisp...");
 				sleepWhile(3100, 73513, () -> self.isAnimationPlaying() && !Interfaces.getInventory().isFull());
-			} else if (NPCs.interactClosestReachable("Harvest", npc -> config.getNormalNpcs().contains(npc.getId()))) {
-				setState("Harvesting closest " + config.name().toLowerCase() + " wisp...");
+			} else if (NPCs.interactClosestReachable("Harvest")) {
+				setState("Harvesting closest wisp...");
 				sleepWhile(3100, 73513, () -> NPCs.getClosest(n -> n.getName().contains("Enriched")) == null && self.isAnimationPlaying() && !Interfaces.getInventory().isFull());
 			}
 		}
@@ -70,16 +61,6 @@ public class AIOWispGathering extends ScriptSkeleton {
 	public void paintImGui(long runtime) {
 		ImGui.label("Energy p/h: " + Time.perHour(runtime, Interfaces.getInventory().countReg(" energy") - startEnergy));
 		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.DIVINATION).getXp() - startXp));
-	}
-	
-	public void detectLocation() {
-		for (WispConfig c : WispConfig.values()) {
-			Npc n = Npcs.closest(npc -> c.getNormalNpcs().contains(npc.getId()));
-			if (n != null) {
-				config = c;
-				break;
-			}
-		}
 	}
 
 	@Override

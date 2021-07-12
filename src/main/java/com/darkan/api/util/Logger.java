@@ -38,12 +38,12 @@ public class Logger {
 
 			File file;
 			for (int i = 0; i < parts.length - 1; ++i) {
-				file = new File("./freedev/" + parts[i]);
+				file = new File(System.getProperty("user.home")+"/.freedev/" + parts[i]);
 				if (!file.exists()) {
 					file.mkdir();
 				}
 			}
-			FileWriter writer = new FileWriter("./freedev/" + fileName, true);
+			FileWriter writer = new FileWriter(System.getProperty("user.home")+"/.freedev/" + fileName, true);
 			writer.write("[" + getDateString() + "]:  "+ text + "\r\n");
 			writer.close();
 		} catch (Exception e) {

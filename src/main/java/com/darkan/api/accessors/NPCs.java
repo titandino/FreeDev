@@ -52,8 +52,16 @@ public class NPCs {
 		return distanceMap.get(sortedKeys.get(0));
 	}
 	
+    public static boolean interactClosestReachable(String option) {
+         NPC closest = getClosestReachable(n -> n.hasOption(option));
+         if (closest == null)
+             return false;
+         closest.interact(option);
+         return true;
+     }
+	
     public static boolean interactClosestReachable(String option, Filter<NPC> filter) {
-         NPC closest = getClosestReachable(filter);
+         NPC closest = getClosestReachable(n -> filter.accept(n) && n.hasOption(option));
          if (closest == null)
              return false;
          closest.interact(option);
