@@ -8,7 +8,6 @@ import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Client;
-import kraken.plugin.api.Debug;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
@@ -24,7 +23,7 @@ public class HallOfMemories extends ScriptSkeleton {
 	private int startXp;
 	private NPC memory;
 	private boolean twoTick = true;
-	private boolean useCoreFragments = true;
+	private boolean useCoreFragments = false;
 
 	public HallOfMemories() {
 		super("Hall Of Memories", 600);
@@ -54,12 +53,11 @@ public class HallOfMemories extends ScriptSkeleton {
 			sleepWhile(700, 12000, () -> self.isMoving());
 			return;
 		}
-		if (Interfaces.getInventory().freeSlots() > 5 && WorldObjects.interactClosest("Take-from", object -> object.getName().equals("Jar depot"))) {
+		if (!Interfaces.getInventory().containsAny(MEMORY_JAR_EMPTY, MEMORY_JAR_PARTIAL, MEMORY_JAR_FULL) && WorldObjects.interactClosest("Take-from", object -> object.getName().equals("Jar depot"))) {
 			setState("Gathering empty jars.");
-			sleepWhile(2400, 25000, () -> Interfaces.getInventory().freeSlots() > 5 || self.isMoving());
+			sleepWhile(2400, 35000, () -> Interfaces.getInventory().freeSlots() > 5 || self.isMoving());
 			return;
-		}
-		if ((Interfaces.getInventory().contains(MEMORY_JAR_EMPTY, 1) || Interfaces.getInventory().contains(MEMORY_JAR_PARTIAL, 1))) {
+		} else if (Interfaces.getInventory().contains(MEMORY_JAR_EMPTY, 1) || Interfaces.getInventory().contains(MEMORY_JAR_PARTIAL, 1)) {
 			memory = HOMConfig.getNPCForLevel(Client.getStatById(Client.DIVINATION).getCurrent());
 			if (memory != null) {	    
 			    if (memory.getName().toUpperCase().contains("MEMORIES") && useCoreFragments && Interfaces.getInventory().contains(CORE_MEMORY_FRAGMENT_ITEM, 1) 
@@ -79,7 +77,7 @@ public class HallOfMemories extends ScriptSkeleton {
 			setState("Filling memory jars.");
 		} else if (Interfaces.getInventory().contains(MEMORY_JAR_FULL, 1) && !self.isAnimationPlaying() && WorldObjects.interactClosest("Offer-memory")) {
 			setState("Depositing memory jars.");
-			sleepWhile(5000, 75000, () -> self.isAnimationPlaying() || self.isMoving());
+			sleepWhile(5000, 75000, () -> Interfaces.getInventory().contains(MEMORY_JAR_FULL, 1));
 		}
 	}
 

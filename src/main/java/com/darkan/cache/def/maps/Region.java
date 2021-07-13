@@ -410,7 +410,7 @@ public class Region {
 				continue;
 			int distance = Utils.getDistanceTo(object, real);
 			if (distance != -1)
-				distanceMap.put(distance, object);
+				distanceMap.put(distance, real);
 		}
 		if (distanceMap.isEmpty())
 			return false;

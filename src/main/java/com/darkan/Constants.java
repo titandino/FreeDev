@@ -1,8 +1,5 @@
 package com.darkan;
 
-import com.darkan.api.world.WorldObject;
-import com.darkan.api.world.WorldTile;
-import com.darkan.cache.def.maps.Region;
 import com.darkan.cache.def.objects.ObjectDef;
 
 public class Constants {
