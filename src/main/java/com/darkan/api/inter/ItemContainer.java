@@ -151,4 +151,12 @@ public class ItemContainer extends IFComponent {
 		}
 		return false;
 	}
+
+	public int freeSlots() {
+		int free = 0;
+		for (Item item : getItems())
+			if (item == null)
+				free++;
+		return free;
+	}
 }

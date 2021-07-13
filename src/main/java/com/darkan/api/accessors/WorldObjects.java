@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
+
 import kraken.plugin.api.Filter;
 import kraken.plugin.api.Players;
 import kraken.plugin.api.SceneObjects;
@@ -109,4 +110,29 @@ public class WorldObjects {
         obj.interact(option);
         return true;
     }
+    
+    public static boolean interactClosest(int option, Filter<WorldObject> filter) {
+        WorldObject obj = getClosest(filter);
+        if (obj == null)
+            return false;
+        obj.interact(option);
+        return true;
+    }
+    
+    public static boolean interactClosest(String option) {
+        WorldObject obj = getClosest(o -> o.hasOption(option));
+        if (obj == null)
+            return false;
+        obj.interact(option);
+        return true;
+    }
+
+    public static boolean interactClosest(String option, Filter<WorldObject> filter) {
+        WorldObject obj = getClosest(filter);
+        if (obj == null)
+            return false;
+        obj.interact(option);
+        return true;
+    }
+
 }

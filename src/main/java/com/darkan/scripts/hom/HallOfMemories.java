@@ -4,8 +4,6 @@ import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.NPC;
 import com.darkan.api.inter.Interfaces;
-import com.darkan.api.world.WorldObject;
-import com.darkan.api.world.WorldTile;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
@@ -17,8 +15,6 @@ import kraken.plugin.api.Time;
 @Script("Hall of Memories")
 public class HallOfMemories extends ScriptSkeleton {
   
-    private static final WorldObject UNSTABLE_RIFT = new WorldObject(111375, new WorldTile(2204, 9134, 0));
-
     private static final int MEMORY_JAR_EMPTY = 42898;
     private static final int MEMORY_JAR_PARTIAL = 42899;
     private static final int MEMORY_JAR_FULL = 42900;
@@ -43,10 +39,10 @@ public class HallOfMemories extends ScriptSkeleton {
 	public void loop(Player self) {
         if (self.isMoving())
             return;
-		if (!Interfaces.getInventory().isFull() && !self.isAnimationPlaying()) {
-		    if (WorldObjects.interactClosestReachable("Take-from", object -> object.getName().equals("Jar depot"))) {
+		if (Interfaces.getInventory().freeSlots() > 5) {
+		    if (WorldObjects.interactClosest("Take-from", object -> object.getName().equals("Jar depot"))) {
 		        setState("Gathering empty jars.");
-                sleepWhile(2400, 25000, () -> self.isAnimationPlaying() || self.isMoving());
+                sleepWhile(2400, 25000, () -> Interfaces.getInventory().freeSlots() > 5 || self.isMoving());
 		    }
         }
         if ((Interfaces.getInventory().contains(MEMORY_JAR_EMPTY, 1) || Interfaces.getInventory().contains(MEMORY_JAR_PARTIAL, 1)) && Interfaces.getInventory().isFull()) {
@@ -68,9 +64,10 @@ public class HallOfMemories extends ScriptSkeleton {
             setState("Filling memory jars.");
         } else if (Interfaces.getInventory().contains(MEMORY_JAR_FULL, 1)) {
             if (!self.isAnimationPlaying()) {
-                UNSTABLE_RIFT.interact("Offer-memory");
-                setState("Depositing memory jars.");
-                sleepWhile(5000, 75000, () -> self.isAnimationPlaying() || self.isMoving());
+                if (WorldObjects.interactClosest("Offer-memory")) {
+	                setState("Depositing memory jars.");
+	                sleepWhile(5000, 75000, () -> self.isAnimationPlaying() || self.isMoving());
+                }
             }
         }
     }

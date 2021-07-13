@@ -75,8 +75,8 @@ public class WorldObject extends WorldTile implements Interactable {
 		
 		//TODO remove this once cracksmoke fixes his object coordinates
 		boolean valid = Region.validateObjCoords(this);
-		int x = (int) (valid ? getX() : getX() - Math.ceil(getDef().sizeX / 2));
-		int y = (int) (valid ? getY() : getY() - Math.ceil(getDef().sizeY / 2));
+		int x = valid ? getX() : getX() - (int) Math.ceil((double) getDef().sizeX / 2.0);
+		int y = valid ? getY() : getY() - (int) Math.ceil((double) getDef().sizeY / 2.0);
 		
 		Actions.menu(MENU_OPS[action], getId(), x, y, Utils.random(0, Integer.MAX_VALUE));
 	}

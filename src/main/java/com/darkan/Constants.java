@@ -1,5 +1,9 @@
 package com.darkan;
 
+import com.darkan.api.world.WorldObject;
+import com.darkan.api.world.WorldTile;
+import com.darkan.cache.def.maps.Region;
+
 public class Constants {
 	
 	public static final String[] SKILL_NAME = { "Attack", "Defence", "Strength", "Constitution", "Ranged", "Prayer", "Magic", "Cooking", "Woodcutting", "Fletching", "Fishing", "Firemaking", "Crafting", "Smithing", "Mining", "Herblore", "Agility",
@@ -7,7 +11,8 @@ public class Constants {
 
 	
 	public static void main(String[] args) {
-		String tempDesc = "Mememe mesmimismeim seim s (100%) 2930 sdjf s";
-		System.out.println(Integer.valueOf(tempDesc.substring(tempDesc.indexOf('(')+1, tempDesc.indexOf('%'))));
+		Region region = Region.getRegion(new WorldTile(2230, 9116).getRegionId());
+		for (WorldObject obj : region.getObjectList())
+			System.out.println(obj);
 	}
 }
