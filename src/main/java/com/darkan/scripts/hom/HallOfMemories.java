@@ -57,8 +57,7 @@ public class HallOfMemories extends ScriptSkeleton {
 			return;
 		}
 		if ((Interfaces.getInventory().contains(MEMORY_JAR_EMPTY, 1) || Interfaces.getInventory().contains(MEMORY_JAR_PARTIAL, 1))) {
-			if (!self.isAnimationPlaying())
-				memory = HOMConfig.getNPCForLevel(Client.getStatById(Client.DIVINATION).getCurrent());
+			memory = HOMConfig.getNPCForLevel(Client.getStatById(Client.DIVINATION).getCurrent());
 			if (memory != null) {
 				setState("2 ticking memory...");
 				memory.interact("Harvest");
