@@ -8,6 +8,7 @@ import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Client;
+import kraken.plugin.api.Debug;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
@@ -58,15 +59,15 @@ public class HallOfMemories extends ScriptSkeleton {
 			sleepWhile(2400, 25000, () -> Interfaces.getInventory().freeSlots() > 5 || self.isMoving());
 			return;
 		}
-    	if (useCoreFragments && Interfaces.getInventory().contains(CORE_MEMORY_FRAGMENT_ITEM, 1) 
-    	        && WorldObjects.interactClosest("Interact", object -> object.getId() == 111376)) {
-            setState("Spawning memory fragment");
-            sleepWhile(2000, 25000, () -> self.isAnimationPlaying() || self.isMoving());
-            return;
-        }
 		if ((Interfaces.getInventory().contains(MEMORY_JAR_EMPTY, 1) || Interfaces.getInventory().contains(MEMORY_JAR_PARTIAL, 1))) {
 			memory = HOMConfig.getNPCForLevel(Client.getStatById(Client.DIVINATION).getCurrent());
-			if (memory != null) {
+			if (memory != null) {	    
+			    if (memory.getName().toUpperCase().contains("MEMORIES") && useCoreFragments && Interfaces.getInventory().contains(CORE_MEMORY_FRAGMENT_ITEM, 1) 
+			                && WorldObjects.interactClosest("Interact", object -> object.getId() == 111376)) {
+			            setState("Spawning memory fragment");
+			            sleepWhile(5000, 25000, () -> self.isAnimationPlaying() || self.isMoving());
+			            return;
+			    }
 				setState("2 ticking memory...");
 				memory.interact("Harvest");
 				if (twoTick)
