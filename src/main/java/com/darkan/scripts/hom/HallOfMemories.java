@@ -22,6 +22,7 @@ public class HallOfMemories extends ScriptSkeleton {
 
 	private int startXp;
 	private NPC memory;
+	private boolean twoTick = true;
 
 	public HallOfMemories() {
 		super("Hall Of Memories", 600);
@@ -61,7 +62,10 @@ public class HallOfMemories extends ScriptSkeleton {
 			if (memory != null) {
 				setState("2 ticking memory...");
 				memory.interact("Harvest");
-				sleep(600);
+				if (twoTick)
+					sleep(600);
+				else
+					sleepWhile(3000, 40000, () -> self.isAnimationPlaying() || self.isMoving());
 				return;
 			}
 			setState("Filling memory jars.");
@@ -73,6 +77,7 @@ public class HallOfMemories extends ScriptSkeleton {
 
 	@Override
 	public void paintImGui(long runtime) {
+		twoTick = ImGui.checkbox("2 Tick", twoTick);
 		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.DIVINATION).getXp() - startXp));
 	}
 
