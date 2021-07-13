@@ -15,15 +15,11 @@ public class IFComponent {
 	}
 
 	public void clickComponent(int option, int slotId) {
-		int realOp = -1;
-		switch(option) {
-		case 0:
-			realOp = 1;
-			break;
-		case 4:
-			realOp = 8;
-			break;
-		}
+		int realOp = switch(option) {
+			case 0 -> 1;
+			case 4 -> 8;
+			default -> -1;
+		};
 		Actions.menu(Actions.MENU_EXECUTE_WIDGET, realOp, slotId, getHash(), 1);
 	}
 

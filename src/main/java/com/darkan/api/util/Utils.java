@@ -98,64 +98,36 @@ private static final Random RANDOM = new SecureRandom();
 		if (c > 0 && c < '\u0080' || c >= '\u00a0' && c <= '\u00ff')
 			return (byte) c;
 
-		switch (c) {
-		case '\u20ac':
-			return (-128);
-		case '\u201a':
-			return (-126);
-		case '\u0192':
-			return (-125);
-		case '\u201e':
-			return (-124);
-		case '\u2026':
-			return (-123);
-		case '\u2020':
-			return (-122);
-		case '\u2021':
-			return (-121);
-		case '\u02c6':
-			return (-120);
-		case '\u2030':
-			return (-119);
-		case '\u0160':
-			return (-118);
-		case '\u2039':
-			return (-117);
-		case '\u0152':
-			return (-116);
-		case '\u017d':
-			return (-114);
-		case '\u2018':
-			return (-111);
-		case '\u2019':
-			return (-110);
-		case '\u201c':
-			return (-109);
-		case '\u201d':
-			return (-108);
-		case '\u2022':
-			return (-107);
-		case '\u2013':
-			return (-106);
-		case '\u2014':
-			return (-105);
-		case '\u02dc':
-			return (-104);
-		case '\u2122':
-			return (-103);
-		case '\u0161':
-			return (-102);
-		case '\u203a':
-			return (-101);
-		case '\u0153':
-			return (-100);
-		case '\u017e':
-			return (-98);
-		case '\u0178':
-			return (-97);
-		default:
-			return 63;
-		}
+		return switch (c) {
+			case '\u20ac' -> -128;
+			case '\u201a' -> -126;
+			case '\u0192' -> -125;
+			case '\u201e' -> -124;
+			case '\u2026' -> -123;
+			case '\u2020' -> -122;
+			case '\u2021' -> -121;
+			case '\u02c6' -> -120;
+			case '\u2030' -> -119;
+			case '\u0160' -> -118;
+			case '\u2039' -> -117;
+			case '\u0152' -> -116;
+			case '\u017d' -> -114;
+			case '\u2018' -> -111;
+			case '\u2019' -> -110;
+			case '\u201c' -> -109;
+			case '\u201d' -> -108;
+			case '\u2022' -> -107;
+			case '\u2013' -> -106;
+			case '\u2014' -> -105;
+			case '\u02dc' -> -104;
+			case '\u2122' -> -103;
+			case '\u0161' -> -102;
+			case '\u203a' -> -101;
+			case '\u0153' -> -100;
+			case '\u017e' -> -98;
+			case '\u0178' -> -97;
+			default -> 63;
+		};
 	}
 
 	public static void putSmartInt(ByteBuffer buffer, int value) {

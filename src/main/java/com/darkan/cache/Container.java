@@ -26,21 +26,12 @@ class Container {
 
 			Compression compression = Compression.forData(data.array());
 			byte[] compressed = data.array();
-			byte[] decompressed;
-			switch (compression) {
-			case BZIP:
-				decompressed = BZIP2.decompress(compressed);
-				break;
-			case GZIP:
-				decompressed = GZIP.decompress(compressed);
-				break;
-			case ZLIB:
-				decompressed = ZLIB.decompress(compressed);
-				break;
-			default:
-				decompressed = compressed;
-				break;
-			}
+			byte[] decompressed = switch (compression) {
+				case BZIP -> BZIP2.decompress(compressed);
+				case GZIP -> GZIP.decompress(compressed);
+				case ZLIB -> ZLIB.decompress(compressed);
+				default -> compressed;
+			};
 			return new Container(decompressed, compression);
 		} catch (IOException e) {
 			System.err.println("Error decompressing container data...");
