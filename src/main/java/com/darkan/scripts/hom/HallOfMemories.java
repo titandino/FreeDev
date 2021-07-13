@@ -24,7 +24,7 @@ public class HallOfMemories extends ScriptSkeleton {
 	private NPC memory;
 
 	public HallOfMemories() {
-		super("Hall Of Memories", 1200);
+		super("Hall Of Memories", 600);
 	}
 
 	@Override
@@ -66,13 +66,9 @@ public class HallOfMemories extends ScriptSkeleton {
 				return;
 			}
 			setState("Filling memory jars.");
-		} else if (Interfaces.getInventory().contains(MEMORY_JAR_FULL, 1)) {
-			if (!self.isAnimationPlaying()) {
-				if (WorldObjects.interactClosest("Offer-memory")) {
-					setState("Depositing memory jars.");
-					sleepWhile(5000, 75000, () -> self.isAnimationPlaying() || self.isMoving());
-				}
-			}
+		} else if (Interfaces.getInventory().contains(MEMORY_JAR_FULL, 1) && !self.isAnimationPlaying() && WorldObjects.interactClosest("Offer-memory")) {
+			setState("Depositing memory jars.");
+			sleepWhile(5000, 75000, () -> self.isAnimationPlaying() || self.isMoving());
 		}
 	}
 
