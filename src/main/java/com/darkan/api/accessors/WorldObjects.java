@@ -55,6 +55,8 @@ public class WorldObjects {
 	public static List<WorldObject> getNearby(Filter<WorldObject> filter) {
 		List<WorldObject> list = new ArrayList<>();
 		SceneObjects.closest(obj -> {
+			if (obj.hidden())
+				return false;
 			WorldObject wo = new WorldObject(obj.getId(), new WorldTile(obj.getGlobalPosition()));
 			if (wo.getPlane() == Players.self().getGlobalPosition().getZ() && filter.accept(wo))
 				list.add(wo);
@@ -66,6 +68,8 @@ public class WorldObjects {
 	public static List<WorldObject> getNearby() {
 		List<WorldObject> list = new ArrayList<>();
 		SceneObjects.closest(obj -> {
+			if (obj.hidden())
+				return false;
 			if (obj.getGlobalPosition().getZ() == Players.self().getGlobalPosition().getZ())
 				list.add(new WorldObject(obj.getId(), new WorldTile(obj.getGlobalPosition().getX(), obj.getGlobalPosition().getY(), obj.getGlobalPosition().getZ())));
 			return false;
