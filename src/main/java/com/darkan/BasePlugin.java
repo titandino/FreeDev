@@ -89,7 +89,7 @@ public final class BasePlugin extends AbstractPlugin {
     }
 
     public void onWidgetVisibilityChanged(int id, boolean visible) {
-    	//Debug.log("Interface visibility: " + id + " -> " + visible);
+    	Debug.log("Interface visibility: " + id + " -> " + visible);
     	Interfaces.setVisibility(id, visible);
     }
 }
