@@ -48,7 +48,7 @@ public class HallOfMemories extends ScriptSkeleton {
 		}
 		if (NPCs.interactClosestReachable("Capture", npc -> npc.getName().equals("Knowledge fragment"))) {
 			setState("Getting knowledge fragments.");
-			sleepWhile(3000, 12000, () -> self.isAnimationPlaying() || self.isMoving());
+			sleepWhile(700, 12000, () -> self.isMoving());
 			return;
 		}
 		if (Interfaces.getInventory().freeSlots() > 5 && WorldObjects.interactClosest("Take-from", object -> object.getName().equals("Jar depot"))) {
@@ -59,8 +59,12 @@ public class HallOfMemories extends ScriptSkeleton {
 		if ((Interfaces.getInventory().contains(MEMORY_JAR_EMPTY, 1) || Interfaces.getInventory().contains(MEMORY_JAR_PARTIAL, 1))) {
 			if (!self.isAnimationPlaying())
 				memory = HOMConfig.getNPCForLevel(Client.getStatById(Client.DIVINATION).getCurrent());
-			if (memory != null)
+			if (memory != null) {
+				setState("2 ticking memory...");
 				memory.interact("Harvest");
+				sleep(600);
+				return;
+			}
 			setState("Filling memory jars.");
 		} else if (Interfaces.getInventory().contains(MEMORY_JAR_FULL, 1)) {
 			if (!self.isAnimationPlaying()) {
