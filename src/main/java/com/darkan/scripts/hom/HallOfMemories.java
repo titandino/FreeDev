@@ -23,6 +23,7 @@ public class HallOfMemories extends ScriptSkeleton {
 	private int startXp;
 	private NPC memory;
 	private boolean twoTick = true;
+	private boolean useCoreFragments = true;
 
 	public HallOfMemories() {
 		super("Hall Of Memories", 600);
@@ -57,6 +58,12 @@ public class HallOfMemories extends ScriptSkeleton {
 			sleepWhile(2400, 25000, () -> Interfaces.getInventory().freeSlots() > 5 || self.isMoving());
 			return;
 		}
+    	if (useCoreFragments && Interfaces.getInventory().contains(CORE_MEMORY_FRAGMENT_ITEM, 1) 
+    	        && WorldObjects.interactClosest("Interact", object -> object.getId() == 111376)) {
+            setState("Spawning memory fragment");
+            sleepWhile(2000, 25000, () -> self.isAnimationPlaying() || self.isMoving());
+            return;
+        }
 		if ((Interfaces.getInventory().contains(MEMORY_JAR_EMPTY, 1) || Interfaces.getInventory().contains(MEMORY_JAR_PARTIAL, 1))) {
 			memory = HOMConfig.getNPCForLevel(Client.getStatById(Client.DIVINATION).getCurrent());
 			if (memory != null) {
@@ -78,6 +85,7 @@ public class HallOfMemories extends ScriptSkeleton {
 	@Override
 	public void paintImGui(long runtime) {
 		twoTick = ImGui.checkbox("2 Tick", twoTick);
+		useCoreFragments = ImGui.checkbox("Use core memory fragments", useCoreFragments);
 		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.DIVINATION).getXp() - startXp));
 	}
 

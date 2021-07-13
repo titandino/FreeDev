@@ -400,8 +400,6 @@ public class Region {
 	}
 
 	public static boolean validateObjCoords(WorldObject object) {
-		if (object.getDef() != null)
-			return false;
 		Region region = Region.getRegion(object.getRegionId());
 		List<WorldObject> realObjects = region.getObjectList();
 		if (realObjects == null || realObjects.size() <= 0)
