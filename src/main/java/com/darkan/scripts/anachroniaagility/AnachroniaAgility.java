@@ -34,7 +34,7 @@ public class AnachroniaAgility extends ScriptSkeleton {
 			for (AgilityNode node : AgilityNode.values()) {
 				setState("Checking if "+node+" is good to start at...");
 				if (node.getArea().inside(self.getGlobalPosition())) {
-					if (node == AgilityNode.END)
+					if (node == getEnd())
 						reverse = true;
 					currNode = node;
 					return true;
@@ -53,14 +53,14 @@ public class AnachroniaAgility extends ScriptSkeleton {
 		if (currNode.getArea().inside(self.getGlobalPosition())) {
 			setState("Moving to " + currNode.name() + "...");
 			if (reverse) {
-				if (next == AgilityNode.END)
+				if (next == getEnd())
 					return;
 				if (next.getReverseObj() != null)
 					next.getReverseObj().interact(0);
 				else
 					next.getObject().interact(0);
 			} else {
-				if (currNode == AgilityNode.END)
+				if (currNode == getEnd())
 					return;
 				currNode.getObject().interact(0);
 			}
@@ -90,11 +90,21 @@ public class AnachroniaAgility extends ScriptSkeleton {
 			return nodes[currNode.ordinal()-1];
 		}
 		
-		if (currNode.ordinal() == AgilityNode.END.ordinal()) {
+		if (currNode.ordinal() == getEnd().ordinal()) {
 			reverse = true;
-			return AgilityNode.END;
+			return getEnd();
 		}
 		return nodes[currNode.ordinal()+1];
+	}
+	
+	public AgilityNode getEnd() {
+		if (Client.getStatById(Client.AGILITY).getMax() >= 85)
+			return AgilityNode.END;
+		if (Client.getStatById(Client.AGILITY).getMax() >= 70)
+			return AgilityNode.VINE3;
+		if (Client.getStatById(Client.AGILITY).getMax() >= 50)
+			return AgilityNode.CLIFF_3;
+		return AgilityNode.RUINED_TEMP3;
 	}
 
 	@Override
