@@ -13,7 +13,7 @@ import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
 
-@Script("Spirit Attraction")
+@Script(value = "Spirit Attraction", utility = true)
 public class SpiritAttraction extends ScriptSkeleton {
 
 	private static Set<String> SPIRIT_NAMES = new HashSet<>(Arrays.asList(new String[] { 

@@ -1,14 +1,12 @@
 package com.darkan.scripts.impl.aiorunespan;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.NPC;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.world.Interactable;
+import com.darkan.api.world.WorldObject;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
@@ -36,45 +34,40 @@ public class AIORunespan extends ScriptSkeleton {
 	protected void loop(Player self) {
 		if (self.isAnimationPlaying() || self.isMoving())
 			return;
-		if (!Interfaces.getInventory().contains(Rune.ESSENCE, 1)) {
-			setState("Ran out of essence... Looking for nearby essence swarm...");
-			NPC essence = NPCs.getClosestReachable(n -> n.getId() == 15402);
-			if (essence != null) {
-				setState("Ran out of essence... Grabbing more...");
-				essence.interact("Collect");
-			}
-			sleep(3500);
-		} else {
+		if (!Interfaces.getInventory().contains(Rune.ESSENCE, 1) && NPCs.interactClosestReachable("Collect", n -> n.getId() == 15402)) {
+			setState("Ran out of essence... Grabbing more...");
+			sleepWhile(2500, 20000, () -> !Interfaces.getInventory().contains(Rune.ESSENCE, 1));
+			return;
+		} 
+		if (Interfaces.getInventory().contains(Rune.ESSENCE, 1)) {
 			setState("Searching for best node to siphon...");
-			NodeInfo bestNodeInfo = getBestNearbyNode();
-			if (bestNodeInfo == null) {
+			Interactable node = getBestNearbyNode();
+			if (node == null) {
 				sleep(2000);
 				return;
-			}			
-			Interactable node;
-			if (bestNodeInfo.isNPC())
-				node = NPCs.getClosestReachable(n -> n.getId() == bestNodeInfo.getId());
-			else
-				node = WorldObjects.getClosestReachable(o -> o.getId() == bestNodeInfo.getId());
-
-			if (node != null) {
-				setState("Clicking closest " + bestNodeInfo.name().toLowerCase() + "...");
-				node.interact("Siphon");
-				sleep(5500);
 			}
+			
+			setState("Clicking closest " + node.name() + "...");
+			node.interact("Siphon");
+			sleepWhile(2500, 20000, () -> Interfaces.getInventory().contains(Rune.ESSENCE, 1) || self.isMoving());
 		}
 	}
 
-	private NodeInfo getBestNearbyNode() {
+	private Interactable getBestNearbyNode() {
 		List<NodeInfo> sorted = NodeInfo.bestNodesForLevel(members, Client.getStatById(Client.RUNECRAFTING).getCurrent());
-		Set<Integer> reachableNpcs = NPCs.getNearbyReachable().stream().map(n -> n.getId()).collect(Collectors.toSet());
-		Set<Integer> reachableObjects = WorldObjects.getNearbyReachable().stream().map(o -> o.getId()).collect(Collectors.toSet());
+		List<NPC> closestNpcs = NPCs.getOrderedClosest();
+		List<WorldObject> closestObjects = WorldObjects.getOrderedClosest();
 		
-		for (NodeInfo n : sorted) {
-			if (n.isNPC() && reachableNpcs.contains(n.getId()))
-				return n;
-			else if (!n.isNPC() && reachableObjects.contains(n.getId()))
-				return n;
+		for (NodeInfo node : sorted) {
+			if (node.isNPC()) {
+				for (NPC npc : closestNpcs)
+					if (npc.getId() == node.getId())
+						return npc;
+			} else {
+				for (WorldObject object : closestObjects)
+					if (object.getId() == node.getId())
+						return object;
+			}
 		}
 		return null;
 	}

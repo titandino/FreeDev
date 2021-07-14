@@ -2,6 +2,7 @@ package com.darkan.api.accessors;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -58,7 +59,7 @@ public class WorldObjects {
 			if (obj.hidden())
 				return false;
 			WorldObject wo = new WorldObject(obj.getId(), new WorldTile(obj.getGlobalPosition()));
-			if (wo.getPlane() == Players.self().getGlobalPosition().getZ() && filter.accept(wo))
+			if (wo.getPlane() == Players.self().getGlobalPosition().getZ() && (filter == null || filter.accept(wo)))
 				list.add(wo);
 			return false;
 		});
@@ -66,15 +67,7 @@ public class WorldObjects {
 	}
 	
 	public static List<WorldObject> getNearby() {
-		List<WorldObject> list = new ArrayList<>();
-		SceneObjects.closest(obj -> {
-			if (obj.hidden())
-				return false;
-			if (obj.getGlobalPosition().getZ() == Players.self().getGlobalPosition().getZ())
-				list.add(new WorldObject(obj.getId(), new WorldTile(obj.getGlobalPosition().getX(), obj.getGlobalPosition().getY(), obj.getGlobalPosition().getZ())));
-			return false;
-		});
-		return list;
+		return getNearby(null);
 	}
 	
 	public static List<WorldObject> getNearbyReachable() {
@@ -138,5 +131,35 @@ public class WorldObjects {
         obj.interact(option);
         return true;
     }
+    
+	public static List<WorldObject> getOrderedClosest(Filter<WorldObject> filter) {
+		Map<Integer, List<WorldObject>> distanceMap = new HashMap<>();
+		List<WorldObject> closest = new ArrayList<>();
+		List<WorldObject> objects = getNearby(filter);
+		WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
+		for (WorldObject object : objects) {
+			if (object != null) {
+				int distance = Utils.getRouteDistanceTo(pTile, object);
+				if (distance != -1) {
+					List<WorldObject> nAtDist = distanceMap.get(distance);
+					if (nAtDist == null)
+						nAtDist = new ArrayList<>();
+					nAtDist.add(object);
+					distanceMap.put(distance, nAtDist);
+				}
+			}
+		}
+		if (distanceMap.isEmpty())
+			return closest;
+		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
+		Collections.sort(sortedKeys);
+		for (int key : sortedKeys)
+			closest.addAll(distanceMap.get(key));
+		return closest;
+	}
+	
+	public static List<WorldObject> getOrderedClosest() {
+		return getOrderedClosest(null);
+	}
 
 }
