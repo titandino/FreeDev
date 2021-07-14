@@ -69,9 +69,9 @@ public class WorldObject extends WorldTile implements Interactable {
 		return type.slot;
 	}
 	
-	public void interact(int action) {
+	public boolean interact(int action) {
 		if (action < 0 || action >= MENU_OPS.length)
-			return;
+			return false;
 				
 		//TODO remove this once cracksmoke fixes his object coordinates
 		boolean valid = Region.validateObjCoords(this);
@@ -79,12 +79,16 @@ public class WorldObject extends WorldTile implements Interactable {
 		int y = (int) (valid ? getY() : getY() - Math.ceil(getDef().sizeY / 2));
 		
 		Actions.menu(MENU_OPS[action], getId(), x, y, Utils.random(0, Integer.MAX_VALUE));
+		return true;
 	}
 	
-	public void interact(String action) {
+	public boolean interact(String action) {
 		int op = getDef().getOpIdForName(action);
-		if (op != -1)
+		if (op != -1) {
 			interact(op);
+			return true;
+		}
+		return false;
 	}
 
 	public ObjectDef getDef() {

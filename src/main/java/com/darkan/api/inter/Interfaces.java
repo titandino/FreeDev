@@ -42,6 +42,18 @@ public class Interfaces {
 	public static ItemContainer getEquipment() {
 		return EQUIPMENT;
 	}
+	
+   public static ItemContainer getBank() {
+        return BANK;
+    }
+   
+    public static ItemContainer getBankInventory() {
+        return BANK_INVENTORY;
+    }
+    
+    public static ItemContainer getBankEquipment() {
+        return BANK_EQUIPMENT;
+    }
 
 	public static Interface get(int interfaceId) {
 		return new Interface(interfaceId);

@@ -151,6 +151,16 @@ public class ItemContainer extends IFComponent {
 		}
 		return false;
 	}
+	
+    public boolean clickItemReg(String regex, String option) {
+        for (Item item : getItems()) {
+            if (item != null && Pattern.compile(regex).matcher(item.getDef().name).find()) {
+                item.click(option);
+                return true;
+            }
+        }
+        return false;
+     }
 
 	public int freeSlots() {
 		int free = 0;

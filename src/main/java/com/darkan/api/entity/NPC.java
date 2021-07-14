@@ -38,17 +38,21 @@ public class NPC extends Entity implements Interactable {
 	}
 
 	@Override
-	public void interact(String string) {
+	public boolean interact(String string) {
 		int op = getDef().getOpIdForName(string);
-		if (op != -1)
+		if (op != -1) {
 			interact(op);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
-	public void interact(int option) {
+	public boolean interact(int option) {
 		if (option < 0 || option > 5)
-			return;
+			return false;
 		Actions.menu(Actions.MENU_EXECUTE_NPC1 + option, memNpc.getServerIndex(), 0, 0, Utils.random(0, Integer.MAX_VALUE));
+		return true;
 	}
 
 	public String getName() {
