@@ -114,7 +114,7 @@ public class AnachroniaAgility extends ScriptSkeleton {
 	
 	@Override
 	public void paintImGui(long runtime) {
-		ImGui.label("Current obstacle: " + currNode.name());
+		ImGui.label("Current obstacle: " + currNode != null ? currNode.name() : "None");
 		ImGui.label("Direction: " + (reverse ? "counter-clockwise" : "clockwise"));
 		ImGui.label("Pages p/h: " + Time.perHour(runtime, Interfaces.getInventory().count(PAGE_ID) - startPages));
 		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.AGILITY).getXp() - startXp));
