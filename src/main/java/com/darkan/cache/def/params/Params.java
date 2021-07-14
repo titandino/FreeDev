@@ -75,4 +75,40 @@ public class Params {
 	public Object get(int id) {
 		return map.get(id);
 	}
+	
+	public String getString(int opcode, String defaultVal) {
+		if (map != null) {
+			Object value = map.get(opcode);
+			if (value != null && value instanceof String)
+				return (String) value;
+		}
+		return defaultVal;
+	}
+
+	public String getString(int opcode) {
+		if (map != null) {
+			Object value = map.get(opcode);
+			if (value != null && value instanceof String)
+				return (String) value;
+		}
+		return "null";
+	}
+	
+	public int getInt(int opcode, int defaultVal) {
+		if (map != null) {
+			Object value = map.get(opcode);
+			if (value != null && value instanceof Integer)
+				return (int) value;
+		}
+		return defaultVal;
+	}
+
+	public int getInt(int opcode) {
+		if (map != null) {
+			Object value = map.get(opcode);
+			if (value != null && value instanceof Integer)
+				return (int) value;
+		}
+		return 0;
+	}
 }

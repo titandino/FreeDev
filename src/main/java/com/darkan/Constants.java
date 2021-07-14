@@ -1,5 +1,6 @@
 package com.darkan;
 
+import com.darkan.cache.def.items.ItemDef;
 import com.darkan.cache.def.objects.ObjectDef;
 
 public class Constants {
@@ -13,6 +14,9 @@ public class Constants {
 //		for (WorldObject obj : region.getObjectList())
 //			System.out.println(obj);
 		
-		System.out.println(ObjectDef.get(111376));
+		ItemDef def = ItemDef.get(15333);
+		System.out.println("Skill required: " + def.getCreationLevelReq() + " " + SKILL_NAME[def.getCreationSkillId()]);
+		System.out.println("Awards " + def.getCreationExperience() + " experience");
+		System.out.println("Materials required: " + ItemDef.get(15333).getMaterials());
 	}
 }

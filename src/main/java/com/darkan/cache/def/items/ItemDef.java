@@ -2,10 +2,15 @@ package com.darkan.cache.def.items;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 
+import com.darkan.Constants;
+import com.darkan.api.item.Item;
 import com.darkan.api.util.Utils;
 import com.darkan.cache.Cache;
+import com.darkan.cache.def.enums.EnumDef;
 import com.darkan.cache.def.params.Params;
+import kraken.plugin.api.Client;
 
 public class ItemDef {
 	public int id;
@@ -202,13 +207,13 @@ public class ItemDef {
 	}
 	
 	public void loadEquippedOps() {
-		wornActions[0] = (String) (params.get(528) == null ? "null" : params.get(528));
-		wornActions[1] = (String) (params.get(529) == null ? "null" : params.get(529));
-		wornActions[2] = (String) (params.get(530) == null ? "null" : params.get(530));
-		wornActions[3] = (String) (params.get(531) == null ? "null" : params.get(531));
-		wornActions[4] = (String) (params.get(1211) == null ? "null" : params.get(1211));
-		wornActions[5] = (String) (params.get(6712) == null ? "null" : params.get(6712));
-		wornActions[6] = (String) (params.get(6713) == null ? "null" : params.get(6713));
+		wornActions[0] = params.getString(528);
+		wornActions[1] = params.getString(529);
+		wornActions[2] = params.getString(530);
+		wornActions[3] = params.getString(531);
+		wornActions[4] = params.getString(1211);
+		wornActions[5] = params.getString(6712);
+		wornActions[6] = params.getString(6713);
 	}
 	
 	public String getEquipOp(int optionId) {
@@ -237,6 +242,57 @@ public class ItemDef {
 		if (equipOp != null && !equipOp.equals("null") && equipOp.equalsIgnoreCase(option))
 			return true;
 		return false;
+	}
+	
+	public int getCreationSkillId() {
+		return (int) EnumDef.get(681).values.get(getCraftingType());
+	}
+	
+	public int getCraftingType() {
+		return params.getInt(2696);
+	}
+	
+	public int getCreationLevelReq() {
+		return params.getInt(2645);
+	}
+	
+	public int getToolBeltReqItem() {
+		return params.getInt(2650, -1);
+	}
+	
+	public ArrayList<Item> getMaterials() {
+		ArrayList<Item> mats = new ArrayList<Item>();
+		for (int i = 0;i < 6;i++) {
+			Item item = null;
+			if (params.getInt(2655+i, -1) != -1)
+				item = new Item(params.getInt(2655+i));
+			if (params.getInt(2665+i, -1) != -1 && item != null)
+				item.setAmount(params.getInt(2665+i, -1));
+			else if (params.getInt(2665+i, -1) != -1 && item == null) {
+				item = new Item((int) EnumDef.get(params.getInt(2675+i, 0)).values.get(2655+i), params.getInt(2665+i, -1));
+			}
+			if (item != null)
+				mats.add(item);
+		}
+		return mats;
+	}
+
+	public boolean hasCreationReqs() {
+		if (params == null)
+			return true;
+		int skillId = getCreationSkillId();
+		int level = getCreationLevelReq();
+		if (skillId < 0 || skillId >= Constants.SKILL_NAME.length)
+			return true;
+		return Client.getStatById(skillId).getCurrent() >= level;
+	}
+	
+	public int getCreationAmount() {
+		return params.getInt(2653, 1);
+	}
+	
+	public double getCreationExperience() {
+		return params.getInt(2697)/10;
 	}
 	
 	private static ItemDefParser PARSER = new ItemDefParser();
