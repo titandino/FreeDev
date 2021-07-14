@@ -6,6 +6,7 @@ import com.darkan.cache.def.maps.Region;
 import com.darkan.cache.def.objects.ObjectDef;
 
 import kraken.plugin.api.Actions;
+import kraken.plugin.api.Debug;
 
 public class WorldObject extends WorldTile implements Interactable {
 	private static final int[] MENU_OPS = { 
@@ -73,10 +74,14 @@ public class WorldObject extends WorldTile implements Interactable {
 		if (action < 0 || action >= MENU_OPS.length)
 			return;
 		
+		Debug.log("Cracksmoke object: " + this);
+		
 		//TODO remove this once cracksmoke fixes his object coordinates
 		boolean valid = Region.validateObjCoords(this);
-		int x = valid ? getX() : getX() - (int) Math.ceil((double) getDef().sizeX / 2.0);
-		int y = valid ? getY() : getY() - (int) Math.ceil((double) getDef().sizeY / 2.0);
+		Debug.log("Valid? " + valid);
+		Debug.log("Real map object: " + this);
+		int x = (int) (valid ? getX() : getX() - Math.ceil(getDef().sizeX / 2));
+		int y = (int) (valid ? getY() : getY() - Math.ceil(getDef().sizeY / 2));
 		
 		Actions.menu(MENU_OPS[action], getId(), x, y, Utils.random(0, Integer.MAX_VALUE));
 	}
