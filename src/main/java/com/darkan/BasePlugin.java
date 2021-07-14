@@ -1,6 +1,8 @@
 package com.darkan;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import kraken.plugin.api.PluginContext;
 
 public final class BasePlugin extends AbstractPlugin {
 	
+	private List<String> orderedNames;
 	private Map<String, Class<? extends ScriptSkeleton>> scriptTypes = new HashMap<>();
 	private Map<Class<? extends ScriptSkeleton>, ScriptSkeleton> scripts = new HashMap<>();
 
@@ -37,6 +40,8 @@ public final class BasePlugin extends AbstractPlugin {
 	    	List<Class<?>> classes = Utils.getClassesWithAnnotation("com.darkan.scripts", Script.class);
 			for (Class<?> clazz : classes)
 				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
+			orderedNames = new ArrayList<>(scriptTypes.keySet());
+		   	Collections.sort(orderedNames);
 			Debug.log("Parsed scripts: " + scriptTypes.keySet().toString());
     	} catch (Exception e) {
     		Debug.log("Failed to load scripts: " + e.getMessage());
@@ -54,7 +59,7 @@ public final class BasePlugin extends AbstractPlugin {
 
     public void onPaint() {
     	ImGui.label("Please select a script:");
-    	for (String scriptName : scriptTypes.keySet()) {
+    	for (String scriptName : orderedNames) {
     		Class<? extends ScriptSkeleton> script = scriptTypes.get(scriptName);
     		boolean currRunning = scripts.get(script) != null;
     		boolean running = ImGui.checkbox(scriptName, currRunning);
