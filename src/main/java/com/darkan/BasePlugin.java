@@ -90,6 +90,7 @@ public final class BasePlugin extends AbstractPlugin {
     }
 
     public void onConVarChanged(ConVar conv, int oldValue, int newValue) {
+    	//MyPlayer.getVars().checkVarUpdates();
     	Debug.log("Var changed: " + conv.getId() + " from " + oldValue + " -> " + newValue);
     	MyPlayer.getVars().setVar(conv.getId(), newValue);
     }

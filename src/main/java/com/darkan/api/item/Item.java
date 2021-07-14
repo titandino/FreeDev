@@ -32,10 +32,21 @@ public class Item {
 	
 	public void click(String option) {
 		int op = -1;
-		if (container == Interfaces.getEquipment())
+		if (container == Interfaces.getEquipment()) {
 			op = getDef().getEquipOpIdForName(option);
-		if (container == Interfaces.getInventory())
+			op += 2;
+		}
+		if (container == Interfaces.getInventory()) {
 			op = getDef().getInvOpIdForName(option);
+			op = switch(op) {
+				case 0 -> 1;
+				case 1 -> 2;
+				case 2 -> 3;
+				case 3 -> 7;
+				case 4 -> 8;
+				default -> -1;
+			};
+		}
 		if (op != -1)
 			click(op);
 	}	

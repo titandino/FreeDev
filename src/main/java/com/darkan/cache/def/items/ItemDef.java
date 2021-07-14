@@ -29,6 +29,7 @@ public class ItemDef {
 	public int femaleModel1 = -1;
 	public int femaleModel2 = -1;
 	public byte equipmentType2 = -1;
+	public String[] wornActions = new String[7];
 	public String[] groundActions = new String[5];
 	public String[] inventoryActions = new String[5];
 	public short[] originalColors;
@@ -141,7 +142,7 @@ public class ItemDef {
 	}
 	
 	public int getInvOpIdForName(String opName) {
-		for (int i = 0;i < 5;i++) {
+		for (int i = 0;i < inventoryActions.length;i++) {
 			if (containsInvOp(i, opName))
 				return i;
 		}
@@ -193,26 +194,37 @@ public class ItemDef {
 	}
 	
 	public int getEquipOpIdForName(String opName) {
-		for (int i = 0;i < 5;i++) {
+		for (int i = 0;i < wornActions.length;i++) {
 			if (containsEquipOp(i, opName))
 				return i;
 		}
 		return -1;
 	}
 	
+	public void loadEquippedOps() {
+		wornActions[0] = (String) (params.get(528) == null ? "null" : params.get(528));
+		wornActions[1] = (String) (params.get(529) == null ? "null" : params.get(529));
+		wornActions[2] = (String) (params.get(530) == null ? "null" : params.get(530));
+		wornActions[3] = (String) (params.get(531) == null ? "null" : params.get(531));
+		wornActions[4] = (String) (params.get(1211) == null ? "null" : params.get(1211));
+		wornActions[5] = (String) (params.get(6712) == null ? "null" : params.get(6712));
+		wornActions[6] = (String) (params.get(6713) == null ? "null" : params.get(6713));
+	}
+	
 	public String getEquipOp(int optionId) {
-		if (params == null)
+		if (wornActions == null)
 			return "null";
-		Object wearingOption = params.get(optionId == 4 ? 1211 : (528 + optionId));
-		if (wearingOption != null && wearingOption instanceof String)
-			return (String) wearingOption;
-		return "null";
+		if (optionId >= wornActions.length)
+			return "null";
+		if (wornActions[optionId] == null)
+			return "null";
+		return wornActions[optionId];
 	}
 	
 	public boolean containsEquipOp(String option) {
 		if (params == null)
 			return false;
-		for (int i = 0;i < 5;i++)
+		for (int i = 0;i < wornActions.length;i++)
 			if (containsEquipOp(i, option))
 				return true;
 		return false;
