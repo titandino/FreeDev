@@ -1,4 +1,4 @@
-package com.darkan.scripts.spiritattraction;
+package com.darkan.scripts.impl;
 
 import java.util.Arrays;
 import java.util.HashSet;

@@ -37,7 +37,7 @@ public final class BasePlugin extends AbstractPlugin {
     @SuppressWarnings("unchecked")
 	private void loadScripts() {
     	try {
-	    	List<Class<?>> classes = Utils.getClassesWithAnnotation("com.darkan.scripts", Script.class);
+	    	List<Class<?>> classes = Utils.getClassesWithAnnotation("com.darkan.scripts.impl", Script.class);
 			for (Class<?> clazz : classes)
 				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
 			orderedNames = new ArrayList<>(scriptTypes.keySet());

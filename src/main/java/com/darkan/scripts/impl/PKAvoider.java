@@ -1,4 +1,4 @@
-package com.darkan.scripts.pkavoider;
+package com.darkan.scripts.impl;
 
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Area;

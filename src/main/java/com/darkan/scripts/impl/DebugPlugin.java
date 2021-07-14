@@ -1,4 +1,4 @@
-package com.darkan.scripts.debug;
+package com.darkan.scripts.impl;
 
 import java.util.Arrays;
 

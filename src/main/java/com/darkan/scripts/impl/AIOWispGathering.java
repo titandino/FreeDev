@@ -1,4 +1,4 @@
-package com.darkan.scripts.aiowisp;
+package com.darkan.scripts.impl;
 
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;

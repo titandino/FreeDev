@@ -1,4 +1,4 @@
-package com.darkan.scripts.anachroniaagility;
+package com.darkan.scripts.impl.anachroniaagility;
 
 import com.darkan.api.util.Area;
 import com.darkan.api.world.WorldObject;

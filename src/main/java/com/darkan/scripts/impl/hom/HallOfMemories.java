@@ -1,4 +1,4 @@
-package com.darkan.scripts.hom;
+package com.darkan.scripts.impl.hom;
 
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;

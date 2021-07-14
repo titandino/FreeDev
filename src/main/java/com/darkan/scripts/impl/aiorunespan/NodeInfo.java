@@ -1,4 +1,4 @@
-package com.darkan.scripts.aiorunespan;
+package com.darkan.scripts.impl.aiorunespan;
 
 import java.util.ArrayList;
 import java.util.HashMap;

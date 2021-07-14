@@ -1,4 +1,4 @@
-package com.darkan.scripts.aiorunespan;
+package com.darkan.scripts.impl.aiorunespan;
 
 public enum Platform {
 	P_EARTH(70478, Rune.EARTH), 

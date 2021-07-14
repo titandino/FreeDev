@@ -1,4 +1,4 @@
-package com.darkan.scripts.nightshadegatherer;
+package com.darkan.scripts.impl;
 
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.inter.Interfaces;

@@ -1,4 +1,4 @@
-package com.darkan.scripts.anachroniaagility;
+package com.darkan.scripts.impl.anachroniaagility;
 
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
