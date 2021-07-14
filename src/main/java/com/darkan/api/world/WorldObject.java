@@ -104,4 +104,9 @@ public class WorldObject extends WorldTile implements Interactable {
 	public String toString() {
 		return "[" + id + " (" + getName() + "), " + type + ", " + rotation + ", " + super.toString() + "]";
 	}
+
+	@Override
+	public String name() {
+		return getName();
+	}
 }

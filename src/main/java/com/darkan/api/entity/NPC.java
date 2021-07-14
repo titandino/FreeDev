@@ -67,4 +67,9 @@ public class NPC extends Entity implements Interactable {
 	public String toString() {
 		return "[" + id + ", " + getName() + ", " + getPosition() + "]";
 	}
+
+	@Override
+	public String name() {
+		return getName();
+	}
 }

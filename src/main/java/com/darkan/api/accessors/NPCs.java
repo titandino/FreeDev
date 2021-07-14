@@ -2,6 +2,7 @@ package com.darkan.api.accessors;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -104,7 +105,7 @@ public class NPCs {
 		List<NPC> list = new ArrayList<>();
 		Npcs.closest(n -> {
 			NPC npc = new NPC(n);
-			if (filter.accept(npc))
+			if (filter == null || filter.accept(npc))
 				list.add(npc);
 			return false;
 		});
@@ -112,12 +113,7 @@ public class NPCs {
 	}
 	
 	public static List<NPC> getNearby() {
-		List<NPC> list = new ArrayList<>();
-		Npcs.closest(n -> {
-			list.add(new NPC(n));
-			return false;
-		});
-		return list;
+		return getNearby(null);
 	}
 	
 	public static List<NPC> getNearbyReachable() {
@@ -132,5 +128,35 @@ public class NPCs {
 			}
 		}
 		return reachable;
+	}
+	
+	public static List<NPC> getOrderedClosest(Filter<NPC> filter) {
+		Map<Integer, List<NPC>> distanceMap = new HashMap<>();
+		List<NPC> closest = new ArrayList<>();
+		List<NPC> npcs = getNearby(filter);
+		WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
+		for (NPC npc : npcs) {
+			if (npc != null) {
+				int distance = Utils.getRouteDistanceTo(pTile, npc.getPosition());
+				if (distance != -1) {
+					List<NPC> nAtDist = distanceMap.get(distance);
+					if (nAtDist == null)
+						nAtDist = new ArrayList<>();
+					nAtDist.add(npc);
+					distanceMap.put(distance, nAtDist);
+				}
+			}
+		}
+		if (distanceMap.isEmpty())
+			return closest;
+		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
+		Collections.sort(sortedKeys);
+		for (int key : sortedKeys)
+			closest.addAll(distanceMap.get(key));
+		return closest;
+	}
+	
+	public static List<NPC> getOrderedClosest() {
+		return getOrderedClosest(null);
 	}
 }
