@@ -5,7 +5,6 @@ import java.security.SecureRandom;
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.NPC;
-import com.darkan.api.inter.Interface;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
@@ -19,7 +18,7 @@ import kraken.plugin.api.Player;
 import kraken.plugin.api.Vector2i;
 import kraken.plugin.api.Bank;
 
-//@Script("AIO Woodcut")
+@Script("AIO Woodcut")
 public class AIOWoodcut extends ScriptSkeleton {
     
     int selectedTree = 0;
@@ -27,7 +26,8 @@ public class AIOWoodcut extends ScriptSkeleton {
     boolean firemake = false;
     boolean drop = false;
     boolean bank = true;
-    boolean clearInventory = false;
+    boolean fullInventory = true;
+    boolean paused = true;
     WorldTile startTile = null;
     SecureRandom random = new SecureRandom();
 	
@@ -44,63 +44,70 @@ public class AIOWoodcut extends ScriptSkeleton {
 	
 	@Override
 	public void loop(Player self) {
+	    if (paused)
+	        return;
 		if (self.isMoving() || self.isAnimationPlaying())
 			return;
 		
-		if (Interfaces.getInventory().isFull()) {
-		    clearInventory = true;
-		} else if (!(Interfaces.getBankInventory().containsAnyReg("logs") || Interfaces.getBankInventory().containsAnyReg("(u)"))) {
-		    clearInventory = false;
-		}
+		if (Interfaces.getInventory().isFull())
+		    fullInventory = true;
+		else if (!Interfaces.getInventory().containsAnyReg("(?i)logs") && !Interfaces.getInventory().containsAnyReg("(u)")) //Leave the inventory as "full" until the player has finished fletching/firemaking/banking
+		    fullInventory = false;
 		
-		if (!Interfaces.getInventory().isFull() && (getTimeSinceLastMoving() > 1200) && Utils.getDistanceTo(new WorldTile(self.getGlobalPosition()), startTile) > 24) {
-	        setState("Running back to starting area");
-		    Move.to(new Vector2i(startTile.getX() + (random.nextInt(10) - 5), startTile.getY() + (random.nextInt(10) - 5)));
-		    return;
+		if (!fullInventory) {
+    		if ((getTimeSinceLastMoving() > 1200) && Utils.getDistanceTo(new WorldTile(self.getGlobalPosition()), startTile) > 24) {
+    	        setState("Running back to starting area");
+    		    Move.to(new Vector2i(startTile.getX() + (random.nextInt(10) - 5), startTile.getY() + (random.nextInt(10) - 5)));
+    		    return;
+    		}
+    		if (WorldObjects.interactClosestReachable("Chop down", object -> object.getName().equals(getTree()) && object.hasOption("Chop down"))) {
+    		    setState("Cutting " + getTree());
+    		    sleepWhile(Integer.MAX_VALUE, () -> self.isAnimationPlaying());
+    	        return;
+    		}
 		}
-		if (!Interfaces.getInventory().isFull() && WorldObjects.interactClosestReachable("Chop down", object -> object.getName().equals(getTree()) && object.hasOption("Chop down"))) {
-		    setState("Cutting " + getTree());
-		    sleepWhile(Integer.MAX_VALUE, () -> self.isAnimationPlaying());
-	        return;
-		}
-		if (fletch && Interfaces.getInventory().isFull()) {
-		    setState("Fletching");
-		    //do fletching logic
-		    sleepWhile(Integer.MAX_VALUE, () -> self.isAnimationPlaying());
-		    return;
-		}
-		if (firemake && clearInventory) {
-		    setState("Firemaking");
-		    WorldObject fire = WorldObjects.getClosest(object -> object.getName() == "Fire" && object.hasOption("Use"));//do firemaking logic
-		    if (fire == null)
-		        Interfaces.getInventory().clickItemReg("(?i)logs", "Light");
 
-		    //Interface: 1179, child: 17, slot: 17
-		    return;
-		}
-		if (drop && clearInventory) {
-		    setState("Dropping items");
-		    Interfaces.getInventory().clickItemReg("(?i)logs", "Drop");
-		    Interfaces.getInventory().clickItemReg("(u)", "Drop");
-	        sleep(Utils.gaussian(100, 300));
-		    //sleepWhile(Integer.MAX_VALUE, () -> Interfaces.getInventory().containsAnyReg("logs") || Interfaces.getInventory().containsAnyReg("(u)"));
-		    return;
-		}
-		if (bank && Interfaces.getInventory().isFull() && Bank.isOpen()) {
-		    setState("Banking items");
-	        Interfaces.getBankInventory().clickItemReg("(?i)logs", "Deposit-All");
-	        Interfaces.getBankInventory().clickItemReg("(u)", "Deposit-All");
-	        //sleepWhile(Integer.MAX_VALUE, () -> Interfaces.getBankInventory().containsAnyReg("logs") || Interfaces.getBankInventory().containsAnyReg("(u)"));
-	        return;
-		}
-		if (bank && Interfaces.getInventory().isFull() && !Bank.isOpen()) {
-		    setState("Running to bank");
-		    if (!openBank(self)) {
-		        bank = false;
-		        return;
-		    }
-		    sleepWhile(Integer.MAX_VALUE, () -> !Bank.isOpen());
-		    return;
+		if (fullInventory) {
+	        if (fletch && Interfaces.getInventory().isFull()) {
+	            setState("Fletching");
+	            //do fletching logic
+	            sleepWhile(Integer.MAX_VALUE, () -> self.isAnimationPlaying());
+	            return;
+	        }
+    		if (firemake && Interfaces.getInventory().freeSlots() <= 1) {
+    		    setState("Firemaking");
+    		    WorldObject fire = WorldObjects.getClosest(object -> object.getName() == "Fire" && object.hasOption("Use"));//do firemaking logic
+    		    if (fire == null) {
+    		        Interfaces.getInventory().clickItemReg("(?i)logs", "Light");
+    		        return;
+    		    }
+    		    //fire.interact("Use");
+    		    //Interface: 1179, child: 17, slot: 17
+                sleepWhile(Integer.MAX_VALUE, () -> self.isAnimationPlaying());
+    		    return;
+    		}
+    		if (drop) {
+    		    setState("Dropping items");
+    		    Interfaces.getInventory().clickItemReg("(?i)logs", "Drop");
+    		    Interfaces.getInventory().clickItemReg("(u)", "Drop");
+    	        sleep(Utils.gaussian(100, 300));
+    		    return;
+    		}
+    		if (bank && Interfaces.getInventory().isFull() && Bank.isOpen()) {
+    		    setState("Banking items");
+    	        Interfaces.getBankInventory().clickItemReg("(?i)logs", "Deposit-All");
+    	        Interfaces.getBankInventory().clickItemReg("(u)", "Deposit-All");
+    	        return;
+    		}
+    		if (bank && Interfaces.getInventory().isFull() && !Bank.isOpen()) {
+    		    setState("Running to bank");
+    		    if (!openBank(self)) {
+    		        bank = false;
+    		        return;
+    		    }
+    		    sleepWhile(Integer.MAX_VALUE, () -> !Bank.isOpen());
+    		    return;
+    		}
 		}
 	}
 
@@ -126,6 +133,7 @@ public class AIOWoodcut extends ScriptSkeleton {
 	    
 	    ImGui.label("\n\n");
 	    
+	    paused = ImGui.checkbox("Script paused", paused);
 	    fletch = ImGui.checkbox("Fletch logs", fletch && !firemake);
 	    firemake = ImGui.checkbox("Firemake logs", firemake && (!fletch && !bank));
 	    drop = ImGui.checkbox("Drop logs", (drop && (!firemake && !bank)) || (!firemake && !bank));
@@ -146,11 +154,11 @@ public class AIOWoodcut extends ScriptSkeleton {
 	    case 0 -> "Tree";
 	    case 1 -> "Oak";
         case 2 -> "Willow";
-        case 3 -> "Maple";
-        case 4 -> "Acadia";
+        case 3 -> "Maple Tree";
+        case 4 -> "Acadia tree";
         case 5 -> "Yew";
-        case 6 -> "Magic";
-        case 7 -> "Elder";
+        case 6 -> "Magic tree";
+        case 7 -> "Elder tree";
         default -> throw new IllegalArgumentException("Unexpected value " + selectedTree + " is not mapped to a valid tree.");
 	    };
 	}
