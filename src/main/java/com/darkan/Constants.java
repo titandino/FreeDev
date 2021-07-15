@@ -1,7 +1,6 @@
 package com.darkan;
 
 import com.darkan.cache.def.items.ItemDef;
-import com.darkan.cache.def.objects.ObjectDef;
 
 public class Constants {
 	

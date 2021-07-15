@@ -12,7 +12,6 @@ import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
 
-import kraken.plugin.api.Debug;
 import kraken.plugin.api.Filter;
 import kraken.plugin.api.Players;
 import kraken.plugin.api.SceneObjects;
@@ -40,7 +39,6 @@ public class WorldObjects {
 			});
 			OBJECTS.clear();
 			OBJECTS.addAll(list);
-			Debug.log("Objects after updating: " + OBJECTS);
 			UPDATING = false;
 		}).start();
 	}
@@ -83,7 +81,6 @@ public class WorldObjects {
 
 	public static List<WorldObject> getNearby(Filter<WorldObject> filter) {
 		List<WorldObject> list = new ArrayList<>();
-		Debug.log("Nearby: " + OBJECTS);
 		for (WorldObject obj : OBJECTS) {
 			if (filter == null || filter.accept(obj))
 				list.add(obj);
@@ -174,14 +171,12 @@ public class WorldObjects {
 				}
 			}
 		}
-		Debug.log("Distance map: " + distanceMap);
 		if (distanceMap.isEmpty())
 			return closest;
 		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
 		Collections.sort(sortedKeys);
 		for (int key : sortedKeys)
 			closest.addAll(distanceMap.get(key));
-		Debug.log("Closest " + closest);
 		return closest;
 	}
 	

@@ -11,7 +11,6 @@ import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Client;
-import kraken.plugin.api.Debug;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
@@ -58,11 +57,7 @@ public class AIORunespan extends ScriptSkeleton {
 		List<NodeInfo> sorted = NodeInfo.bestNodesForLevel(members, Client.getStatById(Client.RUNECRAFTING).getCurrent());
 		List<NPC> closestNpcs = NPCs.getOrderedClosest();
 		List<WorldObject> closestObjects = WorldObjects.getOrderedClosest();
-		
-		Debug.log(sorted.toString());
-		Debug.log(closestNpcs.toString());
-		Debug.log(closestObjects.toString());
-		
+
 		for (NodeInfo node : sorted) {
 			if (node.isNPC()) {
 				for (NPC npc : closestNpcs)
