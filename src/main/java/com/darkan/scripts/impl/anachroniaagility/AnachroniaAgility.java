@@ -67,13 +67,15 @@ public class AnachroniaAgility extends ScriptSkeleton {
 				if (next == getEnd())
 					return;
 				if (next.getReverseObj() != null)
-					next.getReverseObj().interact(0);
+					next.getReverseObj().interact(0, false);
 				else
-					next.getObject().interact(0);
+					next.getObject().interact(0, false);
+				sleepWhile(2500, 20000, () -> self.isMoving() || self.isAnimationPlaying());
 			} else {
 				if (currNode == getEnd())
 					return;
-				currNode.getObject().interact(0);
+				currNode.getObject().interact(0, false);
+				sleepWhile(2500, 20000, () -> self.isMoving() || self.isAnimationPlaying());
 			}
 		} else {
 			setState("Checking if we should move to "+next+"...");

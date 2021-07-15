@@ -70,15 +70,23 @@ public class WorldObject extends WorldTile implements Interactable {
 	}
 	
 	public boolean interact(int action) {
+		return interact(action, true);
+	}
+	
+	public boolean interact(int action, boolean validate) {
 		if (action < 0 || action >= MENU_OPS.length)
 			return false;
-				
-		//TODO remove this once cracksmoke fixes his object coordinates
-		boolean valid = Region.validateObjCoords(this);
-		int x = (int) (valid ? getX() : getX() - Math.ceil(getDef().sizeX / 2));
-		int y = (int) (valid ? getY() : getY() - Math.ceil(getDef().sizeY / 2));
 		
-		Actions.menu(MENU_OPS[action], getId(), x, y, Utils.random(0, Integer.MAX_VALUE));
+		if (validate) {
+			//TODO remove this once cracksmoke fixes his object coordinates
+			boolean valid = Region.validateObjCoords(this);
+			int x = (int) (valid ? getX() : getX() - Math.ceil(getDef().sizeX / 2));
+			int y = (int) (valid ? getY() : getY() - Math.ceil(getDef().sizeY / 2));
+			
+			Actions.menu(MENU_OPS[action], getId(), x, y, Utils.random(0, Integer.MAX_VALUE));
+		} else  {
+			Actions.menu(MENU_OPS[action], getId(), getX(), getY(), Utils.random(0, Integer.MAX_VALUE));
+		}
 		return true;
 	}
 	

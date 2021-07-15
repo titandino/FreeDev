@@ -36,7 +36,7 @@ public class AIOAgility extends ScriptSkeleton {
 	public void loop(Player self) {
 		int nextIdx = getNext();
 		if (course[currNodeIdx].getArea().inside(self.getGlobalPosition())) {
-			if (WorldObjects.getClosest(obj -> obj.getId() == course[currNodeIdx].getObjectId()).interact(0)) {
+			if ((course[currNodeIdx].getObject() != null && course[currNodeIdx].getObject().interact(0)) || WorldObjects.getClosest(obj -> obj.getId() == course[currNodeIdx].getObjectId()).interact(0)) {
 				setState("Using " + course[currNodeIdx].getName() + "...");
 				sleepWhile(2500, 25000, () -> self.isMoving() || self.isAnimationPlaying());
 			}
