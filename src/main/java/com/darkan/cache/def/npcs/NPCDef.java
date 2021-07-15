@@ -19,6 +19,12 @@ public class NPCDef {
 	}
 	
 	public static NPCDef get(int id) {
+		NPCDef def = PARSER.get(Cache.get(), id);
+		if (def == null) {
+			NPCDef empty = new NPCDef();
+			empty.id = id;
+			return empty;
+		}
 		return PARSER.get(Cache.get(), id);
 	}
 

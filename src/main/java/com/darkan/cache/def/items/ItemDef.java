@@ -88,6 +88,11 @@ public class ItemDef {
 	public boolean noted = false;
 	public boolean lended = false;
 	
+	public ItemDef() {
+		groundActions = new String[] { null, null, "Take", null, null };
+		inventoryActions = new String[] { null, null, null, null, "Drop" };
+	}
+	
 	public void toNote() {
 		ItemDef realItem = get(notedItemId);
 		members = realItem.members;
@@ -302,6 +307,12 @@ public class ItemDef {
 	}
 	
 	public static ItemDef get(int id) {
+		ItemDef def = PARSER.get(Cache.get(), id);
+		if (def == null) {
+			ItemDef empty = new ItemDef();
+			empty.id = id;
+			return empty;
+		}
 		return PARSER.get(Cache.get(), id);
 	}
 	

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.darkan.api.accessors.NPCs;
+import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.entity.VarManager;
 import com.darkan.api.inter.Interfaces;
@@ -54,6 +56,8 @@ public final class BasePlugin extends AbstractPlugin {
     		if (script != null)
     			script.process();
     	}
+		WorldObjects.update();
+		NPCs.update();
         return 17;
     }
 
