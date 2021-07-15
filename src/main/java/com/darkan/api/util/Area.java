@@ -18,6 +18,13 @@ public class Area {
 		maxY = Math.max(t1.getY(), t2.getY());
 	}
 	
+	public Area(int cornerX1, int cornerY1, int cornerX2, int cornerY2) {
+		minX = Math.min(cornerX1, cornerX2);
+		maxX = Math.max(cornerX1, cornerX2);
+		minY = Math.min(cornerY1, cornerY2);
+		maxY = Math.max(cornerY1, cornerY2);
+	}
+	
 	public boolean inside(WorldTile tile) {
 		return tile.getX() >= minX && tile.getX() <= maxX && tile.getY() >= minY && tile.getY() <= maxY;
 	}

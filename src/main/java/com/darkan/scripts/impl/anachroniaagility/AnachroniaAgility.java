@@ -47,9 +47,20 @@ public class AnachroniaAgility extends ScriptSkeleton {
 
 	@Override
 	public void loop(Player self) {
-		if (self.isAnimationPlaying() || self.isMoving())
-			return;
 		AgilityNode next = getNext();
+		if (MyPlayer.getHealthPerc() < 10) {
+			sleep(1600);
+			return;
+		} else if (MyPlayer.getHealthPerc() < 40) {
+			Item excal = Interfaces.getEquipment().getItemById(ENHANCED_EXCALIBUR, AUGMENTED_ENHANCED_EXCALIBUR);
+			if (excal == null)
+				excal = Interfaces.getInventory().getItemById(ENHANCED_EXCALIBUR, AUGMENTED_ENHANCED_EXCALIBUR);
+			if (excal != null) {
+				excal.click("Activate");
+				sleep(1600);
+				return;
+			}
+		}
 		if (currNode.getArea().inside(self.getGlobalPosition())) {
 			setState("Moving to " + currNode.name() + "...");
 			if (reverse) {
@@ -64,14 +75,6 @@ public class AnachroniaAgility extends ScriptSkeleton {
 					return;
 				currNode.getObject().interact(0);
 			}
-			Item excal = Interfaces.getEquipment().getItemById(ENHANCED_EXCALIBUR, AUGMENTED_ENHANCED_EXCALIBUR);
-			if (excal == null)
-				excal = Interfaces.getInventory().getItemById(ENHANCED_EXCALIBUR, AUGMENTED_ENHANCED_EXCALIBUR);
-			if (excal != null && MyPlayer.getHealthPerc() < 40) {
-				excal.click("Activate");
-				sleep(5000);
-			}
-			sleep(2500);
 		} else {
 			setState("Checking if we should move to "+next+"...");
 			if (next.getArea().inside(self.getGlobalPosition()))

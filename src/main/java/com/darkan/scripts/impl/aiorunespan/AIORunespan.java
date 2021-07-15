@@ -49,7 +49,7 @@ public class AIORunespan extends ScriptSkeleton {
 			
 			setState("Clicking closest " + node.name() + "...");
 			node.interact("Siphon");
-			sleepWhile(2500, 20000, () -> Interfaces.getInventory().contains(Rune.ESSENCE, 1) || self.isMoving());
+			sleepWhile(2500, 20000, () -> self.isAnimationPlaying() || self.isMoving());
 		}
 	}
 
