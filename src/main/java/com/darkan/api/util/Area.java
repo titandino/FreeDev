@@ -12,10 +12,12 @@ public class Area {
 	private int maxY;
 	
 	public Area(WorldTile t1, WorldTile t2) {
-		minX = Math.min(t1.getX(), t2.getX());
-		maxX = Math.max(t1.getX(), t2.getX());
-		minY = Math.min(t1.getY(), t2.getY());
-		maxY = Math.max(t1.getY(), t2.getY());
+		if (t1 != null && t2 != null) {
+			minX = Math.min(t1.getX(), t2.getX());
+			maxX = Math.max(t1.getX(), t2.getX());
+			minY = Math.min(t1.getY(), t2.getY());
+			maxY = Math.max(t1.getY(), t2.getY());
+		}
 	}
 	
 	public Area(int cornerX1, int cornerY1, int cornerX2, int cornerY2) {
