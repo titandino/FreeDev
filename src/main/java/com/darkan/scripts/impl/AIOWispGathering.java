@@ -23,7 +23,7 @@ public class AIOWispGathering extends ScriptSkeleton {
 	private int startEnergy;
 	
 	public AIOWispGathering() {
-		super("AIO Wisp Gathering", 1000);
+		super("AIO Wisp Gathering", 300);
 	}
 	
 	@Override
