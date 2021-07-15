@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.NPC;
+import com.darkan.api.inter.Interface;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
@@ -26,6 +27,7 @@ public class AIOWoodcut extends ScriptSkeleton {
     boolean firemake = false;
     boolean drop = false;
     boolean bank = true;
+    boolean clearInventory = false;
     WorldTile startTile = null;
     SecureRandom random = new SecureRandom();
 	
@@ -44,6 +46,13 @@ public class AIOWoodcut extends ScriptSkeleton {
 	public void loop(Player self) {
 		if (self.isMoving() || self.isAnimationPlaying())
 			return;
+		
+		if (Interfaces.getInventory().isFull()) {
+		    clearInventory = true;
+		} else if (!(Interfaces.getBankInventory().containsAnyReg("logs") || Interfaces.getBankInventory().containsAnyReg("(u)"))) {
+		    clearInventory = false;
+		}
+		
 		if (!Interfaces.getInventory().isFull() && (getTimeSinceLastMoving() > 1200) && Utils.getDistanceTo(new WorldTile(self.getGlobalPosition()), startTile) > 24) {
 	        setState("Running back to starting area");
 		    Move.to(new Vector2i(startTile.getX() + (random.nextInt(10) - 5), startTile.getY() + (random.nextInt(10) - 5)));
@@ -60,17 +69,16 @@ public class AIOWoodcut extends ScriptSkeleton {
 		    sleepWhile(Integer.MAX_VALUE, () -> self.isAnimationPlaying());
 		    return;
 		}
-		if (firemake && Interfaces.getInventory().isFull()) {
-		    boolean firemaking = true;
+		if (firemake && clearInventory) {
 		    setState("Firemaking");
-		    while (firemaking) {
-		        if (!Interfaces.getInventory().containsAnyReg("logs"))
-		            firemaking = false;
-		        //do firemaking logic
-		    }
+		    WorldObject fire = WorldObjects.getClosest(object -> object.getName() == "Fire" && object.hasOption("Use"));//do firemaking logic
+		    if (fire == null)
+		        Interfaces.getInventory().clickItemReg("(?i)logs", "Light");
+
+		    //Interface: 1179, child: 17, slot: 17
 		    return;
 		}
-		if (drop) {
+		if (drop && clearInventory) {
 		    setState("Dropping items");
 		    Interfaces.getInventory().clickItemReg("(?i)logs", "Drop");
 		    Interfaces.getInventory().clickItemReg("(u)", "Drop");
