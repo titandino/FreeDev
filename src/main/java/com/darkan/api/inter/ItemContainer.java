@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import com.darkan.api.item.Item;
 
+import kraken.plugin.api.Debug;
 import kraken.plugin.api.Widget;
 
 public class ItemContainer extends IFComponent {

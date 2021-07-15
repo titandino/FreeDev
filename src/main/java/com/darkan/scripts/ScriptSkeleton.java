@@ -26,6 +26,7 @@ public abstract class ScriptSkeleton {
 	private int gausVariance = 4000;
 	
 	private long lastMyPlayerAnim;
+	private long lastMyPlayerMoved;
 	
 	private long loopTimer;
 	private long lastLoop;
@@ -63,6 +64,8 @@ public abstract class ScriptSkeleton {
 			}
 			if (self.isAnimationPlaying())
 				lastMyPlayerAnim = System.currentTimeMillis();
+	        if (self.isMoving())
+	            lastMyPlayerMoved = System.currentTimeMillis();
 			localPlayerAtt = 0;
 			if (!enabled) {
 				if (Client.getStatById(Client.HITPOINTS).getXp() <= 100)
@@ -97,6 +100,10 @@ public abstract class ScriptSkeleton {
 	public long getTimeSinceLastAnimation() {
 		return System.currentTimeMillis() - lastMyPlayerAnim;
 	}
+	
+    public long getTimeSinceLastMoving() {
+        return System.currentTimeMillis() - lastMyPlayerMoved;
+    }
 	
 	public void sleepWhile(long maxTime, Supplier<Boolean> constraint) {
 		sleepWhile(-1, maxTime, constraint);

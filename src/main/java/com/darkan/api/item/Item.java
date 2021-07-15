@@ -4,6 +4,8 @@ import com.darkan.api.inter.IFComponent;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.cache.def.items.ItemDef;
 
+import kraken.plugin.api.Debug;
+
 public class Item {
 	
 	private IFComponent container;
@@ -38,6 +40,7 @@ public class Item {
 		}
 		if (container == Interfaces.getInventory()) {
 			op = getDef().getInvOpIdForName(option);
+			Debug.log("invent option: " + op);
 			op = switch(op) {
 				case 0 -> 1;
 				case 1 -> 2;
@@ -47,6 +50,17 @@ public class Item {
 				default -> -1;
 			};
 		}
+        if (container == Interfaces.getBankInventory()) {
+            op = switch(option) {
+                case "Deposit-1" -> 2;
+                case "Deposit-5" -> 3;
+                case "Deposit-10" -> 4;
+                case "Deposit-50" -> 5;
+                case "Deposit-X" -> 6;
+                case "Deposit-All" -> 7;
+                default -> 1;
+            };
+        }
 		if (op != -1)
 			click(op);
 	}	
