@@ -19,6 +19,15 @@ public class Item {
 		this.amount = amount;
 		this.slot = slot;
 	}
+	
+	public Item(int id) {
+		this(id, 1);
+	}
+	
+	public Item(int id, int amount) {
+		this.id = id;
+		this.amount = amount;
+	}
 
 	public int getId() {
 		return id;
@@ -26,6 +35,10 @@ public class Item {
 
 	public int getAmount() {
 		return amount;
+	}
+	
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 	
 	public void click(int option) {
@@ -67,5 +80,14 @@ public class Item {
 	
 	public ItemDef getDef() {
 		return ItemDef.get(id);
+	}
+	
+	public String getName() {
+		return getDef().name;
+	}
+	
+	@Override
+	public String toString() {
+		return "[" + id + "("+getName()+"), " + amount + "]";
 	}
 }

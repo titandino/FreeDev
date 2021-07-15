@@ -57,7 +57,7 @@ public class AIORunespan extends ScriptSkeleton {
 		List<NodeInfo> sorted = NodeInfo.bestNodesForLevel(members, Client.getStatById(Client.RUNECRAFTING).getCurrent());
 		List<NPC> closestNpcs = NPCs.getOrderedClosest();
 		List<WorldObject> closestObjects = WorldObjects.getOrderedClosest();
-		
+
 		for (NodeInfo node : sorted) {
 			if (node.isNPC()) {
 				for (NPC npc : closestNpcs)

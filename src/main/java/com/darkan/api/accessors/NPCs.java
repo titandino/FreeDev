@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.darkan.api.entity.NPC;
 import com.darkan.api.util.Utils;
@@ -16,6 +17,28 @@ import kraken.plugin.api.Npcs;
 import kraken.plugin.api.Players;
 
 public class NPCs {
+	
+	private static boolean UPDATING = false;
+	private static List<NPC> NPCS = new CopyOnWriteArrayList<>();
+	
+	public static void update() {
+		if (UPDATING)
+			return;
+		UPDATING = true;
+		new Thread(() -> {
+			List<NPC> list = new ArrayList<>();
+			Npcs.closest(npc -> {
+				if (npc == null)
+					return false;
+				NPC tNpc = new NPC(npc);
+				list.add(tNpc);
+				return false;
+			});
+			NPCS.clear();
+			NPCS.addAll(list);
+			UPDATING = false;
+		}).start();
+	}
 	
 	public static NPC getClosest(Filter<NPC> filter) {
 		Map<Integer, NPC> distanceMap = new TreeMap<Integer, NPC>();
@@ -101,14 +124,12 @@ public class NPCs {
         return true;
     }
 	
-	public static List<NPC> getNearby(Filter<NPC> filter) {
+ 	public static List<NPC> getNearby(Filter<NPC> filter) {
 		List<NPC> list = new ArrayList<>();
-		Npcs.closest(n -> {
-			NPC npc = new NPC(n);
-			if (filter == null || filter.accept(npc))
-				list.add(npc);
-			return false;
-		});
+		for (NPC obj : NPCS) {
+			if (filter == null || filter.accept(obj))
+				list.add(obj);
+		}
 		return list;
 	}
 	
