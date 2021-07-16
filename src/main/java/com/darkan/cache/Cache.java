@@ -6,11 +6,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import com.darkan.Settings;
 import com.darkan.api.util.Logger;
 import com.darkan.api.util.Utils;
 
 public class Cache {
-	private static final Path PATH = Paths.get("C:/ProgramData/Jagex/RuneScape/");
+	private static final Path PATH = Paths.get(Settings.getConfig().getCachePath());
 
 	public boolean[] checkedReferenceTables = new boolean[255];
 	public ReferenceTable[] cachedReferenceTables = new ReferenceTable[255];

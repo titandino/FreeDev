@@ -41,7 +41,8 @@ public final class BasePlugin extends AbstractPlugin {
     	pluginContext.setName("FreeDev Scripts");
     	loadScripts();
     	VarManager.linkVarbits();
-    	SwingUtilities.invokeLater(() -> new DebugFrame().setVisible(true));
+    	if (Settings.getConfig().isDebug())
+    		SwingUtilities.invokeLater(() -> new DebugFrame().setVisible(true));
         return true;
     }
     
@@ -66,11 +67,12 @@ public final class BasePlugin extends AbstractPlugin {
 	    		if (script != null)
 	    			script.process();
 	    	}
+	    	List<String> currentMessages = Chatbox.getMessages();
 	    	String prevFirst = prevChats.size() > 0 ? prevChats.get(0) : "null";
 	    	List<Message> newMessages = new ArrayList<>();
-	    	System.out.println(prevFirst);
-	    	System.out.println(prevChats.size());
-	    	for (String chat : Chatbox.getMessages()) {
+//	    	System.out.println(prevFirst);
+//	    	System.out.println(prevChats.size());
+	    	for (String chat : currentMessages) {
 	    		if (chat.equals(prevFirst))
 	    			break;
 	    		Message mes = new Message(chat);

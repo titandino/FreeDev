@@ -112,7 +112,7 @@ public class ItemContainer extends IFComponent {
 	
 	public boolean isFull() {
 		for (Item item : getItems())
-			if (item == null)
+			if (item == null || item.getId() == -1)
 				return false;
 		return true;
 	}
@@ -161,7 +161,7 @@ public class ItemContainer extends IFComponent {
 	public int freeSlots() {
 		int free = 0;
 		for (Item item : getItems())
-			if (item == null)
+			if (item == null || item.getId() == -1)
 				free++;
 		return free;
 	}
