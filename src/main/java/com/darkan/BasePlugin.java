@@ -124,12 +124,12 @@ public final class BasePlugin extends AbstractPlugin {
 
     public void onConVarChanged(ConVar conv, int oldValue, int newValue) {
     	//MyPlayer.getVars().checkVarUpdates();
-    	Debug.log("Var changed: " + conv.getId() + " from " + oldValue + " -> " + newValue);
+    	System.out.println("Var changed: " + conv.getId() + " from " + oldValue + " -> " + newValue);
     	MyPlayer.getVars().setVar(conv.getId(), newValue);
     }
 
     public void onWidgetVisibilityChanged(int id, boolean visible) {
-    	Debug.log("Interface visibility: " + id + " -> " + visible);
+    	System.out.println("Interface visibility: " + id + " -> " + visible);
     	Interfaces.setVisibility(id, visible);
     }
 }

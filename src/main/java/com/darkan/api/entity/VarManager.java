@@ -44,7 +44,7 @@ public class VarManager {
 				int prev = getVarbitForValue(def, values[id]);
 				int curr = getVarbitForValue(def, value);
 				if (prev != curr)
-					Debug.log("Varbit changed: " + def.id + " from " + prev + " -> " + curr);
+					System.out.println("Varbit changed: " + def.id + " from " + prev + " -> " + curr);
 			}
 		}
 		values[id] = value;
