@@ -6,13 +6,12 @@ import java.util.function.Supplier;
 
 import com.darkan.Constants;
 import com.darkan.api.entity.MyPlayer;
-import com.darkan.api.scripting.MessageListener;
 import com.darkan.api.util.Utils;
 
 import kraken.plugin.api.*;
 
 public abstract class ScriptSkeleton {
-	
+
 	private String name;
 	private long started = 0;
 	private Map<Integer, Integer> startXps = new HashMap<>();
@@ -20,58 +19,55 @@ public abstract class ScriptSkeleton {
 	private String error = "";
 	private boolean enabled = false;
 	private int gausVariance = 4000;
-	
+
 	private long lastMyPlayerAnim;
 	private long lastMyPlayerMoved;
-	
+
 	private long loopTimer;
 	private long lastLoop;
-	
+
 	private int loopDelay;
 	private int currDelay;
 
 	private long nextRun;
 
-	private String lastMessage;
-	
 	private Supplier<Boolean> sleepConstraint;
 	private long sleepWhileMax = -1;
 	private long sleepWhileMin = -1;
-	
+
 	private int localPlayerAtt = 0;
-	
+
 	public ScriptSkeleton(String name) {
 		this(name, 600);
 	}
-	
+
 	public ScriptSkeleton(String name, int loopDelay) {
 		this.name = name;
 		this.loopDelay = loopDelay;
 	}
-	
+
 	public abstract boolean onStart(Player self);
+
 	protected abstract void loop(Player self);
+
 	public abstract void paintImGui(long runtime);
+
 	public abstract void paintOverlay(long runtime);
+
 	public abstract void onStop();
 
 	protected int onLoop() {
 		try {
 			Player self = Players.self();
-			if(self == null) {
+			if (self == null) {
 				state = "Finding local player... " + localPlayerAtt++;
 				return 0;
 			}
-			if (self.isAnimationPlaying())
-				lastMyPlayerAnim = System.currentTimeMillis();
-	        if (self.isMoving())
-	            lastMyPlayerMoved = System.currentTimeMillis();
-			localPlayerAtt = 0;
 			if (!enabled) {
 				if (Client.getStatById(Client.HITPOINTS).getXp() <= 100)
 					return 0;
 				MyPlayer.getVars().clearSynced();
-				for (int i = 0;i < Constants.SKILL_NAME.length;i++)
+				for (int i = 0; i < Constants.SKILL_NAME.length; i++)
 					startXps.put(i, Client.getStatById(i).getXp());
 				boolean started = onStart(self);
 				if (started) {
@@ -80,64 +76,50 @@ public abstract class ScriptSkeleton {
 				}
 				return 0;
 			}
-			
+
+			if (self.isAnimationPlaying())
+				lastMyPlayerAnim = System.currentTimeMillis();
+			if (self.isMoving())
+				lastMyPlayerMoved = System.currentTimeMillis();
+			localPlayerAtt = 0;
+
 			if (sleepConstraint != null) {
 				if (System.currentTimeMillis() >= sleepWhileMin && (!sleepConstraint.get() || System.currentTimeMillis() >= sleepWhileMax))
 					sleepConstraint = null;
 				return loopDelay;
 			}
 
-			if(nextRun < System.currentTimeMillis()) {
+			if (nextRun < System.currentTimeMillis()) {
 				currDelay = loopDelay;
 				loop(self);
 				nextRun = System.currentTimeMillis() + Utils.gaussian(currDelay, gausVariance);
 			}
-			if(this instanceof MessageListener) {
-				MessageListener listener = (MessageListener) this;
-				WidgetGroup group = Widgets.getGroupById(137);
-				if(group == null || group.getWidgets() == null || group.getWidgets().length < 84)
-					return 100;
-				Widget widget = group.getWidgets()[83];
-				if(widget == null || widget.getChildren() == null || widget.getChildren().length < 2)
-					return 100;
-				Widget chatContainer = widget.getChildren()[1];
-				if(chatContainer == null || chatContainer.getType() != Widget.CONTAINER || chatContainer.getChildren() == null || chatContainer.getChildren().length < 1)
-					return 100;
-				Widget chat = chatContainer.getChildren()[0];
-				if(chat == null || chat.getType() != Widget.TEXT)
-					return 100;
-				String message = chat.getText();
-				if(message.equals(lastMessage))
-					return 100;
-				lastMessage = message;
-				listener.onMessageReceived(message);
-			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			error = e.toString();
 			Debug.logErr(e);
 			return Utils.gaussian(2000, gausVariance);
 		}
 		return 10;
 	}
-	
+
 	public long getTimeSinceLastAnimation() {
 		return System.currentTimeMillis() - lastMyPlayerAnim;
 	}
-	
-    public long getTimeSinceLastMoving() {
-        return System.currentTimeMillis() - lastMyPlayerMoved;
-    }
-	
+
+	public long getTimeSinceLastMoving() {
+		return System.currentTimeMillis() - lastMyPlayerMoved;
+	}
+
 	public void sleepWhile(long maxTime, Supplier<Boolean> constraint) {
 		sleepWhile(-1, maxTime, constraint);
 	}
-	
+
 	public void sleepWhile(long minTime, long maxTime, Supplier<Boolean> constraint) {
 		sleepConstraint = constraint;
 		sleepWhileMin = System.currentTimeMillis() + minTime;
 		sleepWhileMax = System.currentTimeMillis() + maxTime;
 	}
-	
+
 	public void printGenericXpGain(long runtime) {
 		for (int skillId : startXps.keySet()) {
 			int gainedXp = Client.getStatById(skillId).getXp() - startXps.get(skillId);
@@ -153,20 +135,20 @@ public abstract class ScriptSkeleton {
 		ImGui.label(error);
 		paintImGui(runtime);
 	}
-	
+
 	public void onPaintOverlay() {
 		long runtime = System.currentTimeMillis() - started;
 		paintOverlay(runtime);
 	}
-	
+
 	public final void setState(String state) {
 		this.state = state;
 	}
-	
+
 	public final void sleep(int ms) {
 		currDelay += Utils.gaussian(ms, gausVariance);
 	}
-	
+
 	public final void start() {
 		started = System.currentTimeMillis();
 	}
@@ -184,6 +166,6 @@ public abstract class ScriptSkeleton {
 	}
 
 	public void onVarChange() {
-		
+
 	}
 }

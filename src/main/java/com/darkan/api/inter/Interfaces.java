@@ -60,6 +60,10 @@ public class Interfaces {
 	}
 
 	public static IFComponent getComponent(int interfaceId, int componentId) {
-		return new IFComponent(interfaceId, componentId);
+		try {
+			return new Interface(interfaceId).getComponents()[componentId];
+		} catch(Exception e) {
+			return null;
+		}
 	}
 }

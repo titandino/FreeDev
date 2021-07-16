@@ -24,7 +24,7 @@ public class Interface {
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
-		s.append("Interface: " + id + "\n");
+		s.append("Interface: " + id + "\r\n");
 		s.append("Components: ");
 		for (IFComponent component : getComponents()) {
 			try {

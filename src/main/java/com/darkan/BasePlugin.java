@@ -7,11 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.entity.VarManager;
+import com.darkan.api.inter.Chatbox;
 import com.darkan.api.inter.Interfaces;
+import com.darkan.api.scripting.MessageListener;
+import com.darkan.api.util.DebugFrame;
 import com.darkan.api.util.Logger;
 import com.darkan.api.util.Utils;
 import com.darkan.scripts.Script;
@@ -28,11 +33,14 @@ public final class BasePlugin extends AbstractPlugin {
 	private List<String> orderedNames;
 	private Map<String, Class<? extends ScriptSkeleton>> scriptTypes = new HashMap<>();
 	private Map<Class<? extends ScriptSkeleton>, ScriptSkeleton> scripts = new HashMap<>();
+	
+	private List<String> prevChats = new ArrayList<>();
 
     public boolean onLoaded(PluginContext pluginContext) {
     	pluginContext.setName("FreeDev Scripts");
     	loadScripts();
     	VarManager.linkVarbits();
+    	SwingUtilities.invokeLater(() -> new DebugFrame().setVisible(true));
         return true;
     }
     
@@ -56,9 +64,27 @@ public final class BasePlugin extends AbstractPlugin {
     		if (script != null)
     			script.process();
     	}
+    	String prevFirst = prevChats.size() > 0 ? prevChats.get(0) : "null";
+    	List<String> newChats = new ArrayList<>();
+    	for (String chat : Chatbox.getMessages()) {
+    		if (chat.equals(prevFirst))
+    			break;
+    		newChats.add(chat);
+    	}
+    	if (!newChats.isEmpty()) {
+	    	for (ScriptSkeleton script : scripts.values()) {
+	    		if (script != null && script instanceof MessageListener) {
+	    			for (String chat : newChats)
+	    				((MessageListener) script).onMessageReceived(chat);
+	    		}
+	    	}
+    	}
+    	prevChats.clear();
+    	prevChats.addAll(Chatbox.getMessages());
+    	Chatbox.update();
 		WorldObjects.update();
 		NPCs.update();
-        return 17;
+        return 36;
     }
 
     public void onPaint() {

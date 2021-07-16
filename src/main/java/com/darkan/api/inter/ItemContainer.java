@@ -7,8 +7,6 @@ import java.util.regex.Pattern;
 
 import com.darkan.api.item.Item;
 
-import kraken.plugin.api.Widget;
-
 public class ItemContainer extends IFComponent {
 
 	public ItemContainer(int id, int componentId) {
@@ -16,17 +14,14 @@ public class ItemContainer extends IFComponent {
 	}
 	
 	public Item[] getItems() {
-		Widget[] invSlots = getChildren();
-		if (invSlots == null)
+		try {
+			Item[] items = getItems();
+			if (items == null)
+				return new Item[28];
+			return items;
+		} catch(Exception e) {
 			return new Item[28];
-		Item[] items = new Item[invSlots.length];
-		for (int i = 0;i < items.length;i++) {
-			kraken.plugin.api.Item item = invSlots[i].getItem();
-			if (item == null || item.getId() < 0)
-				continue;
-			items[i] = new Item(this, item.getId(), item.getAmount(), i);
 		}
-		return items;
 	}
 	
 	public Item getItemById(int... ids) {

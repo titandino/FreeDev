@@ -1,6 +1,6 @@
 package com.darkan.api.item;
 
-import com.darkan.api.inter.IFComponent;
+import com.darkan.api.inter.IFSlot;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.cache.def.items.ItemDef;
 
@@ -8,16 +8,14 @@ import kraken.plugin.api.Debug;
 
 public class Item {
 	
-	private IFComponent container;
+	private IFSlot slot;
 	private int id;
 	private int amount;
-	private int slot;
 	
-	public Item(IFComponent container, int id, int amount, int slot) {
-		this.container = container;
+	public Item(IFSlot slot, int id, int amount) {
+		this.slot = slot;
 		this.id = id;
 		this.amount = amount;
-		this.slot = slot;
 	}
 	
 	public Item(int id) {
@@ -42,16 +40,16 @@ public class Item {
 	}
 	
 	public void click(int option) {
-		container.clickComponent(option, slot);
+		slot.click(option);
 	}
 	
 	public void click(String option) {
 		int op = -1;
-		if (container == Interfaces.getEquipment()) {
+		if (slot.getId() == Interfaces.getEquipment().getId()) {
 			op = getDef().getEquipOpIdForName(option);
 			op += 2;
 		}
-		if (container == Interfaces.getInventory()) {
+		if (slot.getId() == Interfaces.getInventory().getId()) {
 			op = getDef().getInvOpIdForName(option);
 			Debug.log("invent option: " + op);
 			op = switch(op) {
@@ -63,7 +61,7 @@ public class Item {
 				default -> -1;
 			};
 		}
-        if (container == Interfaces.getBankInventory()) {
+        if (slot.getId() == Interfaces.getBankInventory().getId()) {
             op = switch(option) {
                 case "Deposit-1" -> 2;
                 case "Deposit-5" -> 3;

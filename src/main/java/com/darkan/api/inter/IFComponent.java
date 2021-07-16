@@ -1,13 +1,15 @@
 package com.darkan.api.inter;
 
+import com.darkan.api.item.Item;
+import com.darkan.api.util.Utils;
+
 import kraken.plugin.api.Actions;
-import kraken.plugin.api.Widget;
 import kraken.plugin.api.Widgets;
 
 public class IFComponent {
 
-	private int id;
-	private int componentId;
+	protected int id;
+	protected int componentId;
 
 	public IFComponent(int id, int componentId) {
 		this.id = id;
@@ -15,20 +17,51 @@ public class IFComponent {
 	}
 
 	public void clickComponent(int option, int slotId) {
-		Actions.menu(Actions.MENU_EXECUTE_WIDGET, option, slotId, getHash(), 1);
+		Actions.menu(Actions.MENU_EXECUTE_WIDGET, option, slotId, getHash(), Utils.random(0, Integer.MAX_VALUE));
 	}
 
 	public int getHash() {
 		return id << 16 | componentId;
 	}
 
-	public Widget[] getChildren() {
-		return Widgets.getGroupById(id).getWidgets()[componentId].getChildren();
+	public IFSlot[] getSlots() {
+		if (getType() != ComponentType.CONTAINER)
+			return null;
+		try {
+			IFSlot[] slots = new IFSlot[Widgets.getGroupById(id).getWidgets()[componentId].getChildren().length];
+			for (int i = 0;i < slots.length;i++)
+				slots[i] = new IFSlot(id, componentId, i);
+			return slots;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public String getText() {
+		if (getType() != ComponentType.TEXT)
+			return null;
 		try {
 			return Widgets.getGroupById(id).getWidgets()[componentId].getText();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public ComponentType getType() {
+		try {
+			return ComponentType.forId(Widgets.getGroupById(id).getWidgets()[componentId].getType());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public Item[] getItems() {
+		try {
+			IFSlot[] slots = getSlots();
+			Item[] items = new Item[slots.length];
+			for (int i = 0;i < slots.length;i++)
+				items[i] = slots[i].getItem();
+			return items;
 		} catch (Exception e) {
 			return null;
 		}
@@ -44,6 +77,22 @@ public class IFComponent {
 	
 	@Override
 	public String toString() {
-		return "[(" + id + "," + componentId + ") '" + getText() + "']";
+		StringBuilder s = new StringBuilder();
+		s.append("\tIFComponent: (" + id + ", " + componentId + ", " + getType() + ")\r\n");
+		IFSlot[] slots = getSlots();
+		String text = getText();
+		if (text != null)
+			s.append("\tText: \"" + text + "\"\r\n");
+		if (slots != null && slots.length > 0) {
+			s.append("\tSlots: \r\n");
+			for (IFSlot slot : slots) {
+				try {
+					s.append(slot.toString());
+				} catch (Exception e) {
+					
+				}
+			}
+		}
+		return s.toString();
 	}
 }
