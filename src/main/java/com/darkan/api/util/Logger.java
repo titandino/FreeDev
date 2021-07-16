@@ -19,7 +19,7 @@ public class Logger {
 	
 	public static void handle(Throwable throwable) {
 		logError(throwable);
-		System.out.println("ERROR! THREAD NAME: " + Thread.currentThread().getName());
+		System.err.println("ERROR! THREAD NAME: " + Thread.currentThread().getName());
 		throwable.printStackTrace();
 	}
 

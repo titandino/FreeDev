@@ -61,65 +61,80 @@ public final class BasePlugin extends AbstractPlugin {
 	}
 
 	public int onLoop() {
-    	for (ScriptSkeleton script : scripts.values()) {
-    		if (script != null)
-    			script.process();
-    	}
-    	String prevFirst = prevChats.size() > 0 ? prevChats.get(0) : "null";
-    	List<Message> newMessages = new ArrayList<>();
-    	for (String chat : Chatbox.getMessages()) {
-    		if (chat.equals(prevFirst))
-    			break;
-    		Message mes = new Message(chat);
-    		newMessages.add(mes);
-    		System.out.println("[CHAT]: " + mes);
-    	}
-    	if (!newMessages.isEmpty()) {
+		try {
 	    	for (ScriptSkeleton script : scripts.values()) {
-	    		if (script != null && script instanceof MessageListener) {
-	    			for (Message chat : newMessages)
-	    				((MessageListener) script).onMessageReceived(chat);
-	    		}
+	    		if (script != null)
+	    			script.process();
 	    	}
+	    	String prevFirst = prevChats.size() > 0 ? prevChats.get(0) : "null";
+	    	List<Message> newMessages = new ArrayList<>();
+	    	System.out.println(prevFirst);
+	    	System.out.println(prevChats.size());
+	    	for (String chat : Chatbox.getMessages()) {
+	    		if (chat.equals(prevFirst))
+	    			break;
+	    		Message mes = new Message(chat);
+	    		newMessages.add(mes);
+	    		System.out.println("[CHAT]: " + mes);
+	    	}
+	    	if (!newMessages.isEmpty()) {
+		    	for (ScriptSkeleton script : scripts.values()) {
+		    		if (script != null && script instanceof MessageListener) {
+		    			for (Message chat : newMessages)
+		    				((MessageListener) script).onMessageReceived(chat);
+		    		}
+		    	}
+	    	}
+	    	prevChats.clear();
+	    	prevChats.addAll(Chatbox.getMessages());
+	    	Chatbox.update();
+			WorldObjects.update();
+			NPCs.update();
+	        return 36;
+		} catch (Exception e) {
+    		Logger.handle(e);
+    		return 0;
     	}
-    	prevChats.clear();
-    	prevChats.addAll(Chatbox.getMessages());
-    	Chatbox.update();
-		WorldObjects.update();
-		NPCs.update();
-        return 36;
     }
 
     public void onPaint() {
-    	ImGui.label("Please select a script:");
-    	for (String scriptName : orderedNames) {
-    		Class<? extends ScriptSkeleton> script = scriptTypes.get(scriptName);
-    		boolean currRunning = scripts.get(script) != null;
-    		boolean running = ImGui.checkbox(scriptName, currRunning);
-    		if (currRunning && !running) {
-    			scripts.get(script).stop();
-    			scripts.remove(script);
-    		} else if (!currRunning && running) {
-    			try {
-					scripts.put(script, script.getDeclaredConstructor().newInstance());
-				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-					Debug.log("Error constructing script: " + script.getSimpleName());
-					e.printStackTrace();
-				}
-    		}
+    	try {
+	    	ImGui.label("Please select a script:");
+	    	for (String scriptName : orderedNames) {
+	    		Class<? extends ScriptSkeleton> script = scriptTypes.get(scriptName);
+	    		boolean currRunning = scripts.get(script) != null;
+	    		boolean running = ImGui.checkbox(scriptName, currRunning);
+	    		if (currRunning && !running) {
+	    			scripts.get(script).stop();
+	    			scripts.remove(script);
+	    		} else if (!currRunning && running) {
+	    			try {
+						scripts.put(script, script.getDeclaredConstructor().newInstance());
+					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+						Debug.log("Error constructing script: " + script.getSimpleName());
+						e.printStackTrace();
+					}
+	    		}
+	    	}
+	    	
+	    	for (ScriptSkeleton script : scripts.values()) {
+	    		if (script != null)
+	    			script.onPaint();
+	    	}
+    	} catch (Exception e) {
+    		Logger.handle(e);
     	}
-    	
-    	for (ScriptSkeleton script : scripts.values()) {
-    		if (script != null)
-    			script.onPaint();
-    	}    	
     }
 
     public void onPaintOverlay() {
-    	for (ScriptSkeleton script : scripts.values()) {
-    		if (script != null)
-    			script.onPaintOverlay();
-    	}    	
+    	try {
+	    	for (ScriptSkeleton script : scripts.values()) {
+	    		if (script != null)
+	    			script.onPaintOverlay();
+	    	}   
+    	} catch (Exception e) {
+    		Logger.handle(e);
+    	}
     }
 
     public void onConVarChanged(ConVar conv, int oldValue, int newValue) {
