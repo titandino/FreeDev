@@ -19,28 +19,21 @@ import kraken.plugin.api.Vector3i;
 
 public class WorldObjects {
 	
-	private static boolean UPDATING = false;
 	private static List<WorldObject> OBJECTS = new CopyOnWriteArrayList<>();
 	
 	public static void update() {
-		if (UPDATING)
-			return;
-		UPDATING = true;
-		new Thread(() -> {
-			List<WorldObject> list = new ArrayList<>();
-			Vector3i pos = Players.self().getGlobalPosition();
-			SceneObjects.closest(obj -> {
-				if (obj == null || obj.hidden())
-					return false;
-				WorldObject wo = new WorldObject(obj.getId(), new WorldTile(obj.getGlobalPosition()));
-				if (pos.getZ() > 0 || wo.getPlane() == pos.getZ())
-					list.add(wo);
+		List<WorldObject> list = new ArrayList<>();
+		Vector3i pos = Players.self().getGlobalPosition();
+		SceneObjects.closest(obj -> {
+			if (obj == null || obj.hidden())
 				return false;
-			});
-			OBJECTS.clear();
-			OBJECTS.addAll(list);
-			UPDATING = false;
-		}).start();
+			WorldObject wo = new WorldObject(obj.getId(), new WorldTile(obj.getGlobalPosition()));
+			if (pos.getZ() > 0 || wo.getPlane() == pos.getZ())
+				list.add(wo);
+			return false;
+		});
+		OBJECTS.clear();
+		OBJECTS.addAll(list);
 	}
 	
 	public static WorldObject getClosest(Filter<WorldObject> filter) {

@@ -6,11 +6,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.SwingUtilities;
 
-import com.darkan.api.accessors.NPCs;
-import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.entity.VarManager;
 import com.darkan.api.inter.Interfaces;
@@ -22,6 +23,8 @@ import com.darkan.api.util.Logger;
 import com.darkan.api.util.Utils;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.thread.DataUpdateThread;
+import com.darkan.thread.DataUpdateThreadFactory;
 
 import kraken.plugin.AbstractPlugin;
 import kraken.plugin.api.ConVar;
@@ -30,6 +33,8 @@ import kraken.plugin.api.ImGui;
 import kraken.plugin.api.PluginContext;
 
 public final class BasePlugin extends AbstractPlugin {
+	
+	private static ScheduledExecutorService dataUpdateExecutor = Executors.newSingleThreadScheduledExecutor(new DataUpdateThreadFactory());
 	
 	private List<String> orderedNames;
 	private Map<String, Class<? extends ScriptSkeleton>> scriptTypes = new HashMap<>();
@@ -43,6 +48,7 @@ public final class BasePlugin extends AbstractPlugin {
     	VarManager.linkVarbits();
     	if (Settings.getConfig().isDebug())
     		SwingUtilities.invokeLater(() -> new DebugFrame().setVisible(true));
+    	dataUpdateExecutor.scheduleAtFixedRate(new DataUpdateThread(), 0, 200, TimeUnit.MILLISECONDS);
         return true;
     }
     
@@ -89,9 +95,6 @@ public final class BasePlugin extends AbstractPlugin {
 	    	}
 	    	prevChats.clear();
 	    	prevChats.addAll(Chatbox.getMessages());
-	    	Chatbox.update();
-			WorldObjects.update();
-			NPCs.update();
 	        return 36;
 		} catch (Exception e) {
     		Logger.handle(e);

@@ -18,26 +18,19 @@ import kraken.plugin.api.Players;
 
 public class NPCs {
 	
-	private static boolean UPDATING = false;
 	private static List<NPC> NPCS = new CopyOnWriteArrayList<>();
 	
 	public static void update() {
-		if (UPDATING)
-			return;
-		UPDATING = true;
-		new Thread(() -> {
-			List<NPC> list = new ArrayList<>();
-			Npcs.closest(npc -> {
-				if (npc == null)
-					return false;
-				NPC tNpc = new NPC(npc);
-				list.add(tNpc);
+		List<NPC> list = new ArrayList<>();
+		Npcs.closest(npc -> {
+			if (npc == null)
 				return false;
-			});
-			NPCS.clear();
-			NPCS.addAll(list);
-			UPDATING = false;
-		}).start();
+			NPC tNpc = new NPC(npc);
+			list.add(tNpc);
+			return false;
+		});
+		NPCS.clear();
+		NPCS.addAll(list);
 	}
 	
 	public static NPC getClosest(Filter<NPC> filter) {
