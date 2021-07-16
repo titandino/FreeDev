@@ -10,6 +10,10 @@ public class Interfaces {
 	private static final ItemContainer INVENTORY = new ItemContainer(1473, 7);
 	private static final ItemContainer EQUIPMENT = new ItemContainer(1464, 15);
 	
+	private static final ItemContainer BANK = new ItemContainer(517, 188);
+	private static final ItemContainer BANK_INVENTORY = new ItemContainer(517, 15);
+	private static final ItemContainer BANK_EQUIPMENT = new ItemContainer(517, 28);
+	
 	private static final Set<Integer> VISIBLE_INTERFACES = new HashSet<>();
 	
 	public static void setVisibility(int id, boolean visible) {
@@ -38,6 +42,18 @@ public class Interfaces {
 	public static ItemContainer getEquipment() {
 		return EQUIPMENT;
 	}
+	
+   public static ItemContainer getBank() {
+        return BANK;
+    }
+   
+    public static ItemContainer getBankInventory() {
+        return BANK_INVENTORY;
+    }
+    
+    public static ItemContainer getBankEquipment() {
+        return BANK_EQUIPMENT;
+    }
 
 	public static Interface get(int interfaceId) {
 		return new Interface(interfaceId);

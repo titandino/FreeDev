@@ -1,4 +1,4 @@
-package com.darkan.scripts.aiowisp;
+package com.darkan.scripts.impl;
 
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
@@ -23,7 +23,7 @@ public class AIOWispGathering extends ScriptSkeleton {
 	private int startEnergy;
 	
 	public AIOWispGathering() {
-		super("AIO Wisp Gathering", 1000);
+		super("AIO Wisp Gathering", 300);
 	}
 	
 	@Override

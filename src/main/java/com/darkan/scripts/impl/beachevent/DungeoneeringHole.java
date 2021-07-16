@@ -1,4 +1,4 @@
-package com.darkan.scripts.beachevent;
+package com.darkan.scripts.impl.beachevent;
 
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.scripts.ScriptSkeleton;

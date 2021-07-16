@@ -1,4 +1,4 @@
-package com.darkan.scripts.pkavoider;
+package com.darkan.scripts.impl;
 
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Area;
@@ -10,7 +10,7 @@ import kraken.plugin.api.Player;
 import kraken.plugin.api.Players;
 import kraken.plugin.api.Vector3i;
 
-@Script("PKer Avoider")
+@Script(value = "PKer Avoider", utility = true)
 public class PKAvoider extends ScriptSkeleton {
 	
 	public static final int RING_OF_FORTUNE = 39808;

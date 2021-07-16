@@ -2,9 +2,11 @@ package com.darkan.api.accessors;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.darkan.api.entity.NPC;
 import com.darkan.api.util.Utils;
@@ -15,6 +17,28 @@ import kraken.plugin.api.Npcs;
 import kraken.plugin.api.Players;
 
 public class NPCs {
+	
+	private static boolean UPDATING = false;
+	private static List<NPC> NPCS = new CopyOnWriteArrayList<>();
+	
+	public static void update() {
+		if (UPDATING)
+			return;
+		UPDATING = true;
+		new Thread(() -> {
+			List<NPC> list = new ArrayList<>();
+			Npcs.closest(npc -> {
+				if (npc == null)
+					return false;
+				NPC tNpc = new NPC(npc);
+				list.add(tNpc);
+				return false;
+			});
+			NPCS.clear();
+			NPCS.addAll(list);
+			UPDATING = false;
+		}).start();
+	}
 	
 	public static NPC getClosest(Filter<NPC> filter) {
 		Map<Integer, NPC> distanceMap = new TreeMap<Integer, NPC>();
@@ -100,24 +124,17 @@ public class NPCs {
         return true;
     }
 	
-	public static List<NPC> getNearby(Filter<NPC> filter) {
+ 	public static List<NPC> getNearby(Filter<NPC> filter) {
 		List<NPC> list = new ArrayList<>();
-		Npcs.closest(n -> {
-			NPC npc = new NPC(n);
-			if (filter.accept(npc))
-				list.add(npc);
-			return false;
-		});
+		for (NPC obj : NPCS) {
+			if (filter == null || filter.accept(obj))
+				list.add(obj);
+		}
 		return list;
 	}
 	
 	public static List<NPC> getNearby() {
-		List<NPC> list = new ArrayList<>();
-		Npcs.closest(n -> {
-			list.add(new NPC(n));
-			return false;
-		});
-		return list;
+		return getNearby(null);
 	}
 	
 	public static List<NPC> getNearbyReachable() {
@@ -132,5 +149,35 @@ public class NPCs {
 			}
 		}
 		return reachable;
+	}
+	
+	public static List<NPC> getOrderedClosest(Filter<NPC> filter) {
+		Map<Integer, List<NPC>> distanceMap = new HashMap<>();
+		List<NPC> closest = new ArrayList<>();
+		List<NPC> npcs = getNearby(filter);
+		WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
+		for (NPC npc : npcs) {
+			if (npc != null) {
+				int distance = Utils.getRouteDistanceTo(pTile, npc.getPosition());
+				if (distance != -1) {
+					List<NPC> nAtDist = distanceMap.get(distance);
+					if (nAtDist == null)
+						nAtDist = new ArrayList<>();
+					nAtDist.add(npc);
+					distanceMap.put(distance, nAtDist);
+				}
+			}
+		}
+		if (distanceMap.isEmpty())
+			return closest;
+		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
+		Collections.sort(sortedKeys);
+		for (int key : sortedKeys)
+			closest.addAll(distanceMap.get(key));
+		return closest;
+	}
+	
+	public static List<NPC> getOrderedClosest() {
+		return getOrderedClosest(null);
 	}
 }

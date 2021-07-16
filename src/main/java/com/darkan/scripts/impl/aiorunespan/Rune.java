@@ -1,4 +1,4 @@
-package com.darkan.scripts.aiorunespan;
+package com.darkan.scripts.impl.aiorunespan;
 
 public class Rune {
 	public static int ESSENCE = 24227, AIR = 24215, EARTH = 24216, WATER = 24214, FIRE = 24213, MIND = 24217, BODY = 24218, CHAOS = 24221, 

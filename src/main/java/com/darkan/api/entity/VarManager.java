@@ -1,6 +1,7 @@
 package com.darkan.api.entity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +18,7 @@ public class VarManager {
 
 	private static boolean LOADING_VARBITS = false;
 	private static boolean MAP_LOADED = false;
+	private static boolean CHECKING_VAR_CHANGES = false;
 	private static Map<Integer, Set<Integer>> VARBIT_MAP;
 	public static final int[] BIT_MASKS = new int[32];
 
@@ -32,7 +34,7 @@ public class VarManager {
 	private Set<Integer> synced;
 
 	public VarManager() {
-		values = new int[VarbitDef.getParser().getMaxId()];
+		values = new int[10000]; //TODO var max size from defs
 		synced = new HashSet<>();
 	}
 	
@@ -69,6 +71,33 @@ public class VarManager {
 			synced.add(id);
 		}
 		return values[id];
+	}
+	
+	public int forceGetVar(int id) {
+		ConVar var = Client.getConVarById(id);
+		if (var != null)
+			setVar(id, var.getValue());
+		return values[id];
+	}
+	
+	public void checkVarUpdates() {
+		if (CHECKING_VAR_CHANGES)
+			return;
+		CHECKING_VAR_CHANGES = true;
+		Thread checker = new Thread(() -> {
+			Debug.log("Checking var changes...");
+			//for (int i = 0;i < values.length;i++) {
+			for (int i : Arrays.asList(6, 3513, 3913, 3914, 3915, 4876, 6091)) {
+				int prv = values[i];
+				int curr = forceGetVar(i);
+				if (prv != curr)
+					Debug.log("Var changed: " + i + " from " + prv + " -> " + curr);
+			}
+			Debug.log("Done checking var changes...");
+			CHECKING_VAR_CHANGES = false;
+		});
+		checker.setPriority(Thread.MAX_PRIORITY);
+		checker.start();
 	}
 	
 	public static int getVarbitForValue(VarbitDef defs, int value) {

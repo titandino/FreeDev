@@ -224,6 +224,7 @@ public class ItemDefParser extends CacheParser<ItemDef> {
 			def.toLend();
 		if (def.boundTemplate != -1)
 			def.toBind();
+		def.loadEquippedOps();
 		return def;
 	}
 }

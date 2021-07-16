@@ -1,4 +1,4 @@
-package com.darkan.scripts.beachevent;
+package com.darkan.scripts.impl.beachevent;
 
 import java.util.HashMap;
 import java.util.Map;

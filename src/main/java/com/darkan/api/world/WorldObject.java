@@ -69,22 +69,34 @@ public class WorldObject extends WorldTile implements Interactable {
 		return type.slot;
 	}
 	
-	public void interact(int action) {
-		if (action < 0 || action >= MENU_OPS.length)
-			return;
-		
-		//TODO remove this once cracksmoke fixes his object coordinates
-		boolean valid = Region.validateObjCoords(this);
-		int x = (int) (valid ? getX() : getX() - Math.ceil(getDef().sizeX / 2));
-		int y = (int) (valid ? getY() : getY() - Math.ceil(getDef().sizeY / 2));
-		
-		Actions.menu(MENU_OPS[action], getId(), x, y, Utils.random(0, Integer.MAX_VALUE));
+	public boolean interact(int action) {
+		return interact(action, true);
 	}
 	
-	public void interact(String action) {
+	public boolean interact(int action, boolean validate) {
+		if (action < 0 || action >= MENU_OPS.length)
+			return false;
+		
+		if (validate) {
+			//TODO remove this once cracksmoke fixes his object coordinates
+			boolean valid = Region.validateObjCoords(this);
+			int x = (int) (valid ? getX() : getX() - Math.ceil(getDef().sizeX / 2));
+			int y = (int) (valid ? getY() : getY() - Math.ceil(getDef().sizeY / 2));
+			
+			Actions.menu(MENU_OPS[action], getId(), x, y, Utils.random(0, Integer.MAX_VALUE));
+		} else  {
+			Actions.menu(MENU_OPS[action], getId(), getX(), getY(), Utils.random(0, Integer.MAX_VALUE));
+		}
+		return true;
+	}
+	
+	public boolean interact(String action) {
 		int op = getDef().getOpIdForName(action);
-		if (op != -1)
+		if (op != -1) {
 			interact(op);
+			return true;
+		}
+		return false;
 	}
 
 	public ObjectDef getDef() {
@@ -103,5 +115,10 @@ public class WorldObject extends WorldTile implements Interactable {
 	@Override
 	public String toString() {
 		return "[" + id + " (" + getName() + "), " + type + ", " + rotation + ", " + super.toString() + "]";
+	}
+
+	@Override
+	public String name() {
+		return getName();
 	}
 }

@@ -14,6 +14,12 @@ public class ObjectDef {
 	private static ObjectDefParser PARSER = new ObjectDefParser();
 	
 	public static ObjectDef get(int id) {
+		ObjectDef def = PARSER.get(Cache.get(), id);
+		if (def == null) {
+			ObjectDef empty = new ObjectDef();
+			empty.id = id;
+			return empty;
+		}
 		return PARSER.get(Cache.get(), id);
 	}
 	

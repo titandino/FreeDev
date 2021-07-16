@@ -1,4 +1,4 @@
-package com.darkan.scripts.anachroniaagility;
+package com.darkan.scripts.impl.anachroniaagility;
 
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
@@ -34,7 +34,7 @@ public class AnachroniaAgility extends ScriptSkeleton {
 			for (AgilityNode node : AgilityNode.values()) {
 				setState("Checking if "+node+" is good to start at...");
 				if (node.getArea().inside(self.getGlobalPosition())) {
-					if (node == AgilityNode.END)
+					if (node == getEnd())
 						reverse = true;
 					currNode = node;
 					return true;
@@ -47,31 +47,36 @@ public class AnachroniaAgility extends ScriptSkeleton {
 
 	@Override
 	public void loop(Player self) {
-		if (self.isAnimationPlaying() || self.isMoving())
-			return;
 		AgilityNode next = getNext();
-		if (currNode.getArea().inside(self.getGlobalPosition())) {
-			setState("Moving to " + currNode.name() + "...");
-			if (reverse) {
-				if (next == AgilityNode.END)
-					return;
-				if (next.getReverseObj() != null)
-					next.getReverseObj().interact(0);
-				else
-					next.getObject().interact(0);
-			} else {
-				if (currNode == AgilityNode.END)
-					return;
-				currNode.getObject().interact(0);
-			}
+		if (MyPlayer.getHealthPerc() < 10) {
+			sleep(1600);
+			return;
+		} else if (MyPlayer.getHealthPerc() < 40) {
 			Item excal = Interfaces.getEquipment().getItemById(ENHANCED_EXCALIBUR, AUGMENTED_ENHANCED_EXCALIBUR);
 			if (excal == null)
 				excal = Interfaces.getInventory().getItemById(ENHANCED_EXCALIBUR, AUGMENTED_ENHANCED_EXCALIBUR);
-			if (excal != null && MyPlayer.getHealthPerc() < 40) {
+			if (excal != null) {
 				excal.click("Activate");
-				sleep(5000);
+				sleep(1600);
+				return;
 			}
-			sleep(2500);
+		}
+		if (currNode.getArea().inside(self.getGlobalPosition())) {
+			setState("Moving to " + currNode.name() + "...");
+			if (reverse) {
+				if (next == getEnd())
+					return;
+				if (next.getReverseObj() != null)
+					next.getReverseObj().interact(0, false);
+				else
+					next.getObject().interact(0, false);
+				sleepWhile(2500, 20000, () -> self.isMoving() || self.isAnimationPlaying());
+			} else {
+				if (currNode == getEnd())
+					return;
+				currNode.getObject().interact(0, false);
+				sleepWhile(2500, 20000, () -> self.isMoving() || self.isAnimationPlaying());
+			}
 		} else {
 			setState("Checking if we should move to "+next+"...");
 			if (next.getArea().inside(self.getGlobalPosition()))
@@ -90,11 +95,21 @@ public class AnachroniaAgility extends ScriptSkeleton {
 			return nodes[currNode.ordinal()-1];
 		}
 		
-		if (currNode.ordinal() == AgilityNode.END.ordinal()) {
+		if (currNode.ordinal() == getEnd().ordinal()) {
 			reverse = true;
-			return AgilityNode.END;
+			return getEnd();
 		}
 		return nodes[currNode.ordinal()+1];
+	}
+	
+	public AgilityNode getEnd() {
+		if (Client.getStatById(Client.AGILITY).getMax() >= 85)
+			return AgilityNode.END;
+		if (Client.getStatById(Client.AGILITY).getMax() >= 70)
+			return AgilityNode.VINE3;
+		if (Client.getStatById(Client.AGILITY).getMax() >= 50)
+			return AgilityNode.CLIFF_3;
+		return AgilityNode.RUINED_TEMP3;
 	}
 
 	@Override
@@ -104,7 +119,7 @@ public class AnachroniaAgility extends ScriptSkeleton {
 	
 	@Override
 	public void paintImGui(long runtime) {
-		ImGui.label("Current obstacle: " + currNode.name());
+		ImGui.label("Current obstacle: " + currNode != null ? currNode.name() : "None");
 		ImGui.label("Direction: " + (reverse ? "counter-clockwise" : "clockwise"));
 		ImGui.label("Pages p/h: " + Time.perHour(runtime, Interfaces.getInventory().count(PAGE_ID) - startPages));
 		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.AGILITY).getXp() - startXp));

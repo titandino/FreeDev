@@ -2,9 +2,11 @@ package com.darkan.cache.def.maps;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.darkan.api.util.Logger;
 import com.darkan.api.util.Utils;
@@ -208,6 +210,8 @@ public class Region {
 						objectPlane--;
 					if (objectPlane < 0 || objectPlane >= 4 || plane < 0 || plane >= 4)
 						continue;
+//					if (flag)
+//						System.out.println(new WorldObject(objectId, ObjectType.forId(type), rotation, localX + regionX * 64, localY + regionY * 64, objectPlane) + ", " + metaDataFlag + ", " + tileFlags[plane][localX][localY]);
 					if (ObjectType.forId(type) == null) {
 						System.out.println(new WorldObject(objectId, ObjectType.forId(type), rotation, localX + regionX * 64, localY + regionY * 64, objectPlane));
 						System.err.println("Invalid object type: " + type + ", " + objectData + " obj: " + ObjectDef.get(objectId));
@@ -394,25 +398,28 @@ public class Region {
 	public List<WorldObject> getObjectList() {
 		return objectList;
 	}
-	
-	public static boolean validateObjCoords(WorldObject object) {
-		return validateObjCoords(object, Utils.larger(object.getDef().sizeX, object.getDef().sizeY) / 2);
-	}
 
-	public static boolean validateObjCoords(WorldObject object, int distance) {
-		if (object.getDef() != null && object.getDef().sizeX <= 1 && object.getDef().sizeY <= 1)
-			return false;
+	public static boolean validateObjCoords(WorldObject object) {
 		Region region = Region.getRegion(object.getRegionId());
 		List<WorldObject> realObjects = region.getObjectList();
 		if (realObjects == null || realObjects.size() <= 0)
 			return false;
+		Map<Integer, WorldObject> distanceMap = new TreeMap<Integer, WorldObject>();
 		for (WorldObject real : realObjects) {
-			if (object.getPlane() != real.getPlane() && real.getId() != object.getId())
+			if (object.getPlane() != real.getPlane() || real.getId() != object.getId())
 				continue;
-			if (Utils.getDistanceTo(object, real) <= distance) {
-				object.setLocation(real.getX(), real.getY(), real.getPlane());
-				return true;
-			}
+			int distance = Utils.getDistanceTo(object, real);
+			if (distance != -1)
+				distanceMap.put(distance, real);
+		}
+		if (distanceMap.isEmpty())
+			return false;
+		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
+		Collections.sort(sortedKeys);
+		WorldObject closest = distanceMap.get(sortedKeys.get(0));
+		if (Utils.getDistanceTo(object, closest) <= Utils.larger(object.getDef().sizeX, object.getDef().sizeY)) {
+			object.setLocation(closest.getX(), closest.getY(), closest.getPlane());
+			return true;
 		}
 		return false;
 	}

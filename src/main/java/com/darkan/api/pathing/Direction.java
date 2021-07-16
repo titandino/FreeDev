@@ -37,26 +37,17 @@ public enum Direction {
 	}
 
 	public static Direction getById(int id) {
-		switch (id) {
-		case 0:
-			return NORTH;
-		case 1:
-			return NORTHEAST;
-		case 2:
-			return EAST;
-		case 3:
-			return SOUTHEAST;
-		case 4:
-			return SOUTH;
-		case 5:
-			return SOUTHWEST;
-		case 6:
-			return WEST;
-		case 7:
-			return NORTHWEST;
-		default:
-			return SOUTH;
-		}
+		return switch (id) {
+			case 0 -> NORTH;
+			case 1 -> NORTHEAST;
+			case 2 -> EAST;
+			case 3 -> SOUTHEAST;
+			case 4 -> SOUTH;
+			case 5 -> SOUTHWEST;
+			case 6 -> WEST;
+			case 7 -> NORTHWEST;
+			default -> SOUTH;
+		};
 	}
 	
 	public static Direction forDelta(int dx, int dy) {
