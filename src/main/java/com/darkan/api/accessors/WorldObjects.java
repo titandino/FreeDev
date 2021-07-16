@@ -22,18 +22,22 @@ public class WorldObjects {
 	private static List<WorldObject> OBJECTS = new CopyOnWriteArrayList<>();
 	
 	public static void update() {
-		List<WorldObject> list = new ArrayList<>();
-		Vector3i pos = Players.self().getGlobalPosition();
-		SceneObjects.closest(obj -> {
-			if (obj == null || obj.hidden())
+		try {
+			List<WorldObject> list = new ArrayList<>();
+			Vector3i pos = Players.self().getGlobalPosition();
+			SceneObjects.closest(obj -> {
+				if (obj == null || obj.hidden())
+					return false;
+				WorldObject wo = new WorldObject(obj.getId(), new WorldTile(obj.getGlobalPosition()));
+				if (pos.getZ() > 0 || wo.getPlane() == pos.getZ())
+					list.add(wo);
 				return false;
-			WorldObject wo = new WorldObject(obj.getId(), new WorldTile(obj.getGlobalPosition()));
-			if (pos.getZ() > 0 || wo.getPlane() == pos.getZ())
-				list.add(wo);
-			return false;
-		});
-		OBJECTS.clear();
-		OBJECTS.addAll(list);
+			});
+			OBJECTS.clear();
+			OBJECTS.addAll(list);
+		} catch(Exception e) {
+			
+		}
 	}
 	
 	public static WorldObject getClosest(Filter<WorldObject> filter) {

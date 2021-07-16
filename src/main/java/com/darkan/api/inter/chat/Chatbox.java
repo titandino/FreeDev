@@ -13,11 +13,15 @@ public class Chatbox {
 	private static IFComponent CHATBOX = new IFComponent(137, 85);
 	
 	public static void update() {
-		List<String> list = new ArrayList<>();
-		for (IFSlot slot : CHATBOX.getSlots())
-			list.add(slot.getText());
-		CHATS.clear();
-		CHATS.addAll(list);
+		try {
+			List<String> list = new ArrayList<>();
+			for (IFSlot slot : CHATBOX.getSlots())
+				list.add(slot.getText());
+			CHATS.clear();
+			CHATS.addAll(list);
+		} catch(Exception e) {
+			
+		}
 	}
 	
 	public static List<String> getMessages() {

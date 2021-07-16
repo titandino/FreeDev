@@ -21,16 +21,20 @@ public class NPCs {
 	private static List<NPC> NPCS = new CopyOnWriteArrayList<>();
 	
 	public static void update() {
-		List<NPC> list = new ArrayList<>();
-		Npcs.closest(npc -> {
-			if (npc == null)
+		try {
+			List<NPC> list = new ArrayList<>();
+			Npcs.closest(npc -> {
+				if (npc == null)
+					return false;
+				NPC tNpc = new NPC(npc);
+				list.add(tNpc);
 				return false;
-			NPC tNpc = new NPC(npc);
-			list.add(tNpc);
-			return false;
-		});
-		NPCS.clear();
-		NPCS.addAll(list);
+			});
+			NPCS.clear();
+			NPCS.addAll(list);
+		} catch(Exception e) {
+			
+		}
 	}
 	
 	public static NPC getClosest(Filter<NPC> filter) {
