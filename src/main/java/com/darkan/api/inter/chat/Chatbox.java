@@ -1,8 +1,11 @@
-package com.darkan.api.inter;
+package com.darkan.api.inter.chat;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import com.darkan.api.inter.IFComponent;
+import com.darkan.api.inter.IFSlot;
 
 public class Chatbox {
 	

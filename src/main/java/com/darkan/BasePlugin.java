@@ -13,8 +13,8 @@ import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.entity.VarManager;
-import com.darkan.api.inter.Chatbox;
 import com.darkan.api.inter.Interfaces;
+import com.darkan.api.inter.chat.Chatbox;
 import com.darkan.api.scripting.MessageListener;
 import com.darkan.api.util.DebugFrame;
 import com.darkan.api.util.Logger;
@@ -70,6 +70,7 @@ public final class BasePlugin extends AbstractPlugin {
     		if (chat.equals(prevFirst))
     			break;
     		newChats.add(chat);
+    		System.out.println("New chat message: " + chat);
     	}
     	if (!newChats.isEmpty()) {
 	    	for (ScriptSkeleton script : scripts.values()) {
