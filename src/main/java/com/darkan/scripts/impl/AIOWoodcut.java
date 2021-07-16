@@ -18,7 +18,7 @@ import kraken.plugin.api.Player;
 import kraken.plugin.api.Vector2i;
 import kraken.plugin.api.Bank;
 
-@Script("AIO Woodcut")
+//@Script("AIO Woodcut")
 public class AIOWoodcut extends ScriptSkeleton {
     
     int selectedTree = 0;

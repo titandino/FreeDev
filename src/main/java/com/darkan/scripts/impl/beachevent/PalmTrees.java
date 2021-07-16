@@ -30,10 +30,8 @@ public class PalmTrees extends BeachActivity {
 	        WorldObjects.interactClosestReachable("Deposit coconuts");
 	        ctx.setState("Depositing coconuts");
 	    } else {
-	        if (currentTree == null)
-	            currentTree = WorldObjects.getClosestReachable(object -> object.hasOption("Pick coconut"));
-	        else if (WorldObjects.getClosestReachable(object -> object.getId() == currentTree.getId()+1) != null)
-	            currentTree = WorldObjects.getClosestReachable(object -> object.getId() != currentTree.getId() && object.hasOption("Pick coconut"));
+	        currentTree = WorldObjects.getClosest(object -> 
+	            PALM_TREE_MAP.containsKey(object.getId()) && (currentTree != null ? currentTree.getId() != object.getId() : true));
 	        
 	        WorldTile loc = PALM_TREE_MAP.get(currentTree.getId());
 	        
@@ -47,6 +45,6 @@ public class PalmTrees extends BeachActivity {
 	        currentTree.interact("Pick coconut");
 	        ctx.setState("Picking coconuts from: " + currentTree.getId() + ", " + currentTree.getName() + ", " + currentTree.getX() + ", " + currentTree.getY() + ", " + currentTree.getPlane());
 	    }
-        ctx.sleepWhile(Integer.MAX_VALUE, () -> ctx.getTimeSinceLastAnimation() < Utils.gaussian(3500, 5000) || self.isAnimationPlaying() || self.isMoving());
+        ctx.sleepWhile(Integer.MAX_VALUE, () -> ctx.getTimeSinceLastAnimation() < Utils.gaussian(3500, 5000) || ctx.getTimeSinceLastMoving() < Utils.gaussian(3500, 5000)|| self.isAnimationPlaying() || self.isMoving());
 	}
 }
