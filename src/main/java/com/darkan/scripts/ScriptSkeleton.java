@@ -6,14 +6,10 @@ import java.util.function.Supplier;
 
 import com.darkan.Constants;
 import com.darkan.api.entity.MyPlayer;
+import com.darkan.api.scripting.MessageListener;
 import com.darkan.api.util.Utils;
 
-import kraken.plugin.api.Client;
-import kraken.plugin.api.Debug;
-import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Player;
-import kraken.plugin.api.Players;
-import kraken.plugin.api.Time;
+import kraken.plugin.api.*;
 
 public abstract class ScriptSkeleton {
 	
@@ -32,6 +28,10 @@ public abstract class ScriptSkeleton {
 	
 	private int loopDelay;
 	private int currDelay;
+
+	private long nextRun;
+
+	private String lastMessage;
 	
 	private Supplier<Boolean> sleepConstraint;
 	private long sleepWhileMax = -1;
@@ -83,15 +83,38 @@ public abstract class ScriptSkeleton {
 					sleepConstraint = null;
 				return loopDelay;
 			}
-			
-			currDelay = loopDelay;
-			loop(self);
-			return Utils.gaussian(currDelay, gausVariance);
+
+			if(nextRun < System.currentTimeMillis()) {
+				currDelay = loopDelay;
+				loop(self);
+				nextRun = System.currentTimeMillis() + Utils.gaussian(currDelay, gausVariance);
+			}
+			if(this instanceof MessageListener) {
+				MessageListener listener = (MessageListener) this;
+				WidgetGroup group = Widgets.getGroupById(137);
+				if(group == null || group.getWidgets() == null || group.getWidgets().length < 84)
+					return 100;
+				Widget widget = group.getWidgets()[83];
+				if(widget == null || widget.getChildren() == null || widget.getChildren().length < 2)
+					return 100;
+				Widget chatContainer = widget.getChildren()[1];
+				if(chatContainer == null || chatContainer.getType() != Widget.CONTAINER || chatContainer.getChildren() == null || chatContainer.getChildren().length < 1)
+					return 100;
+				Widget chat = chatContainer.getChildren()[0];
+				if(chat == null || chat.getType() != Widget.TEXT)
+					return 100;
+				String message = chat.getText();
+				if(message.equals(lastMessage))
+					return 100;
+				lastMessage = message;
+				listener.onMessageReceived(message);
+			}
 		} catch(Exception e) {
 			error = e.toString();
 			Debug.logErr(e);
 			return Utils.gaussian(2000, gausVariance);
 		}
+		return 10;
 	}
 	
 	public long getTimeSinceLastAnimation() {
