@@ -15,12 +15,13 @@ public class ItemContainer extends IFComponent {
 	
 	public Item[] getItems() {
 		try {
-			Item[] items = getItems();
-			if (items == null)
-				return new Item[28];
+			IFSlot[] slots = getSlots();
+			Item[] items = new Item[slots.length];
+			for (int i = 0;i < slots.length;i++)
+				items[i] = slots[i].getItem();
 			return items;
 		} catch(Exception e) {
-			return new Item[28];
+			return new Item[1];
 		}
 	}
 	

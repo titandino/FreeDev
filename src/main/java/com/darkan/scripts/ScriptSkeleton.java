@@ -97,6 +97,7 @@ public abstract class ScriptSkeleton {
 		} catch (Exception e) {
 			error = e.toString();
 			Debug.logErr(e);
+			e.printStackTrace();
 			return Utils.gaussian(2000, gausVariance);
 		}
 		return 10;

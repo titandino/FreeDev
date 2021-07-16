@@ -6,6 +6,7 @@ import java.util.Map;
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
+import com.darkan.api.scripting.MessageListener;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
@@ -13,7 +14,7 @@ import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Player;
 
 @Script("AIO Beach Event")
-public class AIOBeachEvent extends ScriptSkeleton {
+public class AIOBeachEvent extends ScriptSkeleton implements MessageListener {
 	
 	private static Map<String, BeachActivity> ACTIVITIES = new HashMap<>();
 	
@@ -28,7 +29,7 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	
 	private BeachActivity activity = null;
 	private boolean killClawdia = true;
-	private int iceCreamAtts = 0;
+	private long eatAnIceCream = -1;
 			
 	public AIOBeachEvent() {
 		super("AIO Beach Event", 1000);
@@ -39,15 +40,15 @@ public class AIOBeachEvent extends ScriptSkeleton {
 		return true;
 	}
 	
+	public boolean shouldEatIceCream() {
+		return getTemp() == 220 && (System.currentTimeMillis() - eatAnIceCream) < 30000;
+	}
+	
 	@Override
 	public void loop(Player self) {
-		if (iceCreamAtts >= 7)
-			return;
-		if (getTemp() == 220 && !getHighlight().contains("Happy Hour")) {
-			if (Interfaces.getInventory().clickItem("Ice cream", "Eat")) {
-				iceCreamAtts++;
+		if (shouldEatIceCream() && !getHighlight().contains("Happy Hour")) {
+			if (Interfaces.getInventory().clickItem("Ice cream", "Eat"))
 				sleep(5000);
-			}
 			return;
 		}
 		if (killClawdia && NPCs.interactClosest("Attack", n -> n.getName().contains("Clawdia"))) {
@@ -95,5 +96,11 @@ public class AIOBeachEvent extends ScriptSkeleton {
 	@Override
 	public void onStop() {
 		
+	}
+
+	@Override
+	public void onMessageReceived(String message) {
+		if (message.contains("You have reached the maximum temperature and can gain no more XP from the beach. Eat an ice cream to cool yourself down and earn more!"))
+			eatAnIceCream = System.currentTimeMillis();
 	}
 }
