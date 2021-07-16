@@ -15,6 +15,7 @@ import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.entity.VarManager;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.inter.chat.Chatbox;
+import com.darkan.api.inter.chat.Message;
 import com.darkan.api.scripting.MessageListener;
 import com.darkan.api.util.DebugFrame;
 import com.darkan.api.util.Logger;
@@ -65,17 +66,18 @@ public final class BasePlugin extends AbstractPlugin {
     			script.process();
     	}
     	String prevFirst = prevChats.size() > 0 ? prevChats.get(0) : "null";
-    	List<String> newChats = new ArrayList<>();
+    	List<Message> newMessages = new ArrayList<>();
     	for (String chat : Chatbox.getMessages()) {
     		if (chat.equals(prevFirst))
     			break;
-    		newChats.add(chat);
-    		System.out.println("New chat message: " + chat);
+    		Message mes = new Message(chat);
+    		newMessages.add(mes);
+    		System.out.println("[CHAT]: " + mes);
     	}
-    	if (!newChats.isEmpty()) {
+    	if (!newMessages.isEmpty()) {
 	    	for (ScriptSkeleton script : scripts.values()) {
 	    		if (script != null && script instanceof MessageListener) {
-	    			for (String chat : newChats)
+	    			for (Message chat : newMessages)
 	    				((MessageListener) script).onMessageReceived(chat);
 	    		}
 	    	}

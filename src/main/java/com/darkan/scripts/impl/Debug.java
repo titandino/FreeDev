@@ -1,5 +1,6 @@
 package com.darkan.scripts.impl;
 
+import com.darkan.api.inter.chat.Message;
 import com.darkan.api.scripting.MessageListener;
 import com.darkan.scripts.ScriptSkeleton;
 
@@ -23,7 +24,7 @@ public class Debug extends ScriptSkeleton implements MessageListener {
 	}
 	
 	@Override
-	public void onMessageReceived(String message) {
+	public void onMessageReceived(Message message) {
 		System.out.println(message);
 	}
 	

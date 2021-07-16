@@ -6,6 +6,7 @@ import java.util.Map;
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
+import com.darkan.api.inter.chat.Message;
 import com.darkan.api.scripting.MessageListener;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
@@ -99,8 +100,8 @@ public class AIOBeachEvent extends ScriptSkeleton implements MessageListener {
 	}
 
 	@Override
-	public void onMessageReceived(String message) {
-		if (message.contains("You have reached the maximum temperature and can gain no more XP from the beach. Eat an ice cream to cool yourself down and earn more!"))
+	public void onMessageReceived(Message message) {
+		if (message.isGame() && message.getText().contains("You have reached the maximum temperature and can gain no more XP from the beach. Eat an ice cream to cool yourself down and earn more!"))
 			eatAnIceCream = System.currentTimeMillis();
 	}
 }

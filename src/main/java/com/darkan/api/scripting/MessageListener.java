@@ -1,6 +1,8 @@
 package com.darkan.api.scripting;
 
+import com.darkan.api.inter.chat.Message;
+
 public interface MessageListener {
 
-	void onMessageReceived(String message);
+	void onMessageReceived(Message message);
 }
