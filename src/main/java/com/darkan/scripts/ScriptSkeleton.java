@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import com.darkan.Constants;
+import com.darkan.Settings;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.util.Utils;
 
@@ -18,7 +19,7 @@ public abstract class ScriptSkeleton {
 	private String state = "Initializing...";
 	private String error = "";
 	private boolean enabled = false;
-	private int gausVariance = 4000;
+	private int gausVariance = Settings.getConfig().getGaussVariance();
 
 	private long lastMyPlayerAnim;
 	private long lastMyPlayerMoved;
@@ -44,6 +45,7 @@ public abstract class ScriptSkeleton {
 	public ScriptSkeleton(String name, int loopDelay) {
 		this.name = name;
 		this.loopDelay = loopDelay;
+		this.gausVariance = Settings.getConfig().getGaussVariance();
 	}
 
 	public abstract boolean onStart(Player self);

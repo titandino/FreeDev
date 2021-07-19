@@ -19,10 +19,12 @@ public final class Settings {
 
 	private String cachePath;
 	private boolean debug = false;
+	private int gaussVariance;
 	
 	public Settings() {
 		this.cachePath = "C:/ProgramData/Jagex/RuneScape/";
 		this.debug = false;
+		this.gaussVariance = 4000;
 	}	
 
 	public static void loadConfig() {
@@ -49,5 +51,9 @@ public final class Settings {
 
 	public String getCachePath() {
 		return cachePath != null ? cachePath : DEFAULTS.cachePath;
+	}
+
+	public int getGaussVariance() {
+		return gaussVariance;
 	}
 }
