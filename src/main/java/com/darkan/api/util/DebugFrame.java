@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 
 public class DebugFrame extends JFrame {
@@ -70,14 +69,5 @@ public class DebugFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(480, 320);
 		setLocationRelativeTo(null);
-	}
-
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new DebugFrame().setVisible(true);
-			}
-		});
 	}
 }

@@ -4,6 +4,9 @@ import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.NPC;
 import com.darkan.api.inter.Interfaces;
+import com.darkan.api.inter.chat.Message;
+import com.darkan.api.scripting.MessageListener;
+import com.darkan.api.util.Timer;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
@@ -13,7 +16,7 @@ import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
 
 @Script("Hall of Memories")
-public class HallOfMemories extends ScriptSkeleton {
+public class HallOfMemories extends ScriptSkeleton implements MessageListener {
 
 	private static final int MEMORY_JAR_EMPTY = 42898;
 	private static final int MEMORY_JAR_PARTIAL = 42899;
@@ -24,6 +27,7 @@ public class HallOfMemories extends ScriptSkeleton {
 	private NPC memory;
 	private boolean twoTick = true;
 	private boolean useCoreFragments = false;
+	private Timer corePopTimer = new Timer();
 
 	public HallOfMemories() {
 		super("Hall Of Memories", 600);
@@ -60,10 +64,10 @@ public class HallOfMemories extends ScriptSkeleton {
 		} else if (Interfaces.getInventory().contains(MEMORY_JAR_EMPTY, 1) || Interfaces.getInventory().contains(MEMORY_JAR_PARTIAL, 1)) {
 			memory = HOMConfig.getNPCForLevel(Client.getStatById(Client.DIVINATION).getCurrent());
 			if (memory != null) {	    
-			    if (memory.getName().toUpperCase().contains("MEMORIES") && useCoreFragments && Interfaces.getInventory().contains(CORE_MEMORY_FRAGMENT_ITEM, 1) 
+			    if (corePopTimer.time() > 10000 && memory.getName().toUpperCase().contains("MEMORIES") && useCoreFragments && Interfaces.getInventory().contains(CORE_MEMORY_FRAGMENT_ITEM, 1) 
 			                && WorldObjects.interactClosest("Interact", object -> object.getId() == 111376)) {
 			            setState("Spawning memory fragment");
-			            sleepWhile(5000, 25000, () -> self.isAnimationPlaying() || self.isMoving());
+			            sleepWhile(1000, 25000, () -> self.isAnimationPlaying() || self.isMoving());
 			            return;
 			    }
 				setState("2 ticking memory...");
@@ -96,5 +100,11 @@ public class HallOfMemories extends ScriptSkeleton {
 	@Override
 	public void onStop() {
 
+	}
+
+	@Override
+	public void onMessageReceived(Message message) {
+		if (message.isGame() && message.getText().contains("Core memory playback initiated, please stand by..."))
+			corePopTimer.click();
 	}
 }

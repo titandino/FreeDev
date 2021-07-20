@@ -11,10 +11,10 @@ public class Message {
 	private static final String COLOR_START = "<col=";
 	private static final String COLOR_END = ">";
 	
-	private String timestamp;
-	private String color;
-	private String playerName;
-	private String text;
+	private String timestamp = "";
+	private String color = "FFFFFF";
+	private String playerName = "";
+	private String text = "";
 	
 	public Message(String whole) {
 		parse(whole);
@@ -59,7 +59,7 @@ public class Message {
 	}
 	
 	public boolean isChat() {
-		return playerName != null && color.equals("7FA9FF");
+		return !playerName.isEmpty() && color.equals("7FA9FF");
 	}
 	
 	public boolean isGame() {

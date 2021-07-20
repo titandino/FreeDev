@@ -1,8 +1,11 @@
 package com.darkan.scripts.impl.anachroniaagility;
 
+import com.darkan.Settings;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.item.Item;
+import com.darkan.api.util.Utils;
+import com.darkan.api.world.WorldObject;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
@@ -22,7 +25,7 @@ public class AnachroniaAgility extends ScriptSkeleton {
 	private boolean reverse = true;
 
 	public AnachroniaAgility() {
-		super("Anachronia Agility", 600);
+		super("Anachronia Agility", 200);
 	}
 	
 	@Override
@@ -66,16 +69,14 @@ public class AnachroniaAgility extends ScriptSkeleton {
 			if (reverse) {
 				if (next == getEnd())
 					return;
-				if (next.getReverseObj() != null)
-					next.getReverseObj().interact(0, false);
-				else
-					next.getObject().interact(0, false);
-				sleepWhile(2500, 20000, () -> self.isMoving() || self.isAnimationPlaying());
+				WorldObject nextObj = next.getReverseObj() != null ? next.getReverseObj() : next.getObject();
+				if (nextObj.interact(0, false))
+					sleepWhile(1000, Utils.gaussian(10000, Settings.getConfig().getGaussVariance()), () -> self.isMoving() || self.isAnimationPlaying());
 			} else {
 				if (currNode == getEnd())
 					return;
 				currNode.getObject().interact(0, false);
-				sleepWhile(2500, 20000, () -> self.isMoving() || self.isAnimationPlaying());
+				sleepWhile(1000, Utils.gaussian(10000, Settings.getConfig().getGaussVariance()), () -> self.isMoving() || self.isAnimationPlaying());
 			}
 		} else {
 			setState("Checking if we should move to "+next+"...");
@@ -88,9 +89,9 @@ public class AnachroniaAgility extends ScriptSkeleton {
 		AgilityNode[] nodes = AgilityNode.values();
 		
 		if (reverse) {
-			if (currNode.ordinal()-1 < 0) {
+			if (currNode.ordinal()-1 < getStart().ordinal()) {
 				reverse = false;
-				return AgilityNode.CLIFF;
+				return getStart();
 			}
 			return nodes[currNode.ordinal()-1];
 		}
@@ -100,6 +101,16 @@ public class AnachroniaAgility extends ScriptSkeleton {
 			return getEnd();
 		}
 		return nodes[currNode.ordinal()+1];
+	}
+	
+	public AgilityNode getStart() {
+		if (Client.getStatById(Client.AGILITY).getMax() >= 85)
+			return AgilityNode.END;
+		if (Client.getStatById(Client.AGILITY).getMax() >= 70)
+			return AgilityNode.CLIFF_3;
+		if (Client.getStatById(Client.AGILITY).getMax() >= 50)
+			return AgilityNode.RUINED_TEMP3;
+		return AgilityNode.CLIFF;
 	}
 	
 	public AgilityNode getEnd() {
