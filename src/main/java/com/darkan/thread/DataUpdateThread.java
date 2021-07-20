@@ -1,6 +1,7 @@
 package com.darkan.thread;
 
 import com.darkan.api.accessors.NPCs;
+import com.darkan.api.accessors.SpotAnims;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.inter.chat.Chatbox;
 import com.darkan.api.util.Logger;
@@ -28,6 +29,7 @@ public class DataUpdateThread extends Thread {
 			Chatbox.update();
 			NPCs.update();
 			WorldObjects.update();
+			SpotAnims.update();
 			UPDATING_DATA = false;
 		} catch(Exception e) {
 			Logger.handle(e);

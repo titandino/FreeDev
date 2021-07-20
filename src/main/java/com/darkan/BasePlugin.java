@@ -77,18 +77,13 @@ public final class BasePlugin extends AbstractPlugin {
 	    	String prevFirst = prevChats.size() > 0 ? prevChats.get(0) : "null";
 	    	List<Message> newMessages = new ArrayList<>();
 	    	for (String chat : currentMessages) {
-	    		if (chat.equals(prevFirst))
+	    		if (chat != null && chat.equals(prevFirst))
 	    			break;
 	    		Message mes = new Message(chat);
 	    		newMessages.add(mes);
-	    		//System.out.println("[CHAT]: " + mes);
+	    		System.out.println("[CHAT]: " + mes);
 	    	}
 	    	if (!newMessages.isEmpty()) {
-	    		System.out.println("NewMessSize: " + newMessages.size());
-	    		System.out.println("CurrSize: " + currentMessages.size());
-		    	System.out.println("PrevSize: " + prevChats.size());
-		    	System.out.println("CurrMes: " + currentMessages.get(0));
-		    	System.out.println("PrevMes: " + prevFirst);
 		    	for (ScriptSkeleton script : scripts.values()) {
 		    		if (script != null && script instanceof MessageListener) {
 		    			for (Message chat : newMessages)
@@ -146,7 +141,6 @@ public final class BasePlugin extends AbstractPlugin {
     }
 
     public void onConVarChanged(ConVar conv, int oldValue, int newValue) {
-    	//MyPlayer.getVars().checkVarUpdates();
     	if (conv.getId() != 3513)
     		System.out.println("Var changed: " + conv.getId() + " from " + oldValue + " -> " + newValue);
     	MyPlayer.getVars().setVar(conv.getId(), newValue);
