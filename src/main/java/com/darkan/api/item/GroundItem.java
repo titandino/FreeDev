@@ -1,8 +1,11 @@
 package com.darkan.api.item;
 
+import com.darkan.api.util.Utils;
 import com.darkan.api.world.Interactable;
 import com.darkan.api.world.WorldTile;
 import com.darkan.cache.def.items.ItemDef;
+
+import kraken.plugin.api.Actions;
 
 public class GroundItem implements Interactable {
 
@@ -38,13 +41,20 @@ public class GroundItem implements Interactable {
 
 	@Override
 	public boolean interact(int option) {
-		// TODO Auto-generated method stub
+		if (option == 2) {
+			Actions.menu(Actions.MENU_EXECUTE_GROUND_ITEM, getId(), getPosition().getX(), getPosition().getY(), Utils.random(0, Integer.MAX_VALUE));
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean interact(String action) {
-		// TODO Auto-generated method stub
+		int op = getDef().getGroundOpIdForName(action);
+		if (op != -1) {
+			interact(op);
+			return true;
+		}
 		return false;
 	}
 	

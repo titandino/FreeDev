@@ -277,6 +277,14 @@ public class ItemDef {
 		return false;
 	}
 	
+	public int getGroundOpIdForName(String opName) {
+		for (int i = 0;i < inventoryActions.length;i++) {
+			if (containsGroundOp(i, opName))
+				return i;
+		}
+		return -1;
+	}
+	
 	public int getCreationSkillId() {
 		return (int) EnumDef.get(681).values.get(getCraftingType());
 	}
