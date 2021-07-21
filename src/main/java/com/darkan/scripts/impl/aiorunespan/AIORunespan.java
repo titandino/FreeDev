@@ -3,6 +3,7 @@ package com.darkan.scripts.impl.aiorunespan;
 import java.util.List;
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.entity.NPC;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.world.Interactable;
@@ -12,7 +13,6 @@ import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
 
 @Script("AIO Runespan")
@@ -25,14 +25,14 @@ public class AIORunespan extends ScriptSkeleton {
 	private boolean members = true;
 
 	@Override
-	public boolean onStart(Player self) {
+	public boolean onStart() {
 		startXp = Client.getStatById(Client.RUNECRAFTING).getXp();
 		return true;
 	}
 
 	@Override
-	protected void loop(Player self) {
-		if (self.isAnimationPlaying() || self.isMoving())
+	protected void loop() {
+		if (MyPlayer.get().isAnimationPlaying() || MyPlayer.get().isMoving())
 			return;
 		if (!Interfaces.getInventory().contains(Rune.ESSENCE, 1) && NPCs.interactClosestReachable("Collect", n -> n.getId() == 15402)) {
 			setState("Ran out of essence... Grabbing more...");
@@ -49,7 +49,7 @@ public class AIORunespan extends ScriptSkeleton {
 			
 			setState("Clicking closest " + node.name() + "...");
 			node.interact("Siphon");
-			sleepWhile(2500, 20000, () -> self.isAnimationPlaying() || self.isMoving());
+			sleepWhile(2500, 20000, () -> MyPlayer.get().isAnimationPlaying() || MyPlayer.get().isMoving());
 		}
 	}
 

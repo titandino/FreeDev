@@ -1,11 +1,11 @@
 package com.darkan.scripts.impl.aioagility;
 
 import com.darkan.api.accessors.WorldObjects;
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Player;
 
 @Script("AIO Agility")
 public class AIOAgility extends ScriptSkeleton {
@@ -17,12 +17,12 @@ public class AIOAgility extends ScriptSkeleton {
 	}
 	
 	@Override
-	public boolean onStart(Player self) {
+	public boolean onStart() {
 		setState("Starting up...");
 		if (currNodeIdx == -1) {
 			for (int i = 0;i < course.length;i++) {
 				setState("Checking if "+course[i]+" is good to start at...");
-				if (course[i].getArea().inside(self.getGlobalPosition())) {
+				if (course[i].getArea().inside(MyPlayer.get().getGlobalPosition())) {
 					currNodeIdx = i;
 					return true;
 				}
@@ -33,16 +33,16 @@ public class AIOAgility extends ScriptSkeleton {
 	}
 
 	@Override
-	public void loop(Player self) {
+	public void loop() {
 		int nextIdx = getNext();
-		if (course[currNodeIdx].getArea().inside(self.getGlobalPosition())) {
+		if (course[currNodeIdx].getArea().inside(MyPlayer.get().getGlobalPosition())) {
 			if ((course[currNodeIdx].getObject() != null && course[currNodeIdx].getObject().interact(0, false)) || WorldObjects.getClosest(obj -> obj.getId() == course[currNodeIdx].getObjectId()).interact(0)) {
 				setState("Using " + course[currNodeIdx].getName() + "...");
-				sleepWhile(2500, 25000, () -> !course[getNext()].getArea().inside(self.getGlobalPosition()));
+				sleepWhile(2500, 25000, () -> !course[getNext()].getArea().inside(MyPlayer.get().getGlobalPosition()));
 			}
 		} else {
 			setState("Checking if we should move to "+course[nextIdx].getName()+"...");
-			if (course[nextIdx].getArea().inside(self.getGlobalPosition()))
+			if (course[nextIdx].getArea().inside(MyPlayer.get().getGlobalPosition()))
 				currNodeIdx = nextIdx;
 		}
 	}

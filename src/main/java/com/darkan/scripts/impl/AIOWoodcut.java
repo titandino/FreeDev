@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.entity.NPC;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Utils;
@@ -14,7 +15,6 @@ import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Move;
-import kraken.plugin.api.Player;
 import kraken.plugin.api.Vector2i;
 import kraken.plugin.api.Bank;
 
@@ -36,17 +36,16 @@ public class AIOWoodcut extends ScriptSkeleton {
 	}
 	
 	@Override
-	public boolean onStart(Player self) {
-	    if (self != null)
-	        startTile = new WorldTile(self.getGlobalPosition());
+	public boolean onStart() {
+	    startTile = new WorldTile(MyPlayer.get().getGlobalPosition());
 		return true;
 	}
 	
 	@Override
-	public void loop(Player self) {
+	public void loop() {
 	    if (paused)
 	        return;
-		if (self.isMoving() || self.isAnimationPlaying())
+		if (MyPlayer.get().isMoving() || MyPlayer.get().isAnimationPlaying())
 			return;
 		
 		if (Interfaces.getInventory().isFull())
@@ -55,14 +54,14 @@ public class AIOWoodcut extends ScriptSkeleton {
 		    fullInventory = false;
 		
 		if (!fullInventory) {
-    		if ((getTimeSinceLastMoving() > 1200) && Utils.getDistanceTo(new WorldTile(self.getGlobalPosition()), startTile) > 24) {
+    		if ((getTimeSinceLastMoving() > 1200) && Utils.getDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), startTile) > 24) {
     	        setState("Running back to starting area");
     		    Move.to(new Vector2i(startTile.getX() + (random.nextInt(10) - 5), startTile.getY() + (random.nextInt(10) - 5)));
     		    return;
     		}
     		if (WorldObjects.interactClosestReachable("Chop down", object -> object.getName().equals(getTree()) && object.hasOption("Chop down"))) {
     		    setState("Cutting " + getTree());
-    		    sleepWhile(Integer.MAX_VALUE, () -> self.isAnimationPlaying());
+    		    sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
     	        return;
     		}
 		}
@@ -71,7 +70,7 @@ public class AIOWoodcut extends ScriptSkeleton {
 	        if (fletch && Interfaces.getInventory().isFull()) {
 	            setState("Fletching");
 	            //do fletching logic
-	            sleepWhile(Integer.MAX_VALUE, () -> self.isAnimationPlaying());
+	            sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
 	            return;
 	        }
     		if (firemake && Interfaces.getInventory().freeSlots() <= 1) {
@@ -83,7 +82,7 @@ public class AIOWoodcut extends ScriptSkeleton {
     		    }
     		    //fire.interact("Use");
     		    //Interface: 1179, child: 17, slot: 17
-                sleepWhile(Integer.MAX_VALUE, () -> self.isAnimationPlaying());
+                sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
     		    return;
     		}
     		if (drop) {
@@ -101,7 +100,7 @@ public class AIOWoodcut extends ScriptSkeleton {
     		}
     		if (bank && Interfaces.getInventory().isFull() && !Bank.isOpen()) {
     		    setState("Running to bank");
-    		    if (!openBank(self)) {
+    		    if (!openBank()) {
     		        bank = false;
     		        return;
     		    }
@@ -163,16 +162,16 @@ public class AIOWoodcut extends ScriptSkeleton {
 	    };
 	}
 	
-	private boolean openBank(Player self) {
+	private boolean openBank() {
 	    WorldObject nearestBank = WorldObjects.getClosest(object -> object.hasOption("Bank") || object.getName().equals("Bank booth") || (object.getName().equals("Bank chest") || object.getName().equals("Deposit box")));
 	    NPC nearestBanker = NPCs.getClosest(object -> object.hasOption("Bank"));
 	    
 	    int objectDistance = -1, npcDistance = -1;
 	    
 	    if (nearestBank != null)
-	        objectDistance = Utils.getRouteDistanceTo(new WorldTile(self.getGlobalPosition()), nearestBank);
+	        objectDistance = Utils.getRouteDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), nearestBank);
 	    if (nearestBanker != null)
-	        npcDistance = Utils.getRouteDistanceTo(new WorldTile(self.getGlobalPosition()), nearestBanker);
+	        npcDistance = Utils.getRouteDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), nearestBanker);
 	    
 	    if (objectDistance != -1 && npcDistance != -1)
 	        return (objectDistance < npcDistance ? (nearestBank.hasOption("Bank") ? nearestBank.interact("Bank") : nearestBank.interact("Use")) : nearestBanker.interact("Bank"));

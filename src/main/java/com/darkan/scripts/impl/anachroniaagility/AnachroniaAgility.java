@@ -1,6 +1,5 @@
 package com.darkan.scripts.impl.anachroniaagility;
 
-import com.darkan.Settings;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.item.Item;
@@ -11,7 +10,6 @@ import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
 
 @Script("Anachronia Agility")
@@ -29,14 +27,14 @@ public class AnachroniaAgility extends ScriptSkeleton {
 	}
 	
 	@Override
-	public boolean onStart(Player self) {
+	public boolean onStart() {
 		setState("Starting up...");
 		startXp = Client.getStatById(Client.AGILITY).getXp();
 		startPages = Interfaces.getInventory().count(PAGE_ID);
 		if (currNode == null) {
 			for (AgilityNode node : AgilityNode.values()) {
 				setState("Checking if "+node+" is good to start at...");
-				if (node.getArea().inside(self.getGlobalPosition())) {
+				if (node.getArea().inside(MyPlayer.get().getGlobalPosition())) {
 					if (node == getEnd())
 						reverse = true;
 					currNode = node;
@@ -49,7 +47,7 @@ public class AnachroniaAgility extends ScriptSkeleton {
 	}
 
 	@Override
-	public void loop(Player self) {
+	public void loop() {
 		AgilityNode next = getNext();
 		if (MyPlayer.getHealthPerc() < 10) {
 			sleep(1600);
@@ -64,23 +62,23 @@ public class AnachroniaAgility extends ScriptSkeleton {
 				return;
 			}
 		}
-		if (currNode.getArea().inside(self.getGlobalPosition())) {
+		if (currNode.getArea().inside(MyPlayer.get().getGlobalPosition())) {
 			setState("Moving to " + currNode.name() + "...");
 			if (reverse) {
 				if (next == getEnd())
 					return;
 				WorldObject nextObj = next.getReverseObj() != null ? next.getReverseObj() : next.getObject();
 				if (nextObj.interact(0, false))
-					sleepWhile(1000, Utils.gaussian(10000, Settings.getConfig().getGaussVariance()), () -> self.isMoving() || self.isAnimationPlaying());
+					sleepWhile(1000, Utils.gaussian(10000, 5000), () -> MyPlayer.get().isMoving() || MyPlayer.get().isAnimationPlaying());
 			} else {
 				if (currNode == getEnd())
 					return;
 				currNode.getObject().interact(0, false);
-				sleepWhile(1000, Utils.gaussian(10000, Settings.getConfig().getGaussVariance()), () -> self.isMoving() || self.isAnimationPlaying());
+				sleepWhile(1000, Utils.gaussian(10000, 5000), () -> MyPlayer.get().isMoving() || MyPlayer.get().isAnimationPlaying());
 			}
 		} else {
 			setState("Checking if we should move to "+next+"...");
-			if (next.getArea().inside(self.getGlobalPosition()))
+			if (next.getArea().inside(MyPlayer.get().getGlobalPosition()))
 				currNode = next;
 		}
 	}

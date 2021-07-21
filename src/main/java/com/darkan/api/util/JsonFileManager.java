@@ -16,7 +16,7 @@ import com.google.gson.stream.JsonWriter;
 
 public class JsonFileManager {
 	
-	private static Gson GSON = new GsonBuilder().create();
+	private static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	
 	public static void setGSON(Gson gson) {
 		GSON = gson;

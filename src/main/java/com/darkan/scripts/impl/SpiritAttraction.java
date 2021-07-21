@@ -10,7 +10,6 @@ import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
 
 @Script(value = "Spirit Attraction", utility = true)
@@ -28,12 +27,12 @@ public class SpiritAttraction extends ScriptSkeleton {
 	}
 	
 	@Override
-	public boolean onStart(Player self) {
+	public boolean onStart() {
 		return true;
 	}
 
 	@Override
-	public void loop(Player self) {
+	public void loop() {
 		setState("Waiting for spirit...");
 		NPC serenSpirit = NPCs.getClosestReachable(npc -> SPIRIT_NAMES.contains(npc.getName()));
 		if (serenSpirit != null) {

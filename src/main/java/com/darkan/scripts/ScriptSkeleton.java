@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import com.darkan.Constants;
-import com.darkan.Settings;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.util.Utils;
 
@@ -19,7 +18,6 @@ public abstract class ScriptSkeleton {
 	private String state = "Initializing...";
 	private String error = "";
 	private boolean enabled = false;
-	private int gausVariance = Settings.getConfig().getGaussVariance();
 
 	private long lastMyPlayerAnim;
 	private long lastMyPlayerMoved;
@@ -45,12 +43,11 @@ public abstract class ScriptSkeleton {
 	public ScriptSkeleton(String name, int loopDelay) {
 		this.name = name;
 		this.loopDelay = loopDelay;
-		this.gausVariance = Settings.getConfig().getGaussVariance();
 	}
 
-	public abstract boolean onStart(Player self);
+	public abstract boolean onStart();
 
-	protected abstract void loop(Player self);
+	protected abstract void loop();
 
 	public abstract void paintImGui(long runtime);
 
@@ -65,13 +62,14 @@ public abstract class ScriptSkeleton {
 				state = "Finding local player... " + localPlayerAtt++;
 				return 0;
 			}
+			MyPlayer.set(self);
 			if (!enabled) {
 				if (Client.getStatById(Client.HITPOINTS).getXp() <= 100)
 					return 0;
 				MyPlayer.getVars().clearSynced();
 				for (int i = 0; i < Constants.SKILL_NAME.length; i++)
 					startXps.put(i, Client.getStatById(i).getXp());
-				boolean started = onStart(self);
+				boolean started = onStart();
 				if (started) {
 					start();
 					enabled = true;
@@ -93,14 +91,14 @@ public abstract class ScriptSkeleton {
 
 			if (nextRun < System.currentTimeMillis()) {
 				currDelay = loopDelay;
-				loop(self);
-				nextRun = System.currentTimeMillis() + Utils.gaussian(currDelay, gausVariance);
+				loop();
+				nextRun = System.currentTimeMillis() + Utils.gaussian(currDelay, currDelay / 2);
 			}
 		} catch (Exception e) {
 			error = e.toString();
 			Debug.logErr(e);
 			e.printStackTrace();
-			return Utils.gaussian(2000, gausVariance);
+			return Utils.gaussian(2000, 1000);
 		}
 		return 10;
 	}
@@ -149,7 +147,7 @@ public abstract class ScriptSkeleton {
 	}
 
 	public final void sleep(int ms) {
-		currDelay += Utils.gaussian(ms, gausVariance);
+		currDelay += Utils.gaussian(ms, ms / 2);
 	}
 
 	public final void start() {

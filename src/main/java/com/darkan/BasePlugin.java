@@ -77,7 +77,9 @@ public final class BasePlugin extends AbstractPlugin {
 	    	String prevFirst = prevChats.size() > 0 ? prevChats.get(0) : "null";
 	    	List<Message> newMessages = new ArrayList<>();
 	    	for (String chat : currentMessages) {
-	    		if (chat != null && chat.equals(prevFirst))
+	    		if (chat == null)
+	    			continue;
+	    		if (chat.equals(prevFirst))
 	    			break;
 	    		Message mes = new Message(chat);
 	    		newMessages.add(mes);

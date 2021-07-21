@@ -12,7 +12,6 @@ import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Player;
 
 @Script("AIO Beach Event")
 public class AIOBeachEvent extends ScriptSkeleton implements MessageListener {
@@ -37,7 +36,7 @@ public class AIOBeachEvent extends ScriptSkeleton implements MessageListener {
 	}
 	
 	@Override
-	public boolean onStart(Player self) {
+	public boolean onStart() {
 		return true;
 	}
 	
@@ -46,7 +45,7 @@ public class AIOBeachEvent extends ScriptSkeleton implements MessageListener {
 	}
 	
 	@Override
-	public void loop(Player self) {
+	public void loop() {
 		if (shouldEatIceCream() && !getHighlight().contains("Happy Hour")) {
 			if (Interfaces.getInventory().clickItem("Ice cream", "Eat"))
 				sleep(5000);
@@ -59,7 +58,7 @@ public class AIOBeachEvent extends ScriptSkeleton implements MessageListener {
 		}
 		
 		if (activity != null)
-			activity.loop(this, self);
+			activity.loop(this);
 	}
 	
 	public String getHighlight() {

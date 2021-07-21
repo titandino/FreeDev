@@ -1,5 +1,6 @@
 package com.darkan.scripts.impl;
 
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Area;
 import com.darkan.api.world.WorldTile;
@@ -23,16 +24,16 @@ public class PKAvoider extends ScriptSkeleton {
 	}
 
 	@Override
-	public boolean onStart(Player self) {
+	public boolean onStart() {
 		return true;
 	}
 
 	@Override
-	public void loop(Player self) {
-		Vector3i pos = self.getGlobalPosition();
+	public void loop() {
+		Vector3i pos = MyPlayer.get().getGlobalPosition();
 		if (!OPEN_WILDY.inside(pos) && !FORINTHRY.inside(pos))
 			return;
-		Player player = Players.closest(p -> !p.getName().equals(self.getName()));
+		Player player = Players.closest(p -> !p.getName().equals(MyPlayer.get().getName()));
 		if (player != null) {
 			if (Interfaces.getEquipment().clickItem(RING_OF_FORTUNE, "Grand Exchange"))
 				sleep(600);

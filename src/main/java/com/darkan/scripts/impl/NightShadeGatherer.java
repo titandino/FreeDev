@@ -1,12 +1,12 @@
 package com.darkan.scripts.impl;
 
 import com.darkan.api.accessors.WorldObjects;
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Inventory;
-import kraken.plugin.api.Player;
 
 @Script("Gather Nightshades")
 public class NightShadeGatherer extends ScriptSkeleton {
@@ -16,13 +16,13 @@ public class NightShadeGatherer extends ScriptSkeleton {
 	}
 	
 	@Override
-	public boolean onStart(Player self) {
+	public boolean onStart() {
 		return true;
 	}
 	
 	@Override
-	public void loop(Player self) {
-		if (self.isMoving())
+	public void loop() {
+		if (MyPlayer.get().isMoving())
 			return;
 		if (Inventory.isFull()) {
 			if (Interfaces.getInventory().containsAnyReg("of the porter"))
@@ -31,7 +31,7 @@ public class NightShadeGatherer extends ScriptSkeleton {
 			return;
 		}
 		if (!Inventory.isFull() && WorldObjects.interactClosest("Pick", o -> o.getId() == 114921))
-			sleepWhile(1000, 10000, () -> self.isMoving());
+			sleepWhile(1000, 10000, () -> MyPlayer.get().isMoving());
 	}
 
 	@Override

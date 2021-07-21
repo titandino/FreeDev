@@ -9,8 +9,6 @@ import com.darkan.api.util.Utils;
 import com.darkan.cache.def.npcs.NPCDef;
 import com.darkan.scripts.ScriptSkeleton;
 
-import kraken.plugin.api.Player;
-
 public class SandCastles extends BeachActivity {
 
 	private static Map<Integer, String> SAND_CASTLE_MAP = new HashMap<>();
@@ -25,7 +23,7 @@ public class SandCastles extends BeachActivity {
 	private int currentNpc;
 	
 	@Override
-	public void loop(ScriptSkeleton ctx, Player self) {
+	public void loop(ScriptSkeleton ctx) {
 		for (int npcId : SAND_CASTLE_MAP.keySet()) {
 			if (NPCs.getClosest(n -> npcId == n.getId()) != null) {
 				if (WorldObjects.interactClosestReachable("Build", o -> o.getName().equals(SAND_CASTLE_MAP.get(npcId)))) {

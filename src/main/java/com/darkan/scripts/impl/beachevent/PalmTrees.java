@@ -4,13 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.darkan.api.accessors.WorldObjects;
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
 import com.darkan.scripts.ScriptSkeleton;
-
-import kraken.plugin.api.Player;
 
 public class PalmTrees extends BeachActivity {
     
@@ -25,7 +24,7 @@ public class PalmTrees extends BeachActivity {
     WorldObject currentTree = null;
 	
 	@Override
-	public void loop(ScriptSkeleton ctx, Player self) {
+	public void loop(ScriptSkeleton ctx) {
 	    if (Interfaces.getInventory().isFull()) {
 	        WorldObjects.interactClosestReachable("Deposit coconuts");
 	        ctx.setState("Depositing coconuts");
@@ -45,6 +44,6 @@ public class PalmTrees extends BeachActivity {
 	        currentTree.interact("Pick coconut");
 	        ctx.setState("Picking coconuts from: " + currentTree.getId() + ", " + currentTree.getName() + ", " + currentTree.getX() + ", " + currentTree.getY() + ", " + currentTree.getPlane());
 	    }
-        ctx.sleepWhile(Integer.MAX_VALUE, () -> ctx.getTimeSinceLastAnimation() < Utils.gaussian(3500, 5000) || ctx.getTimeSinceLastMoving() < Utils.gaussian(3500, 5000)|| self.isAnimationPlaying() || self.isMoving());
+        ctx.sleepWhile(Integer.MAX_VALUE, () -> ctx.getTimeSinceLastAnimation() < Utils.gaussian(3500, 5000) || ctx.getTimeSinceLastMoving() < Utils.gaussian(3500, 5000)|| MyPlayer.get().isAnimationPlaying() || MyPlayer.get().isMoving());
 	}
 }

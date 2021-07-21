@@ -75,6 +75,14 @@ public class WorldTile {
 	public int getX() {
 		return x;
 	}
+	
+	public float getXDraw() {
+		return x * 512.0f;
+	}
+
+	public float getYDraw() {
+		return y * 512.0f;
+	}
 
 	public int getXInRegion() {
 		return x & 0x3F;

@@ -1,5 +1,9 @@
 package com.darkan.api.pathing;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.darkan.api.world.WorldTile;
 import com.darkan.cache.def.maps.Region;
 
 public class Pathing {
@@ -128,7 +132,7 @@ public class Pathing {
 		return routeSteps;
 	}
 
-	protected static int findRoute(int srcX, int srcY, int srcZ, int srcSizeXY, RouteStrategy strategy, boolean findAlternative) {
+	public static List<WorldTile> findRoute(int srcX, int srcY, int srcZ, int srcSizeXY, RouteStrategy strategy, boolean findAlternative) {
 		isAlternative = false;
 		for (int x = 0; x < GRAPH_SIZE; x++) {
 			for (int y = 0; y < GRAPH_SIZE; y++) {
@@ -153,7 +157,7 @@ public class Pathing {
 		}
 
 		if (!found && !findAlternative)
-			return -1;
+			return null;
 
 		int graphBaseX = srcX - (GRAPH_SIZE / 2);
 		int graphBaseY = srcY - (GRAPH_SIZE / 2);
@@ -196,11 +200,11 @@ public class Pathing {
 			}
 
 			if (lowestCost == Integer.MAX_VALUE || lowestDistance == Integer.MAX_VALUE)
-				return -1;
+				return null;
 		}
 
 		if (endX == srcX && endY == srcY)
-			return 0;
+			return null;
 
 		int steps = 0;
 		int traceX = endX;
@@ -228,8 +232,28 @@ public class Pathing {
 
 			direction = directions[traceX - graphBaseX][traceY - graphBaseY];
 		}
+		List<WorldTile> stepList = new ArrayList<>();
+		WorldTile curr = new WorldTile(srcX, srcY, srcZ);
+		stepList.add(new WorldTile(srcX, srcY, srcZ));
+		for (int i = steps - 1; i >= 0; i--) {
+			int destX = bufferX[i];
+			int destY = bufferY[i];
+			while(true) {
+				if (curr.getX() < destX)
+					curr = curr.transform(1, 0);
+				else if (curr.getX() > destX)
+					curr = curr.transform(-1, 0);
+				if (curr.getY() < destY)
+					curr = curr.transform(0, 1);
+				else if (curr.getY() > destY)
+					curr = curr.transform(0, -1);
+				stepList.add(curr.transform(0, 0));
+				if (curr.getX() == destX && curr.getY() == destY)
+					break;
+			}
+		}
 
-		return steps;
+		return stepList;
 	}
 
 	private static boolean checkSingleTraversal(int srcX, int srcY, RouteStrategy strategy) {

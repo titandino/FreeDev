@@ -17,6 +17,7 @@ import com.darkan.api.pathing.EntityStrategy;
 import com.darkan.api.pathing.FixedTileStrategy;
 import com.darkan.api.pathing.ObjectStrategy;
 import com.darkan.api.pathing.Pathing;
+import com.darkan.api.profile.PlayerProfiles;
 import com.darkan.api.world.ObjectType;
 import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
@@ -27,7 +28,7 @@ public class Utils {
 private static final Random RANDOM = new SecureRandom();
 	
 	public static int gaussian(int mean, int variance) {
-		return (int) (RANDOM.nextGaussian() * Math.sqrt(variance) + mean);
+		return (int) (RANDOM.nextGaussian() * Math.sqrt(variance * PlayerProfiles.get().getGaussVariance()) + mean);
 	}
 	
 	public static final int getDistanceI(int coordX1, int coordY1, int coordX2, int coordY2) {

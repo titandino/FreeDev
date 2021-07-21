@@ -2,13 +2,13 @@ package com.darkan.scripts.impl;
 
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Player;
 import kraken.plugin.api.Time;
 
 @Script("AIO Wisp Gatherer")
@@ -27,14 +27,14 @@ public class AIOWispGathering extends ScriptSkeleton {
 	}
 	
 	@Override
-	public boolean onStart(Player self) {
+	public boolean onStart() {
 		startXp = Client.getStatById(Client.DIVINATION).getXp();
 		startEnergy = Interfaces.getInventory().countReg(" energy");
 		return true;
 	}
 	
 	@Override
-	public void loop(Player self) {
+	public void loop() {
 		if (Interfaces.getInventory().isFull() && WorldObjects.interactClosestReachable("Convert memories")) {
 			setState("Converting memories...");
 			sleepWhile(3500, 51526, () -> Interfaces.getInventory().containsAnyReg(" memory"));
@@ -42,10 +42,10 @@ public class AIOWispGathering extends ScriptSkeleton {
 			setState("Finding closest wisp...");
 			if (NPCs.interactClosestReachable("Harvest", npc -> npc.getName().contains("Enriched"))) {
 				setState("Harvesting closest enriched wisp...");
-				sleepWhile(3100, 73513, () -> self.isAnimationPlaying() && !Interfaces.getInventory().isFull());
+				sleepWhile(3100, 73513, () -> MyPlayer.get().isAnimationPlaying() && !Interfaces.getInventory().isFull());
 			} else if (NPCs.interactClosestReachable("Harvest")) {
 				setState("Harvesting closest wisp...");
-				sleepWhile(3100, 73513, () -> NPCs.getClosest(n -> n.getName().contains("Enriched")) == null && self.isAnimationPlaying() && !Interfaces.getInventory().isFull());
+				sleepWhile(3100, 73513, () -> NPCs.getClosest(n -> n.getName().contains("Enriched")) == null && MyPlayer.get().isAnimationPlaying() && !Interfaces.getInventory().isFull());
 			}
 		}
 	}
