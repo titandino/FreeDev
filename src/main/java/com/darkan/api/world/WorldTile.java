@@ -36,6 +36,12 @@ public class WorldTile {
 		this.plane = (byte) (hash >> 28);
 	}
 	
+	public WorldTile(WorldTile tile, int randomize) {
+		this.x = (short) (tile.x + Utils.random(randomize * 2 + 1) - randomize);
+		this.y = (short) (tile.y + Utils.random(randomize * 2 + 1) - randomize);
+		this.plane = tile.plane;
+	}
+	
 	public WorldTile(int z, int regionX, int regionY, int localX, int localY) {
 		this.x = (short) (regionX << 6 | localX);
 		this.y = (short) (regionY << 6 | localY);
