@@ -5,8 +5,8 @@ import com.darkan.api.pathing.action.node.impl.ObjectNode;
 import com.darkan.api.util.Area;
 
 public enum OreData {
-	COPPER(43188, new TraversalNodeList(new ObjectNode(66876, "Enter", new Area(2290, 4513, 2295, 4520))), new TraversalNodeList(new ObjectNode(67002, "Exit to", new Area(2874, 3499, 2878, 3505)))),
-	TIN(43190, new TraversalNodeList(new ObjectNode(66876, "Enter", new Area(2290, 4513, 2295, 4520))), new TraversalNodeList(new ObjectNode(67002, "Exit to", new Area(2874, 3499, 2878, 3505))));
+	Copper(43188, new TraversalNodeList(new ObjectNode(66876, "Enter", new Area(2290, 4513, 2295, 4520))), new TraversalNodeList(new ObjectNode(67002, "Exit to", new Area(2874, 3499, 2878, 3505)))),
+	Tin(43190, new TraversalNodeList(new ObjectNode(66876, "Enter", new Area(2290, 4513, 2295, 4520))), new TraversalNodeList(new ObjectNode(67002, "Exit to", new Area(2874, 3499, 2878, 3505))));
 	
 	private int varbit;
 	private TraversalNodeList fromBank;
