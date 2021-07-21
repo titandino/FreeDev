@@ -28,7 +28,7 @@ public class Utils {
 private static final Random RANDOM = new SecureRandom();
 	
 	public static int gaussian(int mean, int variance) {
-		return (int) (RANDOM.nextGaussian() * Math.sqrt(variance * PlayerProfiles.get().getGaussVariance()) + mean);
+		return (int) (RANDOM.nextGaussian() * Math.sqrt(variance * PlayerProfiles.get().gaussVariance) + mean);
 	}
 	
 	public static final int getDistanceI(int coordX1, int coordY1, int coordX2, int coordY2) {
