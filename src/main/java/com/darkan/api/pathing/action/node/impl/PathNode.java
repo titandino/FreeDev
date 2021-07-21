@@ -2,17 +2,23 @@ package com.darkan.api.pathing.action.node.impl;
 
 import java.util.List;
 
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.pathing.FixedTileStrategy;
 import com.darkan.api.pathing.Pathing;
 import com.darkan.api.pathing.action.node.TraversalNode;
+import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldTile;
 
 public class PathNode extends TraversalNode {
 	
+	private WorldTile start;
+	private WorldTile end;
 	private List<WorldTile> path;
 	
 	public PathNode(WorldTile start, WorldTile end) {
-		path = Pathing.findRoute(start.getX(), start.getY(), start.getPlane(), 1, new FixedTileStrategy(end.getX(), end.getY()), false);
+		this.start = start;
+		this.end = end;
+		path = Pathing.findRoute(start, 1, new FixedTileStrategy(end.getX(), end.getY()), false);
 	}
 
 	public List<WorldTile> getPath() {
@@ -21,8 +27,7 @@ public class PathNode extends TraversalNode {
 	
 	@Override
 	public boolean canStart() {
-		// TODO Auto-generated method stub
-		return false;
+		return Utils.getRouteDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), start) != -1;
 	}
 
 	@Override
@@ -33,13 +38,12 @@ public class PathNode extends TraversalNode {
 	
 	@Override
 	public boolean reached() {
-		return false;
+		return next != null ? next.canStart() : Utils.getDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), end) <= 2;
 	}
 
 	@Override
 	public TraversalNode copy() {
-		// TODO Auto-generated method stub
-		return null;
+		return null; //TODO
 	}
 
 }

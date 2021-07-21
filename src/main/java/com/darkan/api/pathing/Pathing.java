@@ -26,7 +26,7 @@ public class Pathing {
 	private static int exitY = -1;
 	private static boolean isAlternative;
 	
-	public static int getStepsTo(int srcX, int srcY, int srcZ, int srcSizeXY, RouteStrategy strategy, boolean findAlternative) {
+	public static int getStepsTo(WorldTile start, int srcSize, RouteStrategy strategy, boolean findAlternative) {
 		isAlternative = false;
 		for (int x = 0; x < GRAPH_SIZE; x++) {
 			for (int y = 0; y < GRAPH_SIZE; y++) {
@@ -35,26 +35,26 @@ public class Pathing {
 			}
 		}
 
-		transmitClipData(srcX, srcY, srcZ);
+		transmitClipData(start.getX(), start.getY(), start.getPlane());
 
 		boolean found = false;
-		switch (srcSizeXY) {
+		switch (srcSize) {
 		case 1:
-			found = checkSingleTraversal(srcX, srcY, strategy);
+			found = checkSingleTraversal(start.getX(), start.getY(), strategy);
 			break;
 		case 2:
-			found = checkDoubleTraversal(srcX, srcY, strategy);
+			found = checkDoubleTraversal(start.getX(), start.getY(), strategy);
 			break;
 		default:
-			found = checkVariableTraversal(srcX, srcY, srcSizeXY, strategy);
+			found = checkVariableTraversal(start.getX(), start.getY(), srcSize, strategy);
 			break;
 		}
 
 		if (!found && !findAlternative)
 			return -1;
 
-		int graphBaseX = srcX - (GRAPH_SIZE / 2);
-		int graphBaseY = srcY - (GRAPH_SIZE / 2);
+		int graphBaseX = start.getX() - (GRAPH_SIZE / 2);
+		int graphBaseY = start.getY() - (GRAPH_SIZE / 2);
 		int endX = exitX;
 		int endY = exitY;
 
@@ -97,7 +97,7 @@ public class Pathing {
 				return -1;
 		}
 
-		if (endX == srcX && endY == srcY)
+		if (endX == start.getX() && endY == start.getY())
 			return 0;
 
 		int steps = 0;
@@ -108,7 +108,7 @@ public class Pathing {
 		int lastwritten = direction;
 		bufferX[steps] = traceX;
 		bufferY[steps++] = traceY;
-		while (traceX != srcX || traceY != srcY) {
+		while (traceX != start.getX() || traceY != start.getY()) {
 			if (lastwritten != direction) {
 				bufferX[steps] = traceX;
 				bufferY[steps++] = traceY;
@@ -132,7 +132,7 @@ public class Pathing {
 		return routeSteps;
 	}
 
-	public static List<WorldTile> findRoute(int srcX, int srcY, int srcZ, int srcSizeXY, RouteStrategy strategy, boolean findAlternative) {
+	public static List<WorldTile> findRoute(WorldTile start, int srcSize, RouteStrategy strategy, boolean findAlternative) {
 		isAlternative = false;
 		for (int x = 0; x < GRAPH_SIZE; x++) {
 			for (int y = 0; y < GRAPH_SIZE; y++) {
@@ -141,26 +141,26 @@ public class Pathing {
 			}
 		}
 		
-		transmitClipData(srcX, srcY, srcZ);
+		transmitClipData(start.getX(), start.getY(), start.getPlane());
 
 		boolean found = false;
-		switch (srcSizeXY) {
+		switch (srcSize) {
 		case 1:
-			found = checkSingleTraversal(srcX, srcY, strategy);
+			found = checkSingleTraversal(start.getX(), start.getY(), strategy);
 			break;
 		case 2:
-			found = checkDoubleTraversal(srcX, srcY, strategy);
+			found = checkDoubleTraversal(start.getX(), start.getY(), strategy);
 			break;
 		default:
-			found = checkVariableTraversal(srcX, srcY, srcSizeXY, strategy);
+			found = checkVariableTraversal(start.getX(), start.getY(), srcSize, strategy);
 			break;
 		}
 
 		if (!found && !findAlternative)
 			return null;
 
-		int graphBaseX = srcX - (GRAPH_SIZE / 2);
-		int graphBaseY = srcY - (GRAPH_SIZE / 2);
+		int graphBaseX = start.getX() - (GRAPH_SIZE / 2);
+		int graphBaseY = start.getX() - (GRAPH_SIZE / 2);
 		int endX = exitX;
 		int endY = exitY;
 
@@ -203,7 +203,7 @@ public class Pathing {
 				return null;
 		}
 
-		if (endX == srcX && endY == srcY)
+		if (endX == start.getX() && endY == start.getY())
 			return null;
 
 		int steps = 0;
@@ -213,7 +213,7 @@ public class Pathing {
 		int lastwritten = direction;
 		bufferX[steps] = traceX;
 		bufferY[steps++] = traceY;
-		while (traceX != srcX || traceY != srcY) {
+		while (traceX != start.getX() || traceY != start.getY()) {
 			if (lastwritten != direction) {
 				bufferX[steps] = traceX;
 				bufferY[steps++] = traceY;
@@ -233,8 +233,8 @@ public class Pathing {
 			direction = directions[traceX - graphBaseX][traceY - graphBaseY];
 		}
 		List<WorldTile> stepList = new ArrayList<>();
-		WorldTile curr = new WorldTile(srcX, srcY, srcZ);
-		stepList.add(new WorldTile(srcX, srcY, srcZ));
+		WorldTile curr = new WorldTile(start);
+		stepList.add(new WorldTile(start));
 		for (int i = steps - 1; i >= 0; i--) {
 			int destX = bufferX[i];
 			int destY = bufferY[i];

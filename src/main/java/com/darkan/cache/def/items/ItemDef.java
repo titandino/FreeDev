@@ -249,6 +249,34 @@ public class ItemDef {
 		return false;
 	}
 	
+	public String getGroundOp(int optionId) {
+		if (groundActions == null)
+			return "null";
+		if (optionId >= groundActions.length)
+			return "null";
+		if (groundActions[optionId] == null)
+			return "null";
+		return groundActions[optionId];
+	}
+	
+	public boolean containsGroundOp(String option) {
+		if (params == null)
+			return false;
+		for (int i = 0;i < groundActions.length;i++)
+			if (containsGroundOp(i, option))
+				return true;
+		return false;
+	}
+	
+	public boolean containsGroundOp(int optionId, String option) {
+		if (params == null)
+			return false;
+		String groundOp = getGroundOp(optionId);
+		if (groundOp != null && !groundOp.equals("null") && groundOp.equalsIgnoreCase(option))
+			return true;
+		return false;
+	}
+	
 	public int getCreationSkillId() {
 		return (int) EnumDef.get(681).values.get(getCraftingType());
 	}
