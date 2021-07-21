@@ -65,7 +65,8 @@ public class AIOMining extends ScriptSkeleton {
 				} else {
 					path = null;
 					if (furnace.interact("Deposit-All (Into Metal Bank)"))
-						sleepWhile(3000, 20000, () -> MyPlayer.get().isMoving());
+						sleepWhile(3000, 20000, () -> Interfaces.getInventory().freeSlots() < 8);
+					currentOre = currentOre == OreData.Copper ? OreData.Tin : OreData.Copper;
 					setState("Depositing into metal bank...");
 				}
 			}
