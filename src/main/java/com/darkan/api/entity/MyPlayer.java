@@ -1,5 +1,7 @@
 package com.darkan.api.entity;
 
+import com.darkan.api.world.WorldTile;
+
 import kraken.plugin.api.Client;
 import kraken.plugin.api.Player;
 
@@ -22,6 +24,10 @@ public class MyPlayer {
 
 	public static void set(Player self) {
 		myPlayer = self;
+	}
+
+	public static WorldTile getPosition() {
+		return new WorldTile(myPlayer.getGlobalPosition());
 	}
 	
 }

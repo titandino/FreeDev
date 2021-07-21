@@ -284,6 +284,10 @@ private static final Random RANDOM = new SecureRandom();
 	public static int getDistanceTo(WorldTile start, WorldTile destination) {
 		return start.getDistance(destination);
 	}
+	
+	public static boolean withinDistance(WorldTile from, WorldTile target) {
+		return getDistanceTo(from, target) < PlayerProfiles.get().interactDistanceRange;
+	}
 
 	public static int larger(int v1, int v2) {
 		if (v1 > v2)

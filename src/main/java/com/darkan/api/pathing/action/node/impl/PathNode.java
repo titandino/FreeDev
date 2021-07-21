@@ -37,7 +37,7 @@ public class PathNode extends TraversalNode {
 	
 	@Override
 	public boolean canStart() {
-		return Utils.getRouteDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), start) != -1;
+		return Utils.getRouteDistanceTo(MyPlayer.getPosition(), start) != -1;
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class PathNode extends TraversalNode {
 	}
 	
 	public WorldTile getNextClickPoint() {
-		WorldTile myPos = new WorldTile(MyPlayer.get().getGlobalPosition());
+		WorldTile myPos = MyPlayer.getPosition();
 		WorldTile closest = new WorldTile(0, 0, 0);
 		for (WorldTile tile : path) {
 			if (Utils.getDistanceTo(myPos, tile) < Utils.getDistanceTo(myPos, closest))
@@ -83,7 +83,7 @@ public class PathNode extends TraversalNode {
 	
 	@Override
 	public boolean reached() {
-		return next != null ? next.canStart() : Utils.getDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), end) <= 2;
+		return next != null ? next.canStart() : Utils.getDistanceTo(MyPlayer.getPosition(), end) <= 2;
 	}
 
 	@Override

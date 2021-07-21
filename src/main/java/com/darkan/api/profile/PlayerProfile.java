@@ -8,5 +8,6 @@ public class PlayerProfile {
 	public int futurePathStepMax = 11;
 	public int walkPathDeviation = 3;
 	public int minimapWalkPerc = 30;
+	public int interactDistanceRange = 10;
 	
 }

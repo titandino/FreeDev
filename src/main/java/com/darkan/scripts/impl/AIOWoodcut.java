@@ -37,7 +37,7 @@ public class AIOWoodcut extends ScriptSkeleton {
 	
 	@Override
 	public boolean onStart() {
-	    startTile = new WorldTile(MyPlayer.get().getGlobalPosition());
+	    startTile = MyPlayer.getPosition();
 		return true;
 	}
 	
@@ -54,7 +54,7 @@ public class AIOWoodcut extends ScriptSkeleton {
 		    fullInventory = false;
 		
 		if (!fullInventory) {
-    		if ((getTimeSinceLastMoving() > 1200) && Utils.getDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), startTile) > 24) {
+    		if ((getTimeSinceLastMoving() > 1200) && Utils.getDistanceTo(MyPlayer.getPosition(), startTile) > 24) {
     	        setState("Running back to starting area");
     		    Move.to(new Vector2i(startTile.getX() + (random.nextInt(10) - 5), startTile.getY() + (random.nextInt(10) - 5)));
     		    return;
@@ -169,9 +169,9 @@ public class AIOWoodcut extends ScriptSkeleton {
 	    int objectDistance = -1, npcDistance = -1;
 	    
 	    if (nearestBank != null)
-	        objectDistance = Utils.getRouteDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), nearestBank);
+	        objectDistance = Utils.getRouteDistanceTo(MyPlayer.getPosition(), nearestBank);
 	    if (nearestBanker != null)
-	        npcDistance = Utils.getRouteDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), nearestBanker);
+	        npcDistance = Utils.getRouteDistanceTo(MyPlayer.getPosition(), nearestBanker);
 	    
 	    if (objectDistance != -1 && npcDistance != -1)
 	        return (objectDistance < npcDistance ? (nearestBank.hasOption("Bank") ? nearestBank.interact("Bank") : nearestBank.interact("Use")) : nearestBanker.interact("Bank"));
