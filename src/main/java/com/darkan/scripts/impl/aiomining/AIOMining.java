@@ -29,7 +29,8 @@ public class AIOMining extends ScriptSkeleton {
 	
 	/**
 	 * Tin/Copper/Clay = Burthorpe mine
-	 * Iron/Coal = Lumbridge Swamp southwest
+	 * Iron = Lumbridge Swamp southwest
+	 * Coal = Barbarian village (doesn't even require pathing to bank)
 	 * Mithril = Varrock southwest
 	 * Adamant = Rimmington (clan camp bank) clan vex?
 	 * Luminite = Dwarven mine/Anachronia (low lvl hardcore dwarven mine big nono)
