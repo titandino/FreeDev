@@ -18,12 +18,24 @@ public class IFSlot {
 		this.slotId = slotId;
 	}
 
-	public void click(int option) {
-		Actions.menu(Actions.MENU_EXECUTE_WIDGET, option, slotId, getHash(), Utils.random(0, Integer.MAX_VALUE));
+	public boolean click(int option) {
+		if (isOpen()) {
+			Actions.menu(Actions.MENU_EXECUTE_WIDGET, option, slotId, getHash(), Utils.random(0, Integer.MAX_VALUE));
+			return true;
+		}
+		return false;
 	}
 
 	public int getHash() {
 		return id << 16 | componentId;
+	}
+	
+	public boolean isOpen() {
+		try {
+			return Widgets.getGroupById(id).getWidgets()[componentId].getChildren()[slotId] != null;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 	
 	public String getText() {

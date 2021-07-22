@@ -3,7 +3,7 @@ package com.darkan.api;
 public class InterfaceDecoder {
 	
 	public static void main(String[] args) {
-		int hash = 77266961;
+		int hash = 89784350;
 		int interfaceId = hash >> 16;
 		int slotId = (hash & 0xFF);
 		int childId = hash - (interfaceId << 16);

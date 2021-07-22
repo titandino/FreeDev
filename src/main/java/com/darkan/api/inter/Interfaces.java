@@ -34,6 +34,14 @@ public class Interfaces {
 			return false;
 		}
 	}
+	
+	public static boolean click(int option, int interfaceId, int componentId, int slotId) {
+		return new IFSlot(interfaceId, componentId, slotId).click(slotId);
+	}
+	
+	public static boolean click(int option, int interfaceId, int componentId) {
+		return new IFComponent(interfaceId, componentId).click(option, -1);
+	}
 
 	public static ItemContainer getInventory() {
 		return INVENTORY;

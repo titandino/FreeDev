@@ -14,7 +14,7 @@ import com.darkan.scripts.ScriptSkeleton;
 @Script("AIO Mining")
 public class AIOMining extends ScriptSkeleton {
 	
-	private OreData currentOre = OreData.Iron;
+	private OreData currentOre = OreData.Coal;
 	private TraversalAction path;
 
 	public AIOMining() {
@@ -22,7 +22,6 @@ public class AIOMining extends ScriptSkeleton {
 	}
 		
 	/** TODO
-	 * Coal = Barbarian village (doesn't even require pathing to bank)
 	 * Mithril = Varrock southwest
 	 * Adamant = Rimmington (clan camp bank) clan vex?
 	 * Luminite = Dwarven mine/Anachronia (low lvl hardcore dwarven mine big nono)

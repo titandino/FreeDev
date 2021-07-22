@@ -16,12 +16,40 @@ public class IFComponent {
 		this.componentId = componentId;
 	}
 
-	public void clickComponent(int option, int slotId) {
-		Actions.menu(Actions.MENU_EXECUTE_WIDGET, option, slotId, getHash(), Utils.random(0, Integer.MAX_VALUE));
+	public boolean click(int option, int slotId) {
+		if (isOpen()) {
+			Actions.menu(Actions.MENU_EXECUTE_WIDGET, option, slotId, getHash(), Utils.random(0, Integer.MAX_VALUE));
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean click(int option) {
+		return click(option, -1);
+	}
+	
+	public boolean clickDialogue(int slotId) {
+		if (isOpen()) {
+			Actions.menu(Actions.MENU_EXECUTE_DIALOGUE, 0, slotId, getHash(), Utils.random(0, Integer.MAX_VALUE));
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean clickDialogue() {
+		return clickDialogue(-1);
 	}
 
 	public int getHash() {
 		return id << 16 | componentId;
+	}
+	
+	public boolean isOpen() {
+		try {
+			return Widgets.getGroupById(id).getWidgets()[componentId] != null;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	public IFSlot[] getSlots() {
