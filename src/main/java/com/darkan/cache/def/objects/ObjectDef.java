@@ -45,7 +45,7 @@ public class ObjectDef {
 	public String name = "";
 	public int sizeX = 1;
 	public int sizeY = 1;
-	public int clipType;
+	public int clipType = 2;
 	public boolean blocks;
 	public int interactable;
 	public byte groundContoured;

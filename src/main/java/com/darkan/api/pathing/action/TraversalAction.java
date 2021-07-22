@@ -1,5 +1,6 @@
 package com.darkan.api.pathing.action;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import com.darkan.api.pathing.FixedTileStrategy;
@@ -37,6 +38,8 @@ public class TraversalAction {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(LocalPathing.findLocalRoute(new WorldTile(3177, 3379, 0), 1, new FixedTileStrategy(new WorldTile(3193, 3349, 0)), false)); //TODO extend range of findroute
+		List<WorldTile> path = LocalPathing.findLocalRoute(new WorldTile(3187, 3425, 0), 1, new FixedTileStrategy(new WorldTile(3182, 3371, 0)), false);
+		for (WorldTile tile : path)
+			System.out.println(tile);
 	}
 }

@@ -7,7 +7,7 @@ import com.darkan.api.world.WorldTile;
 import com.darkan.cache.def.maps.Region;
 
 public class LocalPathing {
-	private static final int GRAPH_SIZE = 256;
+	private static final int GRAPH_SIZE = 128;
 	private static final int QUEUE_SIZE = (GRAPH_SIZE * GRAPH_SIZE) / 4;
 	private static final int ALTERNATIVE_ROUTE_MAX_DISTANCE = 100;
 	private static final int ALTERNATIVE_ROUTE_RANGE = 10;
@@ -456,7 +456,7 @@ public class LocalPathing {
 			for (int transmitRegionY = graphBaseY >> 6; transmitRegionY <= (graphBaseY + (GRAPH_SIZE - 1)) >> 6; transmitRegionY++) {
 				int startX = Math.max(graphBaseX, transmitRegionX << 6), startY = Math.max(graphBaseY, transmitRegionY << 6);
 				int endX = Math.min(graphBaseX + GRAPH_SIZE, (transmitRegionX << 6) + 64), endY = Math.min(graphBaseY + GRAPH_SIZE, (transmitRegionY << 6) + 64);
-				Region region = Region.getRegion(transmitRegionX << 8 | transmitRegionY);
+				Region region = Region.get(transmitRegionX << 8 | transmitRegionY);
 				if (region == null || region.getClipMap() == null || region.getClipMap().getMasks() == null) {
 					for (int fillX = startX; fillX < endX; fillX++)
 						for (int fillY = startY; fillY < endY; fillY++)
