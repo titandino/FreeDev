@@ -3,7 +3,7 @@ package com.darkan.api.pathing.action;
 import java.util.function.Supplier;
 
 import com.darkan.api.pathing.FixedTileStrategy;
-import com.darkan.api.pathing.Pathing;
+import com.darkan.api.pathing.LocalPathing;
 import com.darkan.api.pathing.action.node.TraversalNode;
 import com.darkan.api.pathing.action.node.TraversalNodeList;
 import com.darkan.api.world.WorldTile;
@@ -37,6 +37,6 @@ public class TraversalAction {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(Pathing.findRoute(new WorldTile(3187, 3425, 0), 1, new FixedTileStrategy(3182, 3371), false)); //TODO extend range of findroute
+		System.out.println(LocalPathing.findLocalRoute(new WorldTile(3177, 3379, 0), 1, new FixedTileStrategy(new WorldTile(3193, 3349, 0)), false)); //TODO extend range of findroute
 	}
 }

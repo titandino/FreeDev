@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.pathing.FixedTileStrategy;
-import com.darkan.api.pathing.Pathing;
+import com.darkan.api.pathing.LocalPathing;
 import com.darkan.api.pathing.action.node.TraversalNode;
 import com.darkan.api.profile.PlayerProfiles;
 import com.darkan.api.util.Utils;
@@ -28,7 +28,7 @@ public class PathNode extends TraversalNode {
 	public PathNode(WorldTile start, WorldTile end) {
 		this.start = start;
 		this.end = end;
-		path = Pathing.findRoute(start, 1, new FixedTileStrategy(end.getX(), end.getY()), false);
+		path = LocalPathing.findLocalRoute(start, 1, new FixedTileStrategy(end), false);
 	}
 
 	public List<WorldTile> getPath() {

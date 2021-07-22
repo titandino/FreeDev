@@ -17,7 +17,7 @@ import com.darkan.api.item.GroundItem;
 import com.darkan.api.pathing.EntityStrategy;
 import com.darkan.api.pathing.FixedTileStrategy;
 import com.darkan.api.pathing.ObjectStrategy;
-import com.darkan.api.pathing.Pathing;
+import com.darkan.api.pathing.LocalPathing;
 import com.darkan.api.profile.PlayerProfiles;
 import com.darkan.api.world.ObjectType;
 import com.darkan.api.world.WorldObject;
@@ -266,19 +266,19 @@ private static final Random RANDOM = new SecureRandom();
 	}
 	
 	public static int getRouteDistanceTo(WorldTile start, GroundItem item) {
-		return Pathing.getStepsTo(start, 1, new FixedTileStrategy(item.getPosition().getX(), item.getPosition().getY()), false);
+		return LocalPathing.getLocalStepsTo(start, 1, new FixedTileStrategy(item.getPosition()), false);
 	}
 	
 	public static int getRouteDistanceTo(WorldTile start, WorldObject object) {
-		return Pathing.getStepsTo(start, 1, new ObjectStrategy(object), false);
+		return LocalPathing.getLocalStepsTo(start, 1, new ObjectStrategy(object), false);
 	}
 	
 	public static int getRouteDistanceTo(WorldTile start, NPC npc) {
-		return Pathing.getStepsTo(start, 1, new EntityStrategy(npc), false);
+		return LocalPathing.getLocalStepsTo(start, 1, new EntityStrategy(npc), false);
 	}
 	
 	public static int getRouteDistanceTo(WorldTile start, WorldTile tile) {
-		return Pathing.getStepsTo(start, 1, new FixedTileStrategy(tile.getX(), tile.getY()), false);
+		return LocalPathing.getLocalStepsTo(start, 1, new FixedTileStrategy(tile), false);
 	}
 	
 	public static int getDistanceTo(WorldTile start, WorldTile destination) {
