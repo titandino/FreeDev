@@ -14,22 +14,14 @@ import com.darkan.scripts.ScriptSkeleton;
 @Script("AIO Mining")
 public class AIOMining extends ScriptSkeleton {
 	
-	private OreData currentOre = OreData.Copper;
+	private OreData currentOre = OreData.Iron;
 	private TraversalAction path;
 
 	public AIOMining() {
 		super("AIO Mining");
 	}
-	
-	//SpotAnim 7164, 7165 = rockertunity
-	
-	//Ore box varbits
-	//43190 = tin
-	//43188 = copper
-	
+		
 	/**
-	 * Tin/Copper/Clay = Burthorpe mine
-	 * Iron = Lumbridge Swamp southwest
 	 * Coal = Barbarian village (doesn't even require pathing to bank)
 	 * Mithril = Varrock southwest
 	 * Adamant = Rimmington (clan camp bank) clan vex?
@@ -57,28 +49,29 @@ public class AIOMining extends ScriptSkeleton {
 					sleep(Utils.gaussian(2000, 1000));
 				setState("Filling ore box...");
 			} else {
-				WorldObject furnace = WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)"));
-				if (furnace == null) {
+				WorldObject anvil = WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)") && obj.withinDistance(MyPlayer.getPosition()));
+				if (anvil == null) {
 					if (path == null)
-						path = new TraversalAction(() -> WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)")) != null, currentOre.getToBank());
+						path = new TraversalAction(() -> WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)") && obj.withinDistance(MyPlayer.getPosition())) != null, currentOre.getToBank());
 					path.process();
 					setState("Walking to bank...");
 				} else {
 					path = null;
-					if (furnace.interact("Deposit-All (Into Metal Bank)"))
+					if (anvil.interact("Deposit-All (Into Metal Bank)"))
 						sleepWhile(3000, 20000, () -> Interfaces.getInventory().freeSlots() < 8);
-					currentOre = currentOre == OreData.Copper ? OreData.Tin : OreData.Copper;
+					if (currentOre == OreData.Copper || currentOre == OreData.Tin)
+						currentOre = currentOre == OreData.Copper ? OreData.Tin : OreData.Copper;
 					setState("Depositing into metal bank...");
 				}
 			}
 		} else {
 			SpotAnim rt = SpotAnims.getClosest(sa -> sa.getId() == 7164 || sa.getId() == 7165);
 			
-			WorldObject rock = WorldObjects.getClosestTo(rt != null ? rt.getPosition() : MyPlayer.getPosition(), obj -> obj.hasOption("Mine") && obj.getName().contains(currentOre.name()));
+			WorldObject rock = WorldObjects.getClosestTo(rt != null ? rt.getPosition() : MyPlayer.getPosition(), obj -> obj.hasOption("Mine") && obj.getName().contains(currentOre.name()) && obj.withinDistance(MyPlayer.getPosition()));
 			
 			if (rock == null) {
 				if (path == null)
-					path = new TraversalAction(() -> WorldObjects.getClosestReachable(obj -> obj.hasOption("Mine") && obj.getName().contains(currentOre.name())) != null, currentOre.getFromBank());
+					path = new TraversalAction(() -> WorldObjects.getClosestReachable(obj -> obj.hasOption("Mine") && obj.getName().contains(currentOre.name()) && obj.withinDistance(MyPlayer.getPosition())) != null, currentOre.getFromBank());
 				path.process();
 				setState("Walking to rocks...");
 			} else {

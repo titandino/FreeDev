@@ -100,7 +100,7 @@ public class AIOBeachEvent extends ScriptSkeleton implements MessageListener {
 
 	@Override
 	public void onMessageReceived(Message message) {
-		if (message.isGame() && message.getText().contains("You have reached the maximum temperature and can gain no more XP from the beach. Eat an ice cream to cool yourself down and earn more!"))
+		if (message.isGame() && message.getText().contains("Eat an ice cream"))
 			eatAnIceCream = System.currentTimeMillis();
 	}
 }
