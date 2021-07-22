@@ -21,7 +21,7 @@ public class AIOMining extends ScriptSkeleton {
 		super("AIO Mining");
 	}
 		
-	/**
+	/** TODO
 	 * Coal = Barbarian village (doesn't even require pathing to bank)
 	 * Mithril = Varrock southwest
 	 * Adamant = Rimmington (clan camp bank) clan vex?
