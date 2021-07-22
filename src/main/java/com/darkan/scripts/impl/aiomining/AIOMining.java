@@ -83,7 +83,7 @@ public class AIOMining extends ScriptSkeleton {
 			} else {
 				path = null;
 				if (rock.interact("Mine"))
-					sleepWhile(3000, Utils.gaussian(3000, 8000), () -> SpotAnims.getClosest(sa -> sa.getId() == 7164 || sa.getId() == 7164) == null && (MyPlayer.get().isMoving() || Interfaces.getInventory().freeSlots() > Utils.random(2, 6)));
+					sleepWhile(3000, Utils.gaussian(9000, 8000), () -> SpotAnims.getClosest(sa -> sa.getId() == 7164 || sa.getId() == 7164) == null && (MyPlayer.get().isMoving() || Interfaces.getInventory().freeSlots() > Utils.random(2, 6)));
 				setState("Mining...");
 			}
 		}
