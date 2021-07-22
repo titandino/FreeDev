@@ -81,7 +81,7 @@ public final class BasePlugin extends AbstractPlugin {
 	    			continue;
 	    		if (chat.equals(prevFirst))
 	    			break;
-	    		Message mes = new Message(chat);
+	    		Message mes = new Message(chat.replace("<br>", ""));
 	    		newMessages.add(mes);
 	    		System.out.println("[CHAT]: " + mes);
 	    	}
