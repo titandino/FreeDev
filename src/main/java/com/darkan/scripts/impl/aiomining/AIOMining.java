@@ -14,7 +14,7 @@ import com.darkan.scripts.ScriptSkeleton;
 @Script("AIO Mining")
 public class AIOMining extends ScriptSkeleton {
 	
-	private OreData currentOre = OreData.Iron;
+	private OreData currentOre = OreData.Copper;
 	private TraversalAction path;
 
 	public AIOMining() {
@@ -49,10 +49,10 @@ public class AIOMining extends ScriptSkeleton {
 					sleep(Utils.gaussian(2000, 1000));
 				setState("Filling ore box...");
 			} else {
-				WorldObject anvil = WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)") && obj.withinDistance(MyPlayer.getPosition()));
+				WorldObject anvil = WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)")/* && obj.withinDistance(MyPlayer.getPosition())*/);
 				if (anvil == null) {
 					if (path == null)
-						path = new TraversalAction(() -> WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)") && obj.withinDistance(MyPlayer.getPosition())) != null, currentOre.getToBank());
+						path = new TraversalAction(() -> WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)")/*  && obj.withinDistance(MyPlayer.getPosition())*/) != null, currentOre.getToBank());
 					path.process();
 					setState("Walking to bank...");
 				} else {
@@ -67,11 +67,11 @@ public class AIOMining extends ScriptSkeleton {
 		} else {
 			SpotAnim rt = SpotAnims.getClosest(sa -> sa.getId() == 7164 || sa.getId() == 7165);
 			
-			WorldObject rock = WorldObjects.getClosestTo(rt != null ? rt.getPosition() : MyPlayer.getPosition(), obj -> obj.hasOption("Mine") && obj.getName().contains(currentOre.name()) && obj.withinDistance(MyPlayer.getPosition()));
+			WorldObject rock = WorldObjects.getClosestTo(rt != null ? rt.getPosition() : MyPlayer.getPosition(), obj -> obj.hasOption("Mine") && obj.getName().contains(currentOre.name())/* && obj.withinDistance(MyPlayer.getPosition())*/);
 			
 			if (rock == null) {
 				if (path == null)
-					path = new TraversalAction(() -> WorldObjects.getClosestReachable(obj -> obj.hasOption("Mine") && obj.getName().contains(currentOre.name()) && obj.withinDistance(MyPlayer.getPosition())) != null, currentOre.getFromBank());
+					path = new TraversalAction(() -> WorldObjects.getClosestReachable(obj -> obj.hasOption("Mine") && obj.getName().contains(currentOre.name())/* && obj.withinDistance(MyPlayer.getPosition())*/) != null, currentOre.getFromBank());
 				path.process();
 				setState("Walking to rocks...");
 			} else {
