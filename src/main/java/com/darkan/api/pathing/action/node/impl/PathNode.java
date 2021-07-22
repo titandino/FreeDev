@@ -75,7 +75,8 @@ public class PathNode extends TraversalNode {
 			if (tries-- < 0)
 				finalTarget = target;
 			WorldTile att = new WorldTile(target, PlayerProfiles.get().walkPathDeviation);
-			if (Utils.getRouteDistanceTo(target, att) != -1)
+			int routeDist = Utils.getRouteDistanceTo(target, att);
+			if (routeDist != -1 && routeDist <= PlayerProfiles.get().walkPathDeviation+2)
 				finalTarget = att;
 		}
 		return finalTarget;
