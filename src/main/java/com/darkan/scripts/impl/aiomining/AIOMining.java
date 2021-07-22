@@ -71,8 +71,10 @@ public class AIOMining extends ScriptSkeleton {
 				}
 			}
 		} else {
-			SpotAnim rockertunity = SpotAnims.getClosest(sa -> sa.getId() == 7164 || sa.getId() == 7165);
-			WorldObject rock = WorldObjects.getClosestReachable(obj -> (rockertunity == null ? true : obj.getDistance(rockertunity.getPosition()) <= 1) && obj.hasOption("Mine") && obj.getName().contains(currentOre.name()));
+			SpotAnim rt = SpotAnims.getClosest(sa -> sa.getId() == 7164 || sa.getId() == 7165);
+			
+			WorldObject rock = WorldObjects.getClosestTo(rt != null ? rt.getPosition() : MyPlayer.getPosition(), obj -> obj.hasOption("Mine") && obj.getName().contains(currentOre.name()));
+			
 			if (rock == null) {
 				if (path == null)
 					path = new TraversalAction(() -> WorldObjects.getClosestReachable(obj -> obj.hasOption("Mine") && obj.getName().contains(currentOre.name())) != null, currentOre.getFromBank());
