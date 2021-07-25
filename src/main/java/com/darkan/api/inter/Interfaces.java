@@ -15,7 +15,7 @@ public class Interfaces {
 	private static final ItemContainer BANK_EQUIPMENT = new ItemContainer(517, 28);
 	
 	private static final ItemContainer AREA_LOOT = new ItemContainer(1622, 10);
-	
+		
 	private static final Set<Integer> VISIBLE_INTERFACES = new HashSet<>();
 	
 	public static void setVisibility(int id, boolean visible) {
