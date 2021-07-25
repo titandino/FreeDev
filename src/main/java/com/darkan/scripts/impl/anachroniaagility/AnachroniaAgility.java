@@ -29,18 +29,18 @@ public class AnachroniaAgility extends ScriptSkeleton {
 	public boolean onStart() {
 		setState("Starting up...");
 		startPages = Interfaces.getInventory().count(PAGE_ID);
-		if (currNode == null) {
-			for (AgilityNode node : AgilityNode.values()) {
-				setState("Checking if "+node+" is good to start at...");
-				if (node.getArea().inside(MyPlayer.getPosition())) {
-					if (node == getEnd())
-						reverse = true;
-					currNode = node;
-					return true;
-				}
-			}
-			return false;
-		}
+//		if (currNode == null) {
+//			for (AgilityNode node : AgilityNode.values()) {
+//				setState("Checking if "+node+" is good to start at...");
+//				if (node.getArea().inside(MyPlayer.getPosition())) {
+//					if (node == getEnd())
+//						reverse = true;
+//					currNode = node;
+//					return true;
+//				}
+//			}
+//			return false;
+//		}
 		return true;
 	}
 
@@ -126,7 +126,7 @@ public class AnachroniaAgility extends ScriptSkeleton {
 	
 	@Override
 	public void paintImGui(long runtime) {
-		ImGui.label("Current obstacle: " + currNode != null ? currNode.name() : "None");
+		ImGui.label("Current obstacle: " + (currNode != null ? currNode.name() : "None"));
 		ImGui.label("Direction: " + (reverse ? "counter-clockwise" : "clockwise"));
 		ImGui.label("Pages p/h: " + Time.perHour(runtime, Interfaces.getInventory().count(PAGE_ID) - startPages));
 		ImGui.label("HP Perc: " + MyPlayer.getHealthPerc());
