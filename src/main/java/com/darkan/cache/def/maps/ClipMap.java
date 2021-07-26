@@ -470,9 +470,9 @@ public class ClipMap {
 			int newRegionX = (regionId >> 8) * 64;
 			int newRegionY = (regionId & 0xff) * 64;
 			if (projectile)
-				Region.getRegion(tile.getRegionId(), false).getClipMapProj().setFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
+				Region.get(tile.getRegionId(), false).getClipMapProj().setFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
 			else
-				Region.getRegion(tile.getRegionId(), false).getClipMap().setFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
+				Region.get(tile.getRegionId(), false).getClipMap().setFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
 			return;
 		}
 		flags[plane][x][y] = flag;
@@ -484,14 +484,10 @@ public class ClipMap {
 			int regionId = tile.getRegionId();
 			int newRegionX = (regionId >> 8) * 64;
 			int newRegionY = (regionId & 0xff) * 64;
-			if (regionX == newRegionX && regionY == newRegionY) {
-				System.err.println("How TF?");
-				return;
-			}
 			if (projectile)
-				Region.getRegion(tile.getRegionId(), false).getClipMapProj().addFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
+				Region.get(tile.getRegionId(), false).getClipMapProj().addFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
 			else
-				Region.getRegion(tile.getRegionId(), false).getClipMap().addFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
+				Region.get(tile.getRegionId(), false).getClipMap().addFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
 			return;
 		}
 		flags[plane][x][y] |= flag;
@@ -504,9 +500,9 @@ public class ClipMap {
 			int newRegionX = (regionId >> 8) * 64;
 			int newRegionY = (regionId & 0xff) * 64;
 			if (projectile)
-				Region.getRegion(tile.getRegionId(), false).getClipMapProj().removeFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
+				Region.get(tile.getRegionId(), false).getClipMapProj().removeFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
 			else
-				Region.getRegion(tile.getRegionId(), false).getClipMap().removeFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
+				Region.get(tile.getRegionId(), false).getClipMap().removeFlag(plane, tile.getX() - newRegionX, tile.getY() - newRegionY, flag);
 			return;
 		}
 		flags[plane][x][y] &= ~flag;

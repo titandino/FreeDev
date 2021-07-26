@@ -22,7 +22,7 @@ public class AIOAgility extends ScriptSkeleton {
 		if (currNodeIdx == -1) {
 			for (int i = 0;i < course.length;i++) {
 				setState("Checking if "+course[i]+" is good to start at...");
-				if (course[i].getArea().inside(MyPlayer.get().getGlobalPosition())) {
+				if (course[i].getArea().inside(MyPlayer.getPosition())) {
 					currNodeIdx = i;
 					return true;
 				}
@@ -35,10 +35,10 @@ public class AIOAgility extends ScriptSkeleton {
 	@Override
 	public void loop() {
 		int nextIdx = getNext();
-		if (course[currNodeIdx].getArea().inside(MyPlayer.get().getGlobalPosition())) {
+		if (course[currNodeIdx].getArea().inside(MyPlayer.getPosition())) {
 			if ((course[currNodeIdx].getObject() != null && course[currNodeIdx].getObject().interact(0, false)) || WorldObjects.getClosest(obj -> obj.getId() == course[currNodeIdx].getObjectId()).interact(0)) {
 				setState("Using " + course[currNodeIdx].getName() + "...");
-				sleepWhile(2500, 25000, () -> !course[getNext()].getArea().inside(MyPlayer.get().getGlobalPosition()));
+				sleepWhile(2500, 25000, () -> !course[getNext()].getArea().inside(MyPlayer.getPosition()));
 			}
 		} else {
 			setState("Checking if we should move to "+course[nextIdx].getName()+"...");

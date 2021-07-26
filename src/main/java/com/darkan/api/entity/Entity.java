@@ -5,7 +5,7 @@ import com.darkan.api.world.WorldTile;
 public abstract class Entity {
 
 	protected WorldTile position;
-	
+
 	public Entity(kraken.plugin.api.Entity memEntity) {
 		if (memEntity != null)
 			this.position = new WorldTile(memEntity.getGlobalPosition());
@@ -21,6 +21,4 @@ public abstract class Entity {
 	public WorldTile getPosition() {
 		return position;
 	}
-	
-	
 }

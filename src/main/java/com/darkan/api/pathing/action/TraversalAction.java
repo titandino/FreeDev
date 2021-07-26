@@ -1,9 +1,13 @@
 package com.darkan.api.pathing.action;
 
+import java.util.List;
 import java.util.function.Supplier;
 
+import com.darkan.api.pathing.FixedTileStrategy;
+import com.darkan.api.pathing.LocalPathing;
 import com.darkan.api.pathing.action.node.TraversalNode;
 import com.darkan.api.pathing.action.node.TraversalNodeList;
+import com.darkan.api.world.WorldTile;
 
 public class TraversalAction {
 	
@@ -31,5 +35,11 @@ public class TraversalAction {
 
 	public TraversalNodeList getNodes() {
 		return nodes;
+	}
+	
+	public static void main(String[] args) {
+		List<WorldTile> path = LocalPathing.findLocalRoute(new WorldTile(3187, 3425, 0), 1, new FixedTileStrategy(new WorldTile(3182, 3371, 0)), false);
+		for (WorldTile tile : path)
+			System.out.println(tile);
 	}
 }

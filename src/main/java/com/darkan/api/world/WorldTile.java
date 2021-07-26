@@ -1,5 +1,6 @@
 package com.darkan.api.world;
 
+import com.darkan.api.profile.PlayerProfiles;
 import com.darkan.api.util.Utils;
 
 import kraken.plugin.api.Vector3i;
@@ -161,7 +162,7 @@ public class WorldTile {
 	}
 
 	public boolean withinDistance(WorldTile tile) {
-		return withinDistance(tile, 14);
+		return withinDistance(tile, PlayerProfiles.get().interactDistanceRange);
 	}
 	
 	public int getDistance(Vector3i tile) {

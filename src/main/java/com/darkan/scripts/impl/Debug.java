@@ -1,8 +1,10 @@
 package com.darkan.scripts.impl;
 
 import com.darkan.api.entity.MyPlayer;
+import com.darkan.api.inter.Interfaces;
 import com.darkan.api.inter.chat.Message;
 import com.darkan.api.scripting.MessageListener;
+import com.darkan.api.util.Logger;
 import com.darkan.api.util.Paint;
 import com.darkan.api.world.WorldTile;
 import com.darkan.scripts.Script;
@@ -22,6 +24,7 @@ public class Debug extends ScriptSkeleton implements MessageListener {
 	}
 
 	Player myPlayer;
+	int interfaceId = 0;
 	
 	@Override
 	public boolean onStart() {
@@ -55,7 +58,14 @@ public class Debug extends ScriptSkeleton implements MessageListener {
 	
 	@Override
 	public void paintImGui(long runtime) {
-		
+		interfaceId = ImGui.intInput("Interface ID", interfaceId);
+		if (ImGui.button("Dump")) {
+			try {
+				Logger.writeToFile("interfaceDump.txt", Interfaces.get(interfaceId).toString());
+			} catch (Exception e) {
+				System.out.println("Error dumping interface");
+			}
+		}
 	}
 
 	@Override

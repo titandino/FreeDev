@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.pathing.FixedTileStrategy;
-import com.darkan.api.pathing.Pathing;
+import com.darkan.api.pathing.LocalPathing;
 import com.darkan.api.pathing.action.node.TraversalNode;
 import com.darkan.api.profile.PlayerProfiles;
 import com.darkan.api.util.Utils;
@@ -28,7 +28,7 @@ public class PathNode extends TraversalNode {
 	public PathNode(WorldTile start, WorldTile end) {
 		this.start = start;
 		this.end = end;
-		path = Pathing.findRoute(start, 1, new FixedTileStrategy(end.getX(), end.getY()), false);
+		path = LocalPathing.findLocalRoute(start, 1, new FixedTileStrategy(end), false);
 	}
 
 	public List<WorldTile> getPath() {
@@ -37,7 +37,7 @@ public class PathNode extends TraversalNode {
 	
 	@Override
 	public boolean canStart() {
-		return Utils.getRouteDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), start) != -1;
+		return Utils.getRouteDistanceTo(MyPlayer.getPosition(), start) != -1;
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class PathNode extends TraversalNode {
 	}
 	
 	public WorldTile getNextClickPoint() {
-		WorldTile myPos = new WorldTile(MyPlayer.get().getGlobalPosition());
+		WorldTile myPos = MyPlayer.getPosition();
 		WorldTile closest = new WorldTile(0, 0, 0);
 		for (WorldTile tile : path) {
 			if (Utils.getDistanceTo(myPos, tile) < Utils.getDistanceTo(myPos, closest))
@@ -75,7 +75,8 @@ public class PathNode extends TraversalNode {
 			if (tries-- < 0)
 				finalTarget = target;
 			WorldTile att = new WorldTile(target, PlayerProfiles.get().walkPathDeviation);
-			if (Utils.getRouteDistanceTo(target, att) != -1)
+			int routeDist = Utils.getRouteDistanceTo(target, att);
+			if (routeDist != -1 && routeDist <= PlayerProfiles.get().walkPathDeviation+2)
 				finalTarget = att;
 		}
 		return finalTarget;
@@ -83,7 +84,7 @@ public class PathNode extends TraversalNode {
 	
 	@Override
 	public boolean reached() {
-		return next != null ? next.canStart() : Utils.getDistanceTo(new WorldTile(MyPlayer.get().getGlobalPosition()), end) <= 2;
+		return next != null ? next.canStart() : Utils.getDistanceTo(MyPlayer.getPosition(), end) <= 2;
 	}
 
 	@Override

@@ -118,7 +118,7 @@ public class ItemContainer extends IFComponent {
 	}
 
 	public void clickSlot(int option, int slot) {
-		clickComponent(option, slot);
+		click(option, slot);
 	}
 	
 	public boolean clickItem(int itemId, int option) {

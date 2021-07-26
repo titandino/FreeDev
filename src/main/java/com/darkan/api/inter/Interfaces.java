@@ -14,6 +14,10 @@ public class Interfaces {
 	private static final ItemContainer BANK_INVENTORY = new ItemContainer(517, 15);
 	private static final ItemContainer BANK_EQUIPMENT = new ItemContainer(517, 28);
 	
+	private static final ItemContainer DEPOSIT_BOX = new ItemContainer(11, 19);
+	
+	private static final ItemContainer AREA_LOOT = new ItemContainer(1622, 10);
+		
 	private static final Set<Integer> VISIBLE_INTERFACES = new HashSet<>();
 	
 	public static void setVisibility(int id, boolean visible) {
@@ -29,10 +33,18 @@ public class Interfaces {
 	
 	public static boolean isOpen(IFComponent component) {
 		try {
-			return Widgets.getGroupById(component.getId()) != null && Widgets.getGroupById(component.getId()).getWidgets()[component.getComponentId()] != null;
+			return Widgets.getGroupById(component.getInterfaceId()) != null && Widgets.getGroupById(component.getInterfaceId()).getWidgets()[component.getComponentId()] != null;
 		} catch(Exception e) {
 			return false;
 		}
+	}
+	
+	public static boolean click(int option, int interfaceId, int componentId, int slotId) {
+		return new IFSlot(interfaceId, componentId, slotId).click(slotId);
+	}
+	
+	public static boolean click(int option, int interfaceId, int componentId) {
+		return new IFComponent(interfaceId, componentId).click(option, -1);
 	}
 
 	public static ItemContainer getInventory() {
@@ -54,6 +66,10 @@ public class Interfaces {
     public static ItemContainer getBankEquipment() {
         return BANK_EQUIPMENT;
     }
+    
+    public static ItemContainer getAreaLoot() {
+        return AREA_LOOT;
+    }
 
 	public static Interface get(int interfaceId) {
 		return new Interface(interfaceId);
@@ -65,5 +81,9 @@ public class Interfaces {
 		} catch(Exception e) {
 			return null;
 		}
+	}
+
+	public static ItemContainer getDepositBox() {
+		return DEPOSIT_BOX;
 	}
 }

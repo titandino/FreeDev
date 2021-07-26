@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
@@ -40,13 +41,33 @@ public class WorldObjects {
 		}
 	}
 	
-	public static WorldObject getClosest(Filter<WorldObject> filter) {
+	public static WorldObject getClosestTo(WorldTile tile, Filter<WorldObject> filter) {
 		Map<Integer, WorldObject> distanceMap = new TreeMap<Integer, WorldObject>();
 		List<WorldObject> objects = getNearby(filter);
-		WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
 		for (WorldObject object : objects) {
 			if (object != null) {
-				int distance = Utils.getDistanceTo(pTile, object);
+				int distance = Utils.getDistanceTo(tile, object);
+				if (distance != -1)
+					distanceMap.put(distance, object);
+			}
+		}
+		if (distanceMap.isEmpty())
+			return null;
+		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
+		Collections.sort(sortedKeys);
+		return distanceMap.get(sortedKeys.get(0));
+	}
+	
+	public static WorldObject getClosest(Filter<WorldObject> filter) {
+		return getClosestTo(MyPlayer.getPosition(), filter);
+	}
+	
+	public static WorldObject getClosestToReachable(WorldTile tile, Filter<WorldObject> filter) {
+		Map<Integer, WorldObject> distanceMap = new TreeMap<Integer, WorldObject>();
+		List<WorldObject> objects = getNearby(filter);
+		for (WorldObject object : objects) {
+			if (object != null) {
+				int distance = Utils.getRouteDistanceTo(tile, object);
 				if (distance != -1)
 					distanceMap.put(distance, object);
 			}
@@ -59,21 +80,7 @@ public class WorldObjects {
 	}
 
 	public static WorldObject getClosestReachable(Filter<WorldObject> filter) {
-		Map<Integer, WorldObject> distanceMap = new TreeMap<Integer, WorldObject>();
-		List<WorldObject> objects = getNearby(filter);
-		WorldTile pTile = new WorldTile(Players.self().getGlobalPosition());
-		for (WorldObject object : objects) {
-			if (object != null) {
-				int distance = Utils.getRouteDistanceTo(pTile, object);
-				if (distance != -1)
-					distanceMap.put(distance, object);
-			}
-		}
-		if (distanceMap.isEmpty())
-			return null;
-		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
-		Collections.sort(sortedKeys);
-		return distanceMap.get(sortedKeys.get(0));
+		return getClosestToReachable(MyPlayer.getPosition(), filter);
 	}
 
 	public static List<WorldObject> getNearby(Filter<WorldObject> filter) {

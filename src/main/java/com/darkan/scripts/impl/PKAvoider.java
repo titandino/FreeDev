@@ -9,7 +9,6 @@ import com.darkan.scripts.ScriptSkeleton;
 
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Players;
-import kraken.plugin.api.Vector3i;
 
 @Script(value = "PKer Avoider", utility = true)
 public class PKAvoider extends ScriptSkeleton {
@@ -30,8 +29,7 @@ public class PKAvoider extends ScriptSkeleton {
 
 	@Override
 	public void loop() {
-		Vector3i pos = MyPlayer.get().getGlobalPosition();
-		if (!OPEN_WILDY.inside(pos) && !FORINTHRY.inside(pos))
+		if (!OPEN_WILDY.inside(MyPlayer.getPosition()) && !FORINTHRY.inside(MyPlayer.getPosition()))
 			return;
 		Player player = Players.closest(p -> !p.getName().equals(MyPlayer.get().getName()));
 		if (player != null) {

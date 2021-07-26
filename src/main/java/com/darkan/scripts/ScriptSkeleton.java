@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import com.darkan.Constants;
 import com.darkan.api.entity.MyPlayer;
+import com.darkan.api.util.Logger;
 import com.darkan.api.util.Utils;
 
 import kraken.plugin.api.*;
@@ -98,7 +99,7 @@ public abstract class ScriptSkeleton {
 		} catch (Exception e) {
 			error = e.toString();
 			Debug.logErr(e);
-			e.printStackTrace();
+			Logger.handle(e);
 			return Utils.gaussian(2000, 1000);
 		}
 		return 10;

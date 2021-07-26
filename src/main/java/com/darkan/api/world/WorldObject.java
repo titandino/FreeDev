@@ -114,7 +114,7 @@ public class WorldObject extends WorldTile implements Interactable {
 	
 	@Override
 	public String toString() {
-		return "[" + id + " (" + getName() + "), " + type + ", " + rotation + ", " + super.toString() + "]";
+		return "[" + id + " (" + getName() + "), " + type + ", " + rotation + ", " + super.toString() + " clipType: " + ObjectDef.get(id).clipType + "]";
 	}
 
 	@Override

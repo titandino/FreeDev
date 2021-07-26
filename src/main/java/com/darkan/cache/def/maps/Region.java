@@ -12,6 +12,7 @@ import com.darkan.api.util.Logger;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.ObjectType;
 import com.darkan.api.world.WorldObject;
+import com.darkan.api.world.WorldTile;
 import com.darkan.cache.Archive;
 import com.darkan.cache.ArchiveFile;
 import com.darkan.cache.Cache;
@@ -203,8 +204,10 @@ public class Region {
 //						if (print)
 //							System.err.println("3 float flag 2: " + f1 + ", " + f2 + ", " + f3);
 					}
-					if (localX < 0 || localX >= 64 || localY < 0 || localY >= 64)
+					if (localX < 0 || localX >= 64 || localY < 0 || localY >= 64) {
+						System.err.println("Error tile out of range: " + localX + ", " + localY);
 						continue;
+					}
 					int objectPlane = plane;
 					if (tileFlags != null && (tileFlags[1][localX][localY] & 0x2) != 0)
 						objectPlane--;
@@ -217,7 +220,8 @@ public class Region {
 						System.err.println("Invalid object type: " + type + ", " + objectData + " obj: " + ObjectDef.get(objectId));
 						continue;
 					}
-					spawnObject(new WorldObject(objectId, ObjectType.forId(type), rotation, localX + regionX * 64, localY + regionY * 64, objectPlane), objectPlane, localX, localY);
+					WorldObject obj = new WorldObject(objectId, ObjectType.forId(type), rotation, localX + regionX * 64, localY + regionY * 64, objectPlane);
+					spawnObject(obj, objectPlane, localX, localY);
 				}
 			}
 		} catch (Exception e) {
@@ -368,11 +372,11 @@ public class Region {
 		}
 	}
 
-	public static Region getRegion(int regionId) {
-		return getRegion(regionId, true);
+	public static Region get(int regionId) {
+		return get(regionId, true);
 	}
 
-	public static Region getRegion(int regionId, boolean load) {
+	public static Region get(int regionId, boolean load) {
 		Region region = REGIONS.get(regionId);
 		if (region == null) {
 			region = new Region(regionId, load);
@@ -400,7 +404,7 @@ public class Region {
 	}
 
 	public static boolean validateObjCoords(WorldObject object) {
-		Region region = Region.getRegion(object.getRegionId());
+		Region region = Region.get(object.getRegionId());
 		List<WorldObject> realObjects = region.getObjectList();
 		if (realObjects == null || realObjects.size() <= 0)
 			return false;
@@ -422,5 +426,9 @@ public class Region {
 			return true;
 		}
 		return false;
+	}
+
+	public static int getClip(WorldTile tile) {
+		return Region.get(tile.getRegionId()).getClipMap().getMasks()[tile.getPlane()][tile.getXInRegion()][tile.getYInRegion()];
 	}
 }

@@ -17,7 +17,6 @@ public class AnachroniaAgility extends ScriptSkeleton {
 	
 	public static final int PAGE_ID = 47925, ENHANCED_EXCALIBUR = 14632, AUGMENTED_ENHANCED_EXCALIBUR = 36619;
 	
-	private int startXp;
 	private int startPages;
 	private AgilityNode currNode = null;
 	private boolean reverse = true;
@@ -29,12 +28,11 @@ public class AnachroniaAgility extends ScriptSkeleton {
 	@Override
 	public boolean onStart() {
 		setState("Starting up...");
-		startXp = Client.getStatById(Client.AGILITY).getXp();
 		startPages = Interfaces.getInventory().count(PAGE_ID);
 		if (currNode == null) {
 			for (AgilityNode node : AgilityNode.values()) {
 				setState("Checking if "+node+" is good to start at...");
-				if (node.getArea().inside(MyPlayer.get().getGlobalPosition())) {
+				if (node.getArea().inside(MyPlayer.getPosition())) {
 					if (node == getEnd())
 						reverse = true;
 					currNode = node;
@@ -62,7 +60,7 @@ public class AnachroniaAgility extends ScriptSkeleton {
 				return;
 			}
 		}
-		if (currNode.getArea().inside(MyPlayer.get().getGlobalPosition())) {
+		if (currNode.getArea().inside(MyPlayer.getPosition())) {
 			setState("Moving to " + currNode.name() + "...");
 			if (reverse) {
 				if (next == getEnd())
@@ -78,7 +76,7 @@ public class AnachroniaAgility extends ScriptSkeleton {
 			}
 		} else {
 			setState("Checking if we should move to "+next+"...");
-			if (next.getArea().inside(MyPlayer.get().getGlobalPosition()))
+			if (next.getArea().inside(MyPlayer.getPosition()))
 				currNode = next;
 		}
 	}
@@ -128,10 +126,11 @@ public class AnachroniaAgility extends ScriptSkeleton {
 	
 	@Override
 	public void paintImGui(long runtime) {
-		ImGui.label("Current obstacle: " + currNode != null ? currNode.name() : "None");
+		ImGui.label("Current obstacle: " + (currNode != null ? currNode.name() : "None"));
 		ImGui.label("Direction: " + (reverse ? "counter-clockwise" : "clockwise"));
 		ImGui.label("Pages p/h: " + Time.perHour(runtime, Interfaces.getInventory().count(PAGE_ID) - startPages));
-		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.AGILITY).getXp() - startXp));
+		ImGui.label("HP Perc: " + MyPlayer.getHealthPerc());
+		printGenericXpGain(runtime);
 	}
 
 	@Override

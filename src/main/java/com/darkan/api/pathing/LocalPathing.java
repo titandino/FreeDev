@@ -6,7 +6,7 @@ import java.util.List;
 import com.darkan.api.world.WorldTile;
 import com.darkan.cache.def.maps.Region;
 
-public class Pathing {
+public class LocalPathing {
 	private static final int GRAPH_SIZE = 128;
 	private static final int QUEUE_SIZE = (GRAPH_SIZE * GRAPH_SIZE) / 4;
 	private static final int ALTERNATIVE_ROUTE_MAX_DISTANCE = 100;
@@ -26,116 +26,15 @@ public class Pathing {
 	private static int exitY = -1;
 	private static boolean isAlternative;
 	
-	public static int getStepsTo(WorldTile start, int srcSize, RouteStrategy strategy, boolean findAlternative) {
-		isAlternative = false;
-		for (int x = 0; x < GRAPH_SIZE; x++) {
-			for (int y = 0; y < GRAPH_SIZE; y++) {
-				directions[x][y] = 0;
-				distances[x][y] = 99999999;
-			}
-		}
-
-		transmitClipData(start.getX(), start.getY(), start.getPlane());
-
-		boolean found = false;
-		switch (srcSize) {
-		case 1:
-			found = checkSingleTraversal(start.getX(), start.getY(), strategy);
-			break;
-		case 2:
-			found = checkDoubleTraversal(start.getX(), start.getY(), strategy);
-			break;
-		default:
-			found = checkVariableTraversal(start.getX(), start.getY(), srcSize, strategy);
-			break;
-		}
-
-		if (!found && !findAlternative)
-			return -1;
-
-		int graphBaseX = start.getX() - (GRAPH_SIZE / 2);
-		int graphBaseY = start.getY() - (GRAPH_SIZE / 2);
-		int endX = exitX;
-		int endY = exitY;
-
-		if (!found && findAlternative) {
-			isAlternative = true;
-			int lowestCost = Integer.MAX_VALUE;
-			int lowestDistance = Integer.MAX_VALUE;
-
-			int approxDestX = strategy.getApproxDestinationX();
-			int approxDestY = strategy.getApproxDestinationY();
-
-			for (int checkX = (approxDestX - ALTERNATIVE_ROUTE_RANGE); checkX <= (approxDestX + ALTERNATIVE_ROUTE_RANGE); checkX++) {
-				for (int checkY = (approxDestY - ALTERNATIVE_ROUTE_RANGE); checkY <= (approxDestY + ALTERNATIVE_ROUTE_RANGE); checkY++) {
-					int graphX = checkX - graphBaseX;
-					int graphY = checkY - graphBaseY;
-					if (graphX < 0 || graphY < 0 || graphX >= GRAPH_SIZE || graphY >= GRAPH_SIZE || distances[graphX][graphY] >= ALTERNATIVE_ROUTE_MAX_DISTANCE)
-						continue;
-					int deltaX = 0;
-					int deltaY = 0;
-					if (approxDestX <= checkX) {
-						deltaX = 1 - approxDestX - (strategy.getApproxDestinationSizeX() - checkX);
-					} else
-						deltaX = approxDestX - checkX;
-					if (approxDestY <= checkY) {
-						deltaY = 1 - approxDestY - (strategy.getApproxDestinationSizeY() - checkY);
-					} else
-						deltaY = approxDestY - checkY;
-
-					int cost = (deltaX * deltaX) + (deltaY * deltaY);
-					if (cost < lowestCost || (cost <= lowestCost && distances[graphX][graphY] < lowestDistance)) {
-						lowestCost = cost;
-						lowestDistance = distances[graphX][graphY];
-						endX = checkX;
-						endY = checkY;
-					}
-				}
-			}
-
-			if (lowestCost == Integer.MAX_VALUE || lowestDistance == Integer.MAX_VALUE)
-				return -1;
-		}
-
-		if (endX == start.getX() && endY == start.getY())
-			return 0;
-
-		int steps = 0;
-		int routeSteps = 0;
-		int traceX = endX;
-		int traceY = endY;
-		int direction = directions[traceX - graphBaseX][traceY - graphBaseY];
-		int lastwritten = direction;
-		bufferX[steps] = traceX;
-		bufferY[steps++] = traceY;
-		while (traceX != start.getX() || traceY != start.getY()) {
-			if (lastwritten != direction) {
-				bufferX[steps] = traceX;
-				bufferY[steps++] = traceY;
-				lastwritten = direction;
-			}
-
-			if ((direction & DIR_EAST) != 0)
-				traceX++;
-			else if ((direction & DIR_WEST) != 0)
-				traceX--;
-
-			if ((direction & DIR_NORTH) != 0)
-				traceY++;
-			else if ((direction & DIR_SOUTH) != 0)
-				traceY--;
-
-			direction = directions[traceX - graphBaseX][traceY - graphBaseY];
-			routeSteps++;
-		}
-
-		return routeSteps;
+	public static int getLocalStepsTo(WorldTile start, int srcSize, RouteStrategy strategy, boolean findAlternative) {
+		List<WorldTile> steps = findLocalRoute(start, srcSize, strategy, findAlternative);
+		return steps == null ? -1 : steps.size();
 	}
 
-	public static List<WorldTile> findRoute(WorldTile start, int srcSize, RouteStrategy strategy, boolean findAlternative) {
+	public static List<WorldTile> findLocalRoute(WorldTile start, int srcSize, RouteStrategy strategy, boolean findAlternative) {
 		isAlternative = false;
-		for (int x = 0; x < GRAPH_SIZE; x++) {
-			for (int y = 0; y < GRAPH_SIZE; y++) {
+		for (int x = 0; x < directions.length; x++) {
+			for (int y = 0; y < directions.length; y++) {
 				directions[x][y] = 0;
 				distances[x][y] = 99999999;
 			}
@@ -160,7 +59,7 @@ public class Pathing {
 			return null;
 
 		int graphBaseX = start.getX() - (GRAPH_SIZE / 2);
-		int graphBaseY = start.getX() - (GRAPH_SIZE / 2);
+		int graphBaseY = start.getY() - (GRAPH_SIZE / 2);
 		int endX = exitX;
 		int endY = exitY;
 
@@ -204,7 +103,7 @@ public class Pathing {
 		}
 
 		if (endX == start.getX() && endY == start.getY())
-			return null;
+			return new ArrayList<>();
 
 		int steps = 0;
 		int traceX = endX;
@@ -234,7 +133,6 @@ public class Pathing {
 		}
 		List<WorldTile> stepList = new ArrayList<>();
 		WorldTile curr = new WorldTile(start);
-		stepList.add(new WorldTile(start));
 		for (int i = steps - 1; i >= 0; i--) {
 			int destX = bufferX[i];
 			int destY = bufferY[i];
@@ -369,7 +267,6 @@ public class Pathing {
 			}
 
 		}
-
 		exitX = currentX;
 		exitY = currentY;
 		return false;
@@ -559,7 +456,7 @@ public class Pathing {
 			for (int transmitRegionY = graphBaseY >> 6; transmitRegionY <= (graphBaseY + (GRAPH_SIZE - 1)) >> 6; transmitRegionY++) {
 				int startX = Math.max(graphBaseX, transmitRegionX << 6), startY = Math.max(graphBaseY, transmitRegionY << 6);
 				int endX = Math.min(graphBaseX + GRAPH_SIZE, (transmitRegionX << 6) + 64), endY = Math.min(graphBaseY + GRAPH_SIZE, (transmitRegionY << 6) + 64);
-				Region region = Region.getRegion(transmitRegionX << 8 | transmitRegionY);
+				Region region = Region.get(transmitRegionX << 8 | transmitRegionY);
 				if (region == null || region.getClipMap() == null || region.getClipMap().getMasks() == null) {
 					for (int fillX = startX; fillX < endX; fillX++)
 						for (int fillY = startY; fillY < endY; fillY++)
