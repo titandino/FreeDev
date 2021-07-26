@@ -1,8 +1,10 @@
 package com.darkan.api;
 
+import java.io.IOException;
+
 public class InterfaceDecoder {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		int hash = 93716496;
 		int interfaceId = hash >> 16;
 		int slotId = (hash & 0xFF);
