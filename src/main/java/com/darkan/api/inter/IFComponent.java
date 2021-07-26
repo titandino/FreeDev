@@ -8,11 +8,11 @@ import kraken.plugin.api.Widgets;
 
 public class IFComponent {
 
-	protected int id;
+	protected int interfaceId;
 	protected int componentId;
 
 	public IFComponent(int id, int componentId) {
-		this.id = id;
+		this.interfaceId = id;
 		this.componentId = componentId;
 	}
 
@@ -41,12 +41,12 @@ public class IFComponent {
 	}
 
 	public int getHash() {
-		return id << 16 | componentId;
+		return interfaceId << 16 | componentId;
 	}
 	
 	public boolean isOpen() {
 		try {
-			return Widgets.getGroupById(id).getWidgets()[componentId] != null;
+			return Widgets.getGroupById(interfaceId).getWidgets()[componentId] != null;
 		} catch (Exception e) {
 			return false;
 		}
@@ -56,9 +56,9 @@ public class IFComponent {
 		if (getType() != ComponentType.CONTAINER)
 			return null;
 		try {
-			IFSlot[] slots = new IFSlot[Widgets.getGroupById(id).getWidgets()[componentId].getChildren().length];
+			IFSlot[] slots = new IFSlot[Widgets.getGroupById(interfaceId).getWidgets()[componentId].getChildren().length];
 			for (int i = 0;i < slots.length;i++)
-				slots[i] = new IFSlot(id, componentId, i);
+				slots[i] = new IFSlot(interfaceId, componentId, i);
 			return slots;
 		} catch (Exception e) {
 			return null;
@@ -69,7 +69,7 @@ public class IFComponent {
 		if (getType() != ComponentType.TEXT)
 			return null;
 		try {
-			return Widgets.getGroupById(id).getWidgets()[componentId].getText();
+			return Widgets.getGroupById(interfaceId).getWidgets()[componentId].getText();
 		} catch (Exception e) {
 			return null;
 		}
@@ -77,7 +77,7 @@ public class IFComponent {
 	
 	public ComponentType getType() {
 		try {
-			return ComponentType.forId(Widgets.getGroupById(id).getWidgets()[componentId].getType());
+			return ComponentType.forId(Widgets.getGroupById(interfaceId).getWidgets()[componentId].getType());
 		} catch (Exception e) {
 			return null;
 		}
@@ -95,8 +95,8 @@ public class IFComponent {
 		}
 	}
 
-	public int getId() {
-		return id;
+	public int getInterfaceId() {
+		return interfaceId;
 	}
 
 	public int getComponentId() {
@@ -106,7 +106,7 @@ public class IFComponent {
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
-		s.append("\tIFComponent: (" + id + ", " + componentId + ", " + getType() + ")\r\n");
+		s.append("\tIFComponent: (" + interfaceId + ", " + componentId + ", " + getType() + ")\r\n");
 		IFSlot[] slots = getSlots();
 		String text = getText();
 		if (text != null)

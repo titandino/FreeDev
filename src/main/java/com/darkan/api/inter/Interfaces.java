@@ -33,7 +33,7 @@ public class Interfaces {
 	
 	public static boolean isOpen(IFComponent component) {
 		try {
-			return Widgets.getGroupById(component.getId()) != null && Widgets.getGroupById(component.getId()).getWidgets()[component.getComponentId()] != null;
+			return Widgets.getGroupById(component.getInterfaceId()) != null && Widgets.getGroupById(component.getInterfaceId()).getWidgets()[component.getComponentId()] != null;
 		} catch(Exception e) {
 			return false;
 		}

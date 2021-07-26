@@ -45,11 +45,11 @@ public class Item {
 	
 	public void click(String option) {
 		int op = -1;
-		if (slot.getId() == Interfaces.getEquipment().getId()) {
+		if (slot.getInterfaceId() == Interfaces.getEquipment().getInterfaceId()) {
 			op = getDef().getEquipOpIdForName(option);
 			op += 2;
 		}
-		if (slot.getId() == Interfaces.getInventory().getId()) {
+		if (slot.getInterfaceId() == Interfaces.getInventory().getInterfaceId()) {
 			op = getDef().getInvOpIdForName(option);
 			Debug.log("invent option: " + op);
 			op = switch(op) {
@@ -61,7 +61,7 @@ public class Item {
 				default -> -1;
 			};
 		}
-        if (slot.getId() == Interfaces.getBankInventory().getId()) {
+        if (slot.getInterfaceId() == Interfaces.getBankInventory().getInterfaceId()) {
             op = switch(option) {
                 case "Deposit-1" -> 2;
                 case "Deposit-5" -> 3;
@@ -69,6 +69,16 @@ public class Item {
                 case "Deposit-50" -> 5;
                 case "Deposit-X" -> 6;
                 case "Deposit-All" -> 7;
+                default -> 1;
+            };
+        }
+        if (slot.getInterfaceId() == Interfaces.getDepositBox().getInterfaceId()) {
+            op = switch(option) {
+                case "Deposit-1" -> 2;
+                case "Deposit-5" -> 3;
+                case "Deposit-10" -> 4;
+                case "Deposit-All" -> 5;
+                case "Deposit-X" -> 6;
                 default -> 1;
             };
         }
