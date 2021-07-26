@@ -14,6 +14,8 @@ public class Interfaces {
 	private static final ItemContainer BANK_INVENTORY = new ItemContainer(517, 15);
 	private static final ItemContainer BANK_EQUIPMENT = new ItemContainer(517, 28);
 	
+	private static final ItemContainer DEPOSIT_BOX = new ItemContainer(11, 19);
+	
 	private static final ItemContainer AREA_LOOT = new ItemContainer(1622, 10);
 		
 	private static final Set<Integer> VISIBLE_INTERFACES = new HashSet<>();
@@ -79,5 +81,9 @@ public class Interfaces {
 		} catch(Exception e) {
 			return null;
 		}
+	}
+
+	public static ItemContainer getDepositBox() {
+		return DEPOSIT_BOX;
 	}
 }
