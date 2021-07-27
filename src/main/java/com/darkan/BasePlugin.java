@@ -26,7 +26,6 @@ import com.darkan.scripts.ScriptSkeleton;
 import com.darkan.thread.DataUpdateThread;
 import com.darkan.thread.DataUpdateThreadFactory;
 
-import kraken.plugin.AbstractPlugin;
 import kraken.plugin.api.ConVar;
 import kraken.plugin.api.Debug;
 import kraken.plugin.api.ImGui;

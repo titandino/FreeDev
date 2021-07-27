@@ -1,8 +1,6 @@
 package kraken.plugin.api;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Provides access to the local player's inventory.
@@ -61,14 +59,16 @@ public class Inventory {
         return count(id) > 0;
     }
 
-	public static int count(int... ids) {
-		Set<Integer> itemIds = new HashSet<>(Arrays.asList(Arrays.stream(ids).boxed().toArray(Integer[]::new)));
-		int count = 0;
-		for (WidgetItem item : getItems()) {
-			if (item == null || !itemIds.contains(item.getId()))
-				continue;
-			count += item.getAmount();
-		}
-		return count;
-	}
+    /**
+     * Iterates over each of the elements in the inventory.
+     *
+     * @param cb The callback to invoke with each element.
+     */
+    public static void forEach(ElementCallback<WidgetItem> cb) {
+        for (WidgetItem item : getItems()) {
+            if (item != null) {
+                cb.iterate(item);
+            }
+        }
+    }
 }

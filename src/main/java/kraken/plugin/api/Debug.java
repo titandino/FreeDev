@@ -1,7 +1,7 @@
 package kraken.plugin.api;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 /**
  * Provides various debugging utilities.
@@ -15,10 +15,18 @@ public class Debug {
      */
     public static native void log(String s);
 
-	public static void logErr(Throwable e) {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		e.printStackTrace(pw);
-		log(sw.toString());
-	}
+    /**
+     * Prints a stack trace to the bot console.
+     */
+    public static void printStackTrace(String cause, Throwable t) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        t.printStackTrace(new PrintStream(bos));
+        String whole = new String(bos.toByteArray());
+
+        Debug.log("Error occurred during " + cause);
+        for (String s : whole.split("\n")) {
+            Debug.log(s);
+        }
+    }
+
 }
