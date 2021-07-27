@@ -30,6 +30,7 @@ import kraken.plugin.api.ConVar;
 import kraken.plugin.api.Debug;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.PluginContext;
+import kraken.stub.AbstractPlugin;
 
 public final class BasePlugin extends AbstractPlugin {
 	
