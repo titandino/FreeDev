@@ -12,6 +12,7 @@ import com.darkan.api.util.Utils;
 import com.darkan.api.world.SpotAnim;
 import com.darkan.api.world.WorldTile;
 
+import kraken.plugin.api.Effect;
 import kraken.plugin.api.Effects;
 import kraken.plugin.api.Filter;
 import kraken.plugin.api.Players;
@@ -23,13 +24,12 @@ public class SpotAnims {
 	public static void update() {
 		try {
 			List<SpotAnim> list = new ArrayList<>();
-			Effects.closest(sa -> {
+			for (Effect sa : Effects.all()) {
 				if (sa == null)
-					return false;
+					continue;
 				SpotAnim spotAnim = new SpotAnim(sa);
 				list.add(spotAnim);
-				return false;
-			});
+			};
 			SPOT_ANIMS.clear();
 			SPOT_ANIMS.addAll(list);
 		} catch(Exception e) {

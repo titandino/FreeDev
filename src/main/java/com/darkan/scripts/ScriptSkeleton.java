@@ -98,7 +98,6 @@ public abstract class ScriptSkeleton {
 			}
 		} catch (Exception e) {
 			error = e.toString();
-			Debug.logErr(e);
 			Logger.handle(e);
 			return Utils.gaussian(2000, 1000);
 		}

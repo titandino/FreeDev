@@ -13,6 +13,7 @@ import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldTile;
 
 import kraken.plugin.api.Filter;
+import kraken.plugin.api.Npc;
 import kraken.plugin.api.Npcs;
 import kraken.plugin.api.Players;
 
@@ -23,13 +24,12 @@ public class NPCs {
 	public static void update() {
 		try {
 			List<NPC> list = new ArrayList<>();
-			Npcs.closest(npc -> {
+			for (Npc npc : Npcs.all()) {
 				if (npc == null)
-					return false;
+					continue;
 				NPC tNpc = new NPC(npc);
 				list.add(tNpc);
-				return false;
-			});
+			}
 			NPCS.clear();
 			NPCS.addAll(list);
 		} catch(Exception e) {

@@ -26,13 +26,12 @@ public class WorldObjects {
 		try {
 			List<WorldObject> list = new ArrayList<>();
 			Vector3i pos = Players.self().getGlobalPosition();
-			SceneObjects.closest(obj -> {
+			SceneObjects.forEach(obj -> {
 				if (obj == null || obj.hidden())
-					return false;
+					return;
 				WorldObject wo = new WorldObject(obj.getId(), new WorldTile(obj.getGlobalPosition()));
 				if (pos.getZ() > 0 || wo.getPlane() == pos.getZ())
 					list.add(wo);
-				return false;
 			});
 			OBJECTS.clear();
 			OBJECTS.addAll(list);
