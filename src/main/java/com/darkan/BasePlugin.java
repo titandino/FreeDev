@@ -58,7 +58,6 @@ public final class BasePlugin extends AbstractPlugin {
     	try {
 	    	List<Class<?>> classes = Utils.getClassesWithAnnotation("com.darkan.scripts.impl", Script.class);
 			for (Class<?> clazz : classes) {
-				Debug.log("Searching class: " + clazz.getName());
 				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
 			}
 			if (scriptTypes.isEmpty())
