@@ -23,7 +23,6 @@ import com.darkan.api.util.Logger;
 import com.darkan.api.util.Utils;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
-import com.darkan.scripts.impl.beachevent.AIOBeachEvent;
 import com.darkan.thread.DataUpdateThread;
 import com.darkan.thread.DataUpdateThreadFactory;
 
@@ -57,11 +56,8 @@ public final class BasePlugin extends AbstractPlugin {
 	private void loadScripts() {
     	try {
 	    	List<Class<?>> classes = Utils.getClassesWithAnnotation("com.darkan.scripts.impl", Script.class);
-			for (Class<?> clazz : classes) {
+			for (Class<?> clazz : classes)
 				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
-			}
-			if (scriptTypes.isEmpty())
-				scriptTypes.put("AIO Beach Event", AIOBeachEvent.class);
 			orderedNames = new ArrayList<>(scriptTypes.keySet());
 		   	Collections.sort(orderedNames);
 			Debug.log("Parsed scripts: " + scriptTypes.keySet().toString());
