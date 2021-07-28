@@ -2,13 +2,15 @@ package com.darkan.cache;
 
 import java.io.Closeable;
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import com.darkan.BasePlugin;
 import com.darkan.api.util.Logger;
 
 class IndexFile implements Closeable, AutoCloseable {
@@ -17,10 +19,12 @@ class IndexFile implements Closeable, AutoCloseable {
 
 	public IndexFile(Path path) {
 		try {
+			Driver driver = (Driver) Class.forName("org.sqlite.JDBC", true, BasePlugin.class.getClassLoader()).getDeclaredConstructor().newInstance();
+			DriverManager.registerDriver(driver);
 			this.connection = DriverManager.getConnection("jdbc:sqlite:" + path);
 			connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cache`(`KEY` INTEGER PRIMARY KEY, `DATA` BLOB, `VERSION` INTEGER, `CRC` INTEGER);").executeUpdate();
 			connection.prepareStatement("CREATE TABLE IF NOT EXISTS `cache_index`(`KEY` INTEGER PRIMARY KEY, `DATA` BLOB, `VERSION` INTEGER, `CRC` INTEGER);").executeUpdate();
-		} catch (SQLException e) {
+		} catch (SQLException | SecurityException | IllegalAccessException | IllegalArgumentException | InstantiationException | ClassNotFoundException | InvocationTargetException | NoSuchMethodException e) {
 			Logger.logError("Error initializing index");
 			Logger.handle(e);
 		}

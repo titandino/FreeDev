@@ -43,22 +43,24 @@ public final class BasePlugin extends AbstractPlugin {
 	
 	private List<String> prevChats = new ArrayList<>();
 
-    public boolean onLoaded(PluginContext pluginContext) {
-    	pluginContext.setName("FreeDev Scripts");
-    	loadScripts();
-    	VarManager.linkVarbits();
-    	if (Settings.getConfig().isDebug())
-    		SwingUtilities.invokeLater(() -> new DebugFrame().setVisible(true));
-    	dataUpdateExecutor.scheduleAtFixedRate(new DataUpdateThread(), 0, 200, TimeUnit.MILLISECONDS);
-        return true;
-    }
+	public boolean onLoaded(PluginContext pluginContext) {
+		pluginContext.setName("FreeDev Scripts");
+		loadScripts();
+		VarManager.linkVarbits();
+		if (Settings.getConfig().isDebug())
+			SwingUtilities.invokeLater(() -> new DebugFrame().setVisible(true));
+		dataUpdateExecutor.scheduleAtFixedRate(new DataUpdateThread(), 0, 200, TimeUnit.MILLISECONDS);
+		return true;
+	}
     
     @SuppressWarnings("unchecked")
 	private void loadScripts() {
     	try {
 	    	List<Class<?>> classes = Utils.getClassesWithAnnotation("com.darkan.scripts.impl", Script.class);
-			for (Class<?> clazz : classes)
+			for (Class<?> clazz : classes) {
+				Debug.log("Searching class: " + clazz.getName());
 				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
+			}
 			if (scriptTypes.isEmpty())
 				scriptTypes.put("AIO Beach Event", AIOBeachEvent.class);
 			orderedNames = new ArrayList<>(scriptTypes.keySet());

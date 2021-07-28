@@ -25,8 +25,6 @@ import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
 import com.google.common.reflect.ClassPath;
 
-import kraken.plugin.api.Debug;
-
 public class Utils {
 	
 private static final Random RANDOM = new SecureRandom();
@@ -53,10 +51,9 @@ private static final Random RANDOM = new SecureRandom();
 	}
 	
 	public static List<Class<?>> getClassesWithAnnotation(String packageName, Class<? extends Annotation> annotation) throws ClassNotFoundException, IOException {
-		ClassPath cp = ClassPath.from(ClassLoader.getSystemClassLoader());
+		ClassPath cp = ClassPath.from(BasePlugin.class.getClassLoader());
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		for (ClassPath.ClassInfo info : cp.getTopLevelClassesRecursive(packageName)) {
-			Debug.log("Class: " + info.getName());
 			if (!Class.forName(info.getName()).isAnnotationPresent(annotation))
 				continue;
 			classes.add(Class.forName(info.getName()));
