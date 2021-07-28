@@ -24,6 +24,11 @@ dependencies {
 
 shadowJar {
 	archiveBaseName.set('FreeDevScripts')
+	dependencies {
+		exclude(dependency {
+      		it.moduleGroup == 'kraken.api'
+    	})
+	}
 }
 
 build.dependsOn(shadowJar)
