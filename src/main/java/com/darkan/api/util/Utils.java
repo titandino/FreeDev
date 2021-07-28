@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.darkan.BasePlugin;
 import com.darkan.api.entity.NPC;
 import com.darkan.api.item.GroundItem;
 import com.darkan.api.pathing.EntityStrategy;
@@ -23,6 +24,8 @@ import com.darkan.api.world.ObjectType;
 import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
 import com.google.common.reflect.ClassPath;
+
+import kraken.plugin.api.Debug;
 
 public class Utils {
 	
@@ -50,9 +53,10 @@ private static final Random RANDOM = new SecureRandom();
 	}
 	
 	public static List<Class<?>> getClassesWithAnnotation(String packageName, Class<? extends Annotation> annotation) throws ClassNotFoundException, IOException {
-		ClassPath cp = ClassPath.from(Thread.currentThread().getContextClassLoader());
+		ClassPath cp = ClassPath.from(ClassLoader.getSystemClassLoader());
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		for (ClassPath.ClassInfo info : cp.getTopLevelClassesRecursive(packageName)) {
+			Debug.log("Class: " + info.getName());
 			if (!Class.forName(info.getName()).isAnnotationPresent(annotation))
 				continue;
 			classes.add(Class.forName(info.getName()));

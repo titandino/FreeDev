@@ -56,10 +56,11 @@ public final class BasePlugin extends AbstractPlugin {
     @SuppressWarnings("unchecked")
 	private void loadScripts() {
     	try {
-	    	//List<Class<?>> classes = Utils.getClassesWithAnnotation("com.darkan.scripts.impl", Script.class);
-			//for (Class<?> clazz : classes)
-			//	scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
-    		scriptTypes.put("AIO Beach Event", AIOBeachEvent.class);
+	    	List<Class<?>> classes = Utils.getClassesWithAnnotation("com.darkan.scripts.impl", Script.class);
+			for (Class<?> clazz : classes)
+				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
+			if (scriptTypes.isEmpty())
+				scriptTypes.put("AIO Beach Event", AIOBeachEvent.class);
 			orderedNames = new ArrayList<>(scriptTypes.keySet());
 		   	Collections.sort(orderedNames);
 			Debug.log("Parsed scripts: " + scriptTypes.keySet().toString());

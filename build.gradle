@@ -22,13 +22,9 @@ dependencies {
 	implementation project(':KrakenStub')
 }
 
-shadowJar {
-	archiveBaseName.set('FreeDevScripts')
-	dependencies {
-		exclude(dependency {
-      		it.moduleGroup == 'kraken.api'
-    	})
+jar {
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
 	}
 }
-
-build.dependsOn(shadowJar)
