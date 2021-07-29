@@ -295,6 +295,14 @@ public abstract class RouteStrategy {
 	public static final int BLOCK_FLAG_EAST = 0x2;
 	public static final int BLOCK_FLAG_SOUTH = 0x4;
 	public static final int BLOCK_FLAG_WEST = 0x8;
+	
+	/**
+	 *  86, 4, 86, -3, 1, 1, 3, 3
+		86, 3, 86, -3, 1, 1, 3, 3
+		86, 2, 86, -3, 1, 1, 3, 3
+		86, 1, 86, -3, 1, 1, 3, 3
+		86, 0, 86, -3, 1, 1, 3, 3
+	 */
 
 	protected static boolean checkFilledRectangularInteract(int[][] clip, int currentX, int currentY, int sizeX, int sizeY, int targetX, int targetY, int targetSizeX, int targetSizeY, int accessBlockFlag) {
 		int srcEndX = currentX + sizeX;

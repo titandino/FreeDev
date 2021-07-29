@@ -39,7 +39,7 @@ public class Debug extends ScriptSkeleton implements MessageListener {
 	
 	@Override
 	public void onMessageReceived(Message message) {
-		Interfaces.getInventory().getItemReg("torch").useOn(WorldObjects.getClosestReachable(obj -> obj.getName().contains("Tree")));
+		Interfaces.getInventory().getItemReg("torch").useOn(WorldObjects.getClosest(obj -> obj.getName().contains("Tree")));
 	}
 	
 	@Override
