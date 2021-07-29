@@ -10,7 +10,10 @@ public enum OreData {
 	Copper(43188, new TraversalNodeList(new ObjectNode(66876, "Enter", new Area(2290, 4513, 2295, 4520))), new TraversalNodeList(new ObjectNode(67002, "Exit to", new Area(2874, 3499, 2878, 3505)))),
 	Tin(43190, new TraversalNodeList(new ObjectNode(66876, "Enter", new Area(2290, 4513, 2295, 4520))), new TraversalNodeList(new ObjectNode(67002, "Exit to", new Area(2874, 3499, 2878, 3505)))),
 	Iron(43192, new TraversalNodeList(new PathNode(new WorldTile(3187, 3425, 0), new WorldTile(3182, 3371, 0))), new TraversalNodeList(new PathNode(new WorldTile(3182, 3371, 0), new WorldTile(3187, 3425, 0)))),
-	Coal(43192, null, null),
+	Coal(0000/*TODO*/, null, null),
+	Mithril(0000/*TODO*/, new TraversalNodeList(new PathNode(new WorldTile(3187, 3425, 0), new WorldTile(3182, 3371, 0))), new TraversalNodeList(new PathNode(new WorldTile(3182, 3371, 0), new WorldTile(3187, 3425, 0)))),
+	Adamant(0000/*TODO*/, new TraversalNodeList(new PathNode(new WorldTile(2997, 3144, 0), new WorldTile(2977, 3235, 0))), new TraversalNodeList(new PathNode(new WorldTile(2977, 3235, 0), new WorldTile(2997, 3144, 0)))),
+	Gold(0000/*TODO*/, new TraversalNodeList(new PathNode(new WorldTile(2997, 3144, 0), new WorldTile(2977, 3235, 0))), new TraversalNodeList(new PathNode(new WorldTile(2977, 3235, 0), new WorldTile(2997, 3144, 0)))),
 	;
 	
 	private int varbit;

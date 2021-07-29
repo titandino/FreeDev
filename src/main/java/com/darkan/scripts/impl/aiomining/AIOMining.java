@@ -22,8 +22,7 @@ public class AIOMining extends ScriptSkeleton {
 	}
 		
 	/** TODO
-	 * Mithril = Varrock southwest
-	 * Adamant = Rimmington (clan camp bank) clan vex?
+	 * Silver = Falador west (bank in falador using shortcut object/pathnode combo)
 	 * Luminite = Dwarven mine/Anachronia (low lvl hardcore dwarven mine big nono)
 	 * Runite = Mining guild
 	 * Orichalcite = Mining guild

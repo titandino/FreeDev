@@ -48,7 +48,7 @@ public final class BasePlugin extends AbstractPlugin {
 		VarManager.linkVarbits();
 		if (Settings.getConfig().isDebug())
 			SwingUtilities.invokeLater(() -> new DebugFrame().setVisible(true));
-		dataUpdateExecutor.scheduleAtFixedRate(new DataUpdateThread(), 0, 200, TimeUnit.MILLISECONDS);
+		dataUpdateExecutor.scheduleAtFixedRate(new DataUpdateThread(), 0, 50, TimeUnit.MILLISECONDS);
 		return true;
 	}
     
