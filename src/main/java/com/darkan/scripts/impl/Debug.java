@@ -1,5 +1,7 @@
 package com.darkan.scripts.impl;
 
+import com.darkan.api.accessors.NPCs;
+import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.inter.chat.Message;
@@ -37,7 +39,7 @@ public class Debug extends ScriptSkeleton implements MessageListener {
 	
 	@Override
 	public void onMessageReceived(Message message) {
-		kraken.plugin.api.Debug.log(message.toString());
+		Interfaces.getInventory().getItemReg("torch").useOn(WorldObjects.getClosestReachable(obj -> obj.getName().contains("Tree")));
 	}
 	
 	@Override

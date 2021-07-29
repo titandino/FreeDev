@@ -2,7 +2,6 @@ package com.darkan.api.inter;
 
 import com.darkan.api.item.Item;
 import com.darkan.api.util.Utils;
-
 import kraken.plugin.api.Actions;
 import kraken.plugin.api.Widgets;
 
@@ -69,6 +68,10 @@ public class IFSlot {
 
 	public int getComponentId() {
 		return componentId;
+	}
+	
+	public int getSlotId() {
+		return slotId;
 	}
 	
 	@Override

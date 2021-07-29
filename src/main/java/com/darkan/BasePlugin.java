@@ -88,8 +88,13 @@ public final class BasePlugin extends AbstractPlugin {
 	    	if (!newMessages.isEmpty()) {
 		    	for (ScriptSkeleton script : scripts.values()) {
 		    		if (script != null && script instanceof MessageListener) {
-		    			for (Message chat : newMessages)
-		    				((MessageListener) script).onMessageReceived(chat);
+		    			for (Message chat : newMessages) {
+		    				try {
+		    					((MessageListener) script).onMessageReceived(chat);
+		    				} catch (Exception e) {
+		    					Logger.handle(e);
+		    				}
+		    			}
 		    		}
 		    	}
 	    	}

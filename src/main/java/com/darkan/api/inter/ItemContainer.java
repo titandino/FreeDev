@@ -36,12 +36,20 @@ public class ItemContainer extends IFComponent {
 	}
 	
 
-	private Item getItemByName(String... exactNames) {
+	public Item getItemByName(String... exactNames) {
 		Set<String> names = new HashSet<>(Arrays.asList(Arrays.stream(exactNames).toArray(String[]::new)));
 		for (Item item : getItems()) {
 			if (item == null || !names.contains(item.getDef().name))
 				continue;
 			return item;
+		}
+		return null;
+	}
+	
+	public Item getItemReg(String regex) {
+		for (Item item : getItems()) {
+			if (item != null && Pattern.compile(regex).matcher(item.getDef().name).find())
+				return item;
 		}
 		return null;
 	}

@@ -1,9 +1,13 @@
 package com.darkan.api.item;
 
+import com.darkan.api.entity.NPC;
 import com.darkan.api.inter.IFSlot;
 import com.darkan.api.inter.Interfaces;
+import com.darkan.api.util.Utils;
+import com.darkan.api.world.WorldObject;
 import com.darkan.cache.def.items.ItemDef;
 
+import kraken.plugin.api.Actions;
 import kraken.plugin.api.Debug;
 
 public class Item {
@@ -41,6 +45,42 @@ public class Item {
 	
 	public void click(int option) {
 		slot.click(option);
+	}
+	
+	public boolean useOn(Item target) {
+		if (target != null && slot.isOpen()) {
+			Actions.menu(Actions.MENU_EXECUTE_SELECTABLE_WIDGET, 0, slot.getSlotId(), slot.getHash(), Utils.random(0, Integer.MAX_VALUE));
+			Actions.menu(Actions.MENU_EXECUTE_SELECT_WIDGET_ITEM, 0, target.slot.getSlotId(), target.slot.getHash(), Utils.random(0, Integer.MAX_VALUE));
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean useOn(NPC target) {
+		if (target != null && slot.isOpen()) {
+			Actions.menu(Actions.MENU_EXECUTE_SELECTABLE_WIDGET, 0, slot.getSlotId(), slot.getHash(), Utils.random(0, Integer.MAX_VALUE));
+			Actions.menu(Actions.MENU_EXECUTE_SELECT_NPC, target.getServerIndex(), 0, 0, Utils.random(0, Integer.MAX_VALUE));
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean useOn(WorldObject target) {
+		if (target != null && slot.isOpen()) {
+			Actions.menu(Actions.MENU_EXECUTE_SELECTABLE_WIDGET, 0, slot.getSlotId(), slot.getHash(), Utils.random(0, Integer.MAX_VALUE));
+			Actions.menu(Actions.MENU_EXECUTE_SELECT_OBJECT, target.getId(), target.getX(), target.getY(), Utils.random(0, Integer.MAX_VALUE));
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean useOn(GroundItem target) {
+		if (target != null && slot.isOpen()) {
+			Actions.menu(Actions.MENU_EXECUTE_SELECTABLE_WIDGET, 0, slot.getSlotId(), slot.getHash(), Utils.random(0, Integer.MAX_VALUE));
+			Actions.menu(Actions.MENU_EXECUTE_SELECT_GROUND_ITEM, target.getId(), target.getPosition().getX(), target.getPosition().getY(), Utils.random(0, Integer.MAX_VALUE));
+			return true;
+		}
+		return false;
 	}
 	
 	public void click(String option) {

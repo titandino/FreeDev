@@ -13,6 +13,7 @@ public class NPC extends Entity implements Interactable {
 	private Npc memNpc;
 	private int id;
 	private int health;
+	private int serverIndex;
 	
 	public NPC(int id, WorldTile position) {
 		super(position);
@@ -24,6 +25,7 @@ public class NPC extends Entity implements Interactable {
 		this.memNpc = n;
 		this.id = n.getId();
 		this.health = n.getHealth();
+		this.serverIndex = n.getServerIndex();
 	}
 
 	@Override
@@ -81,5 +83,9 @@ public class NPC extends Entity implements Interactable {
 
 	public int getHealth() {
 		return health;
+	}
+
+	public int getServerIndex() {
+		return serverIndex;
 	}
 }
