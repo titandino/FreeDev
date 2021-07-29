@@ -22,7 +22,6 @@ public class AIOWispGathering extends ScriptSkeleton implements MessageListener 
 	 * Chronicle absorption prayer support
 	 */
 		
-	private int startXp;
 	private int startEnergy;
 	private boolean captureChronicles = true;
 	private Timer chronicleTimer = new Timer();
@@ -34,7 +33,6 @@ public class AIOWispGathering extends ScriptSkeleton implements MessageListener 
 	
 	@Override
 	public boolean onStart() {
-		startXp = Client.getStatById(Client.DIVINATION).getXp();
 		startEnergy = Interfaces.getInventory().countReg(" energy");
 		return true;
 	}
@@ -83,7 +81,7 @@ public class AIOWispGathering extends ScriptSkeleton implements MessageListener 
 	public void paintImGui(long runtime) {
 		captureChronicles = ImGui.checkbox("Capture chronicle fragments", captureChronicles);
 		ImGui.label("Energy p/h: " + Time.perHour(runtime, Interfaces.getInventory().countReg(" energy") - startEnergy));
-		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.DIVINATION).getXp() - startXp));
+		printGenericXpGain(runtime);
 	}
 
 	@Override
