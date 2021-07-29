@@ -45,19 +45,23 @@ public class AIOWispGathering extends ScriptSkeleton implements MessageListener 
 			setState("Converting memories...");
 			sleepWhile(3500, 51526, () -> Interfaces.getInventory().containsAnyReg(" memory"));
 		} else if (!Interfaces.getInventory().isFull()) {
-			if (captureChronicles && chronicleTimer.time() < 10000 && notYoursTimer.time() > 30000 && NPCs.interactClosest("Chronicle fragment", "Capture")) {
+			if (canCaptureFragment() && NPCs.interactClosest("Chronicle fragment", "Capture")) {
 				sleepWhile(3100, 73513, () -> notYoursTimer.time() > 30000 && MyPlayer.get().isMoving() && !Interfaces.getInventory().isFull());
 				return;
 			}
 			setState("Finding closest wisp...");
 			if (NPCs.interactClosestReachable("Harvest", npc -> npc.getName().contains("Enriched"))) {
 				setState("Harvesting closest enriched wisp...");
-				sleepWhile(3100, 73513, () -> MyPlayer.get().isAnimationPlaying() && !Interfaces.getInventory().isFull());
+				sleepWhile(3100, 73513, () -> !canCaptureFragment() && MyPlayer.get().isAnimationPlaying() && !Interfaces.getInventory().isFull());
 			} else if (NPCs.interactClosestReachable("Harvest")) {
 				setState("Harvesting closest wisp...");
-				sleepWhile(3100, 73513, () -> NPCs.getClosest(n -> n.getName().contains("Enriched")) == null && MyPlayer.get().isAnimationPlaying() && !Interfaces.getInventory().isFull());
+				sleepWhile(3100, 73513, () -> !canCaptureFragment() && NPCs.getClosest(n -> n.getName().contains("Enriched")) == null && MyPlayer.get().isAnimationPlaying() && !Interfaces.getInventory().isFull());
 			}
 		}
+	}
+	
+	public boolean canCaptureFragment() {
+		return captureChronicles && notYoursTimer.time() > 30000 && chronicleTimer.time() < 10000 && !Interfaces.getInventory().isFull() && NPCs.getClosest(n -> n.getName().contains("Chronicle fragment")) != null;
 	}
 	
 	@Override
