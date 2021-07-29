@@ -104,6 +104,14 @@ public class NPCs {
          closest.interact(option);
          return true;
      }
+     
+     public static boolean interactClosest(String name, String option) {
+         NPC closest = getClosest(n -> n.getName().equalsIgnoreCase(name) && n.hasOption(option));
+         if (closest == null)
+             return false;
+         closest.interact(option);
+         return true;
+     }
 	
     public static boolean interactClosest(String option, Filter<NPC> filter) {
          NPC closest = getClosest(n -> filter.accept(n) && n.hasOption(option));

@@ -4,6 +4,9 @@ import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
+import com.darkan.api.inter.chat.Message;
+import com.darkan.api.scripting.MessageListener;
+import com.darkan.api.util.Timer;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
@@ -12,7 +15,7 @@ import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Time;
 
 @Script("AIO Wisp Gatherer")
-public class AIOWispGathering extends ScriptSkeleton {
+public class AIOWispGathering extends ScriptSkeleton implements MessageListener {
 
 	/**
 	 * TODO
@@ -21,6 +24,9 @@ public class AIOWispGathering extends ScriptSkeleton {
 		
 	private int startXp;
 	private int startEnergy;
+	private boolean captureChronicles = true;
+	private Timer chronicleTimer = new Timer();
+	private Timer notYoursTimer = new Timer();
 	
 	public AIOWispGathering() {
 		super("AIO Wisp Gathering", 300);
@@ -39,6 +45,10 @@ public class AIOWispGathering extends ScriptSkeleton {
 			setState("Converting memories...");
 			sleepWhile(3500, 51526, () -> Interfaces.getInventory().containsAnyReg(" memory"));
 		} else if (!Interfaces.getInventory().isFull()) {
+			if (captureChronicles && chronicleTimer.time() < 10000 && notYoursTimer.time() > 30000 && NPCs.interactClosest("Chronicle fragment", "Capture")) {
+				sleepWhile(3100, 73513, () -> notYoursTimer.time() > 30000 && MyPlayer.get().isMoving() && !Interfaces.getInventory().isFull());
+				return;
+			}
 			setState("Finding closest wisp...");
 			if (NPCs.interactClosestReachable("Harvest", npc -> npc.getName().contains("Enriched"))) {
 				setState("Harvesting closest enriched wisp...");
@@ -48,6 +58,14 @@ public class AIOWispGathering extends ScriptSkeleton {
 				sleepWhile(3100, 73513, () -> NPCs.getClosest(n -> n.getName().contains("Enriched")) == null && MyPlayer.get().isAnimationPlaying() && !Interfaces.getInventory().isFull());
 			}
 		}
+	}
+	
+	@Override
+	public void onMessageReceived(Message message) {
+		if (message.isGame() && message.getText().contains("escapes from the spring!"))
+			chronicleTimer.click();
+		if (message.isGame() && (message.getText().toLowerCase().contains("ironman") || message.getText().toLowerCase().contains("ironmen") || message.getText().toLowerCase().contains("ironwoman")))
+			notYoursTimer.click();
 	}
 
 	@Override
@@ -59,6 +77,7 @@ public class AIOWispGathering extends ScriptSkeleton {
 
 	@Override
 	public void paintImGui(long runtime) {
+		captureChronicles = ImGui.checkbox("Capture chronicle fragments", captureChronicles);
 		ImGui.label("Energy p/h: " + Time.perHour(runtime, Interfaces.getInventory().countReg(" energy") - startEnergy));
 		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.DIVINATION).getXp() - startXp));
 	}
