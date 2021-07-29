@@ -14,7 +14,6 @@ import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Vector2i;
-import kraken.plugin.api.Vector3;
 
 @Script(value = "Debug", utility = true)
 public class Debug extends ScriptSkeleton implements MessageListener {
@@ -38,12 +37,7 @@ public class Debug extends ScriptSkeleton implements MessageListener {
 	
 	@Override
 	public void onMessageReceived(Message message) {
-		System.out.println(message);
-		Vector3 localKraken = myPlayer.getScenePosition();
-		WorldTile playerLoc = new WorldTile(myPlayer.getGlobalPosition());
-		System.out.println(localKraken);
-		System.out.println(playerLoc.getXInRegion() + ", " + playerLoc.getYInRegion());
-		System.out.println(playerLoc.getXDraw() + ", " + playerLoc.getYDraw());
+		kraken.plugin.api.Debug.log(message.toString());
 	}
 	
 	@Override

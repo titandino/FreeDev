@@ -11,7 +11,7 @@ import com.darkan.api.inter.IFSlot;
 public class Chatbox {
 	
 	private static List<String> CHATS = new CopyOnWriteArrayList<>();
-	private static IFComponent CHATBOX = new IFComponent(137, 85);
+	private static IFComponent CHATBOX = new IFComponent(1472, 193);
 	private static IFSlot HEALTH_BAR = new IFSlot(1430, 7, 8);
 	
 	public static void update() {
