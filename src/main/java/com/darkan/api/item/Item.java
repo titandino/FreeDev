@@ -122,6 +122,17 @@ public class Item {
                 default -> 1;
             };
         }
+        if (slot.getInterfaceId() == Interfaces.getBank().getInterfaceId()) {
+            op = switch(option) {
+                case "Withdraw-1" -> 1;
+                case "Withdraw-5" -> 3;
+                case "Withdraw-10" -> 4;
+                case "Withdraw-All" -> 7;
+                case "Withdraw-X" -> 6;
+                case "Withdraw-Placeholder" -> 8;
+                default -> 1;
+            };
+        }
 		if (op != -1)
 			click(op);
 	}	
