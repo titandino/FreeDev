@@ -59,7 +59,13 @@ public class AIOWoodcut extends ScriptSkeleton {
     		    Move.to(new Vector2i(startTile.getX() + (random.nextInt(10) - 5), startTile.getY() + (random.nextInt(10) - 5)));
     		    return;
     		}
-    		if (WorldObjects.interactClosestReachable("Chop down", object -> object.getName().equals(getTree()) && object.hasOption("Chop down"))) {
+            if (WorldObjects.interactClosestReachable("Chop", object -> object.getName().equals(getTree()) && object.hasOption("Chop"))) {
+                setState("Cutting " + getTree());
+                sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
+                return;
+            }
+    		
+    		if (WorldObjects.interactClosestReachable(getTree() == "Ivy" ? "Chop" : "Chop down", object -> object.getName().equals(getTree()) && (object.hasOption("Chop") || object.hasOption("Chop down")))) {
     		    setState("Cutting " + getTree());
     		    sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
     	        return;
@@ -67,24 +73,24 @@ public class AIOWoodcut extends ScriptSkeleton {
 		}
 
 		if (fullInventory) {
-	        if (fletch && Interfaces.getInventory().isFull()) {
-	            setState("Fletching");
-	            //do fletching logic
-	            sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
-	            return;
-	        }
-    		if (firemake && Interfaces.getInventory().freeSlots() <= 1) {
-    		    setState("Firemaking");
-    		    WorldObject fire = WorldObjects.getClosest(object -> object.getName() == "Fire" && object.hasOption("Use"));//do firemaking logic
-    		    if (fire == null) {
-    		        Interfaces.getInventory().clickItemReg("(?i)logs", "Light");
-    		        return;
-    		    }
-    		    //fire.interact("Use");
-    		    //Interface: 1179, child: 17, slot: 17
-                sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
-    		    return;
-    		}
+//	        if (fletch && Interfaces.getInventory().isFull()) {
+//	            setState("Fletching");
+//	            //do fletching logic
+//	            sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
+//	            return;
+//	        }
+//    		if (firemake && Interfaces.getInventory().freeSlots() <= 1) {
+//    		    setState("Firemaking");
+//    		    WorldObject fire = WorldObjects.getClosest(object -> object.getName() == "Fire" && object.hasOption("Use"));//do firemaking logic
+//    		    if (fire == null) {
+//    		        Interfaces.getInventory().clickItemReg("(?i)logs", "Light");
+//    		        return;
+//    		    }
+//    		    //fire.interact("Use");
+//    		    //Interface: 1179, child: 17, slot: 17
+//                sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
+//    		    return;
+//    		}
     		if (drop) {
     		    setState("Dropping items");
     		    Interfaces.getInventory().clickItemReg("(?i)logs", "Drop");
@@ -126,9 +132,10 @@ public class AIOWoodcut extends ScriptSkeleton {
 	    ImGui.label("3 - Maple trees");
 	    ImGui.label("4 - Acadia trees");
 	    ImGui.label("5 - Yew trees");
-	    ImGui.label("6 - Magic trees");
-	    ImGui.label("7 - Elder trees");
-	    selectedTree = ImGui.intSlider("Select a tree: ", selectedTree, 0, 7);
+	    ImGui.label("6 - Ivy");
+	    ImGui.label("7 - Magic trees");
+	    ImGui.label("8 - Elder trees");
+	    selectedTree = ImGui.intSlider("Select a tree: ", selectedTree, 0, 8);
 	    
 	    ImGui.label("\n\n");
 	    
@@ -156,8 +163,9 @@ public class AIOWoodcut extends ScriptSkeleton {
         case 3 -> "Maple Tree";
         case 4 -> "Acadia tree";
         case 5 -> "Yew";
-        case 6 -> "Magic tree";
-        case 7 -> "Elder tree";
+        case 6 -> "Ivy";
+        case 7 -> "Magic tree";
+        case 8 -> "Elder tree";
         default -> throw new IllegalArgumentException("Unexpected value " + selectedTree + " is not mapped to a valid tree.");
 	    };
 	}
