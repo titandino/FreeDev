@@ -11,7 +11,7 @@ import com.darkan.api.world.WorldObject;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.ScriptSkeleton;
 
-@Script("AIO Mining")
+//@Script("AIO Mining")
 public class AIOMining extends ScriptSkeleton {
 	
 	private OreData currentOre = OreData.Coal;

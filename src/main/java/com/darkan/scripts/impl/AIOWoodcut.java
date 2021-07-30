@@ -133,8 +133,8 @@ public class AIOWoodcut extends ScriptSkeleton {
 	    ImGui.label("\n\n");
 	    
 	    paused = ImGui.checkbox("Script paused", paused);
-	    fletch = ImGui.checkbox("Fletch logs", fletch && !firemake);
-	    firemake = ImGui.checkbox("Firemake logs", firemake && (!fletch && !bank));
+	    //fletch = ImGui.checkbox("Fletch logs", fletch && !firemake);
+	    //firemake = ImGui.checkbox("Firemake logs", firemake && (!fletch && !bank));
 	    drop = ImGui.checkbox("Drop logs", (drop && (!firemake && !bank)) || (!firemake && !bank));
 	    bank = ImGui.checkbox("Bank", bank && (!firemake && !drop));
 	    
