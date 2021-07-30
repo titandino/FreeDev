@@ -1,6 +1,5 @@
 package com.darkan.scripts.impl;
 
-import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
@@ -17,7 +16,7 @@ import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Vector2i;
 
-//@Script(value = "Debug", utility = true)
+@Script(value = "Debug", utility = true)
 public class Debug extends ScriptSkeleton implements MessageListener {
 	
 	public Debug() {
