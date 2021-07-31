@@ -65,7 +65,7 @@ public class AIOWoodcut extends ScriptSkeleton {
                 return;
             }
     		
-    		if (WorldObjects.interactClosestReachable(getTree() == "Ivy" ? "Chop" : "Chop down", object -> object.getName().equals(getTree()) && (object.hasOption("Chop") || object.hasOption("Chop down")))) {
+    		if (WorldObjects.interactClosestReachable(getTree().equals("Ivy") ? "Chop" : "Chop down", object -> object.getName().equals(getTree()) && (object.hasOption("Chop") || object.hasOption("Chop down")))) {
     		    setState("Cutting " + getTree());
     		    sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
     	        return;
