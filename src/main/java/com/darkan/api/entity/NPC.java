@@ -10,10 +10,8 @@ import kraken.plugin.api.Npc;
 
 public class NPC extends Entity implements Interactable {
 	
-	private Npc memNpc;
 	private int id;
 	private int health;
-	private int serverIndex;
 	
 	public NPC(int id, WorldTile position) {
 		super(position);
@@ -22,7 +20,6 @@ public class NPC extends Entity implements Interactable {
 
 	public NPC(Npc n) {
 		super(n);
-		this.memNpc = n;
 		this.id = n.getId();
 		this.health = n.getHealth();
 		this.serverIndex = n.getServerIndex();
@@ -55,7 +52,7 @@ public class NPC extends Entity implements Interactable {
 	public boolean interact(int option) {
 		if (option < 0 || option > 5)
 			return false;
-		Actions.menu(Actions.MENU_EXECUTE_NPC1 + option, memNpc.getServerIndex(), 0, 0, Utils.random(0, Integer.MAX_VALUE));
+		Actions.menu(Actions.MENU_EXECUTE_NPC1 + option, getServerIndex(), 0, 0, Utils.random(0, Integer.MAX_VALUE));
 		return true;
 	}
 
@@ -83,9 +80,5 @@ public class NPC extends Entity implements Interactable {
 
 	public int getHealth() {
 		return health;
-	}
-
-	public int getServerIndex() {
-		return serverIndex;
 	}
 }
