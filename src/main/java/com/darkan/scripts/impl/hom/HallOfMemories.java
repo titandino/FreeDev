@@ -27,6 +27,8 @@ public class HallOfMemories extends ScriptSkeleton implements MessageListener {
 	private NPC memory;
 	private boolean twoTick = true;
 	private boolean useCoreFragments = false;
+	private boolean collectKnowledgeFrags = true;
+	private boolean collectMemoryFrags = true;
 	private Timer corePopTimer = new Timer();
 
 	public HallOfMemories() {
@@ -47,12 +49,12 @@ public class HallOfMemories extends ScriptSkeleton implements MessageListener {
 			return;
 		
 		if ((!Interfaces.getInventory().isFull() || Interfaces.getInventory().contains(CORE_MEMORY_FRAGMENT_ITEM, 1)) 
-				&& NPCs.interactClosestReachable("Capture", npc -> npc.getName().equals("Core memory fragment"))) {
+				&& collectMemoryFrags && NPCs.interactClosestReachable("Capture", npc -> npc.getName().equals("Core memory fragment"))) {
 			setState("Getting core memory fragment.");
 			sleepWhile(3000, 12000, () -> MyPlayer.get().isAnimationPlaying() || MyPlayer.get().isMoving());
 			return;
 		}
-		if (NPCs.interactClosestReachable("Capture", npc -> npc.getName().equals("Knowledge fragment"))) {
+		if (collectKnowledgeFrags && NPCs.interactClosestReachable("Capture", npc -> npc.getName().equals("Knowledge fragment"))) {
 			setState("Getting knowledge fragments.");
 			sleepWhile(700, 12000, () -> MyPlayer.get().isMoving());
 			return;
@@ -89,6 +91,8 @@ public class HallOfMemories extends ScriptSkeleton implements MessageListener {
 	public void paintImGui(long runtime) {
 		twoTick = ImGui.checkbox("2 Tick", twoTick);
 		useCoreFragments = ImGui.checkbox("Use core memory fragments", useCoreFragments);
+		collectMemoryFrags = ImGui.checkbox("Collect core memory fragments", collectMemoryFrags);
+		collectKnowledgeFrags = ImGui.checkbox("Collect knowledge fragments", collectKnowledgeFrags);
 		ImGui.label("XP p/h: " + Time.perHour(runtime, Client.getStatById(Client.DIVINATION).getXp() - startXp));
 	}
 
