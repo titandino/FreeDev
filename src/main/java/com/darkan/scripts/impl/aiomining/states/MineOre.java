@@ -29,7 +29,7 @@ public class MineOre extends State implements MessageListener {
 		if (oreBoxFilled && Interfaces.getInventory().isFull() /*MyPlayer.getVars().getVarBit(currentOre.getVarbit()) < 120*/)
 			return new Bank(ore);
 		rock = WorldObjects.getClosestTo(MyPlayer.getPosition(), obj -> obj.hasOption("Mine") && obj.getName().contains(ore.name()) && obj.withinDistance(MyPlayer.getPosition()));
-		if (rock == null)
+		if (rock == null && ore.getFromBank() != null)
 			return new Traversal(this, () -> WorldObjects.getClosestReachable(obj -> obj.hasOption("Mine") && obj.getName().contains(ore.name()) && obj.withinDistance(MyPlayer.getPosition())) != null, ore.getFromBank());
 		return null;
 	}

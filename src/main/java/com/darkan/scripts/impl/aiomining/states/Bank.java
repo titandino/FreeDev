@@ -24,7 +24,7 @@ public class Bank extends State {
 			return new MineOre(ore);
 		
 		depositObj = WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)") && obj.withinDistance(MyPlayer.getPosition()));
-		if (depositObj == null)
+		if (depositObj == null && ore.getToBank() != null)
 			return new Traversal(this, () -> WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)") && obj.withinDistance(MyPlayer.getPosition())) != null, ore.getToBank());
 		return null;
 	}
