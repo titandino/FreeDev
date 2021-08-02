@@ -6,14 +6,14 @@ import com.darkan.api.item.Item;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
 import com.darkan.scripts.Script;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Time;
 
 @Script("Anachronia Agility")
-public class AnachroniaAgility extends ScriptSkeleton {
+public class AnachroniaAgility extends LoopScript {
 	
 	public static final int PAGE_ID = 47925, ENHANCED_EXCALIBUR = 14632, AUGMENTED_ENHANCED_EXCALIBUR = 36619;
 	

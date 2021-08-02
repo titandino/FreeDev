@@ -11,7 +11,7 @@ import com.darkan.api.util.Utils;
 
 import kraken.plugin.api.*;
 
-public abstract class ScriptSkeleton {
+public abstract class LoopScript {
 
 	private String name;
 	private long started = 0;
@@ -26,7 +26,7 @@ public abstract class ScriptSkeleton {
 	private long loopTimer;
 	private long lastLoop;
 
-	private int loopDelay;
+	protected int loopDelay;
 	private int currDelay;
 
 	private long nextRun;
@@ -38,11 +38,11 @@ public abstract class ScriptSkeleton {
 
 	private int localPlayerAtt = 0;
 
-	public ScriptSkeleton(String name) {
+	public LoopScript(String name) {
 		this(name, 600);
 	}
 
-	public ScriptSkeleton(String name, int loopDelay) {
+	public LoopScript(String name, int loopDelay) {
 		this.name = name;
 		this.loopDelay = loopDelay;
 	}

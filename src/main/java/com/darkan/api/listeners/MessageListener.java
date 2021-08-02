@@ -1,4 +1,4 @@
-package com.darkan.api.scripting;
+package com.darkan.api.listeners;
 
 import com.darkan.api.inter.chat.Message;
 

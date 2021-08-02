@@ -5,16 +5,16 @@ import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.inter.chat.Message;
-import com.darkan.api.scripting.MessageListener;
+import com.darkan.api.listeners.MessageListener;
 import com.darkan.api.util.Timer;
 import com.darkan.scripts.Script;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Time;
 
 @Script("AIO Wisp Gatherer")
-public class AIOWispGathering extends ScriptSkeleton implements MessageListener {
+public class AIOWispGathering extends LoopScript implements MessageListener {
 
 	/**
 	 * TODO

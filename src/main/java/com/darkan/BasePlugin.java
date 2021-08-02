@@ -17,12 +17,12 @@ import com.darkan.api.entity.VarManager;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.inter.chat.Chatbox;
 import com.darkan.api.inter.chat.Message;
-import com.darkan.api.scripting.MessageListener;
+import com.darkan.api.listeners.MessageListener;
 import com.darkan.api.util.DebugFrame;
 import com.darkan.api.util.Logger;
 import com.darkan.api.util.Utils;
 import com.darkan.scripts.Script;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 import com.darkan.thread.DataUpdateThread;
 import com.darkan.thread.DataUpdateThreadFactory;
 
@@ -37,8 +37,8 @@ public final class BasePlugin extends AbstractPlugin {
 	private static ScheduledExecutorService dataUpdateExecutor = Executors.newSingleThreadScheduledExecutor(new DataUpdateThreadFactory());
 	
 	private List<String> orderedNames;
-	private Map<String, Class<? extends ScriptSkeleton>> scriptTypes = new HashMap<>();
-	private Map<Class<? extends ScriptSkeleton>, ScriptSkeleton> scripts = new HashMap<>();
+	private Map<String, Class<? extends LoopScript>> scriptTypes = new HashMap<>();
+	private Map<Class<? extends LoopScript>, LoopScript> scripts = new HashMap<>();
 	
 	private List<String> prevChats = new ArrayList<>();
 
@@ -57,7 +57,7 @@ public final class BasePlugin extends AbstractPlugin {
     	try {
 	    	List<Class<?>> classes = Utils.getClassesWithAnnotation("com.darkan.scripts.impl", Script.class);
 			for (Class<?> clazz : classes)
-				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends ScriptSkeleton>) clazz);
+				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends LoopScript>) clazz);
 			orderedNames = new ArrayList<>(scriptTypes.keySet());
 		   	Collections.sort(orderedNames);
 			Debug.log("Parsed scripts: " + scriptTypes.keySet().toString());
@@ -69,7 +69,7 @@ public final class BasePlugin extends AbstractPlugin {
 
 	public int onLoop() {
 		try {
-	    	for (ScriptSkeleton script : scripts.values()) {
+	    	for (LoopScript script : scripts.values()) {
 	    		if (script != null)
 	    			script.process();
 	    	}
@@ -86,7 +86,7 @@ public final class BasePlugin extends AbstractPlugin {
 	    		System.out.println("[CHAT]: " + mes);
 	    	}
 	    	if (!newMessages.isEmpty()) {
-		    	for (ScriptSkeleton script : scripts.values()) {
+		    	for (LoopScript script : scripts.values()) {
 		    		if (script != null && script instanceof MessageListener) {
 		    			for (Message chat : newMessages) {
 		    				try {
@@ -111,7 +111,7 @@ public final class BasePlugin extends AbstractPlugin {
     	try {
 	    	ImGui.label("Please select a script:");
 	    	for (String scriptName : orderedNames) {
-	    		Class<? extends ScriptSkeleton> script = scriptTypes.get(scriptName);
+	    		Class<? extends LoopScript> script = scriptTypes.get(scriptName);
 	    		boolean currRunning = scripts.get(script) != null;
 	    		boolean running = ImGui.checkbox(scriptName, currRunning);
 	    		if (currRunning && !running) {
@@ -127,7 +127,7 @@ public final class BasePlugin extends AbstractPlugin {
 	    		}
 	    	}
 	    	
-	    	for (ScriptSkeleton script : scripts.values()) {
+	    	for (LoopScript script : scripts.values()) {
 	    		if (script != null)
 	    			script.onPaint();
 	    	}
@@ -138,7 +138,7 @@ public final class BasePlugin extends AbstractPlugin {
 
     public void onPaintOverlay() {
     	try {
-	    	for (ScriptSkeleton script : scripts.values()) {
+	    	for (LoopScript script : scripts.values()) {
 	    		if (script != null)
 	    			script.onPaintOverlay();
 	    	}   

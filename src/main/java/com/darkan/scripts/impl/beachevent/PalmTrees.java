@@ -9,7 +9,7 @@ import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 public class PalmTrees extends BeachActivity {
     
@@ -24,7 +24,7 @@ public class PalmTrees extends BeachActivity {
     WorldObject currentTree = null;
 	
 	@Override
-	public void loop(ScriptSkeleton ctx) {
+	public void loop(LoopScript ctx) {
 	    if (Interfaces.getInventory().isFull()) {
 	        WorldObjects.interactClosestReachable("Deposit coconuts");
 	        ctx.setState("Depositing coconuts");

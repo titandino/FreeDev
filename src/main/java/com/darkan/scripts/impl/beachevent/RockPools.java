@@ -4,12 +4,12 @@ import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 public class RockPools extends BeachActivity {
     
 	@Override
-	public void loop(ScriptSkeleton ctx) {
+	public void loop(LoopScript ctx) {
 	    if (!Interfaces.getInventory().isFull()) {
 	        if (!MyPlayer.get().isAnimationPlaying() && !MyPlayer.get().isMoving()) {
 	            NPCs.interactClosestReachable("Lure");

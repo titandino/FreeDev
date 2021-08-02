@@ -7,7 +7,7 @@ import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.util.Utils;
 import com.darkan.cache.def.npcs.NPCDef;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 public class SandCastles extends BeachActivity {
 
@@ -23,7 +23,7 @@ public class SandCastles extends BeachActivity {
 	private int currentNpc;
 	
 	@Override
-	public void loop(ScriptSkeleton ctx) {
+	public void loop(LoopScript ctx) {
 		for (int npcId : SAND_CASTLE_MAP.keySet()) {
 			if (NPCs.getClosest(n -> npcId == n.getId()) != null) {
 				if (WorldObjects.interactClosestReachable("Build", o -> o.getName().equals(SAND_CASTLE_MAP.get(npcId)))) {

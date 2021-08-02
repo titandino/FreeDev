@@ -6,17 +6,17 @@ import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.entity.NPC;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.inter.chat.Message;
-import com.darkan.api.scripting.MessageListener;
+import com.darkan.api.listeners.MessageListener;
 import com.darkan.api.util.Timer;
 import com.darkan.scripts.Script;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Time;
 
 @Script("Hall of Memories")
-public class HallOfMemories extends ScriptSkeleton implements MessageListener {
+public class HallOfMemories extends LoopScript implements MessageListener {
 
 	private static final int MEMORY_JAR_EMPTY = 42898;
 	private static final int MEMORY_JAR_PARTIAL = 42899;

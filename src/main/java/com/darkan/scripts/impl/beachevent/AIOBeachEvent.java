@@ -7,14 +7,14 @@ import com.darkan.api.accessors.NPCs;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.inter.chat.Message;
-import com.darkan.api.scripting.MessageListener;
+import com.darkan.api.listeners.MessageListener;
 import com.darkan.scripts.Script;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 import kraken.plugin.api.ImGui;
 
 @Script("AIO Beach Event")
-public class AIOBeachEvent extends ScriptSkeleton implements MessageListener {
+public class AIOBeachEvent extends LoopScript implements MessageListener {
 	
 	private static Map<String, BeachActivity> ACTIVITIES = new HashMap<>();
 	

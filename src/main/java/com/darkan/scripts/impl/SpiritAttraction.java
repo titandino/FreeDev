@@ -7,13 +7,13 @@ import java.util.Set;
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.entity.NPC;
 import com.darkan.scripts.Script;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Time;
 
 @Script(value = "Spirit Attraction", utility = true)
-public class SpiritAttraction extends ScriptSkeleton {
+public class SpiritAttraction extends LoopScript {
 
 	private static Set<String> SPIRIT_NAMES = new HashSet<>(Arrays.asList(new String[] { 
 			"Seren spirit", "Fire spirit", "Divine blessing", "Divine fire spirit", 

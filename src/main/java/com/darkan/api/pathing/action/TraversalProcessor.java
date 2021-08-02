@@ -9,13 +9,13 @@ import com.darkan.api.pathing.action.node.TraversalNode;
 import com.darkan.api.pathing.action.node.TraversalNodeList;
 import com.darkan.api.world.WorldTile;
 
-public class TraversalAction {
+public class TraversalProcessor {
 	
 	private Supplier<Boolean> finishedCondition;
 	private TraversalNodeList nodes;
 	private TraversalNode curr;
 	
-	public TraversalAction(Supplier<Boolean> finishedCondition, TraversalNodeList nodes) {
+	public TraversalProcessor(Supplier<Boolean> finishedCondition, TraversalNodeList nodes) {
 		this.finishedCondition = finishedCondition;
 		this.nodes = nodes.copy();
 		this.curr = this.nodes.getHead();

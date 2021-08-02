@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 public class Barbeques extends BeachActivity {
     
@@ -12,7 +12,7 @@ public class Barbeques extends BeachActivity {
     private final Random random = new Random();
 	
 	@Override
-	public void loop(ScriptSkeleton ctx) {  
+	public void loop(LoopScript ctx) {  
 	    if (cookingOption.equals("")) {
             if (random.nextBoolean())
                 cookingOption = "Use";

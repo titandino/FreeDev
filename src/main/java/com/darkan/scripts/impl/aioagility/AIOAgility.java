@@ -3,12 +3,12 @@ package com.darkan.scripts.impl.aioagility;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.scripts.Script;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 import kraken.plugin.api.ImGui;
 
 @Script("AIO Agility")
-public class AIOAgility extends ScriptSkeleton {
+public class AIOAgility extends LoopScript {
 	private AgilityNode[] course = Courses.BURTHORPE;
 	private int currNodeIdx = -1;
 

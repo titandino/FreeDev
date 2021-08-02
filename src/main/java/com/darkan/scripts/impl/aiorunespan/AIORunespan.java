@@ -9,14 +9,14 @@ import com.darkan.api.inter.Interfaces;
 import com.darkan.api.world.Interactable;
 import com.darkan.api.world.WorldObject;
 import com.darkan.scripts.Script;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Time;
 
 @Script("AIO Runespan")
-public class AIORunespan extends ScriptSkeleton {
+public class AIORunespan extends LoopScript {
 	public AIORunespan() {
 		super("AIO Runespan");
 	}

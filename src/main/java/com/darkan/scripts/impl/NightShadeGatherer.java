@@ -4,12 +4,12 @@ import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.scripts.Script;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 import kraken.plugin.api.Inventory;
 
 @Script("Gather Nightshades")
-public class NightShadeGatherer extends ScriptSkeleton {
+public class NightShadeGatherer extends LoopScript {
 	
 	public NightShadeGatherer() {
 		super("Gather Nightshades", 250);

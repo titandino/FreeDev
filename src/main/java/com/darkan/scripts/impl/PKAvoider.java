@@ -5,13 +5,13 @@ import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Area;
 import com.darkan.api.world.WorldTile;
 import com.darkan.scripts.Script;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Players;
 
 @Script(value = "PKer Avoider", utility = true)
-public class PKAvoider extends ScriptSkeleton {
+public class PKAvoider extends LoopScript {
 	
 	public static final int RING_OF_FORTUNE = 39808;
 	

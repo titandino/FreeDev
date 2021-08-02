@@ -11,7 +11,7 @@ import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
 import com.darkan.scripts.Script;
-import com.darkan.scripts.ScriptSkeleton;
+import com.darkan.scripts.LoopScript;
 
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Move;
@@ -19,7 +19,7 @@ import kraken.plugin.api.Vector2i;
 import kraken.plugin.api.Bank;
 
 @Script("AIO Woodcut")
-public class AIOWoodcut extends ScriptSkeleton {
+public class AIOWoodcut extends LoopScript {
     
     int selectedTree = 0;
     boolean fletch = false;
