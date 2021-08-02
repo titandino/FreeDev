@@ -1,4 +1,4 @@
-rootProject.name = 'FreeDevAPI'
+rootProject.name = 'FreeDevScripts'
 
 include ':KrakenStub'
 project(':KrakenStub').projectDir = new File("../KrakenStub")
