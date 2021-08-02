@@ -42,14 +42,18 @@ public class MineOre extends State implements MessageListener {
 			ctx.setState("Filling ore box...");
 			return;
 		}
-		SpotAnim rt = SpotAnims.getClosest(sa -> sa.getId() == 7164 || sa.getId() == 7165);
+		SpotAnim rt = getRockertunity();
 		if (rt != null)
 			rock = WorldObjects.getClosestTo(rt != null ? rt.getPosition() : MyPlayer.getPosition(), obj -> obj.hasOption("Mine") && obj.getName().contains(ore.name()) && obj.withinDistance(MyPlayer.getPosition()));
 		if (rock.interact("Mine"))
-			ctx.sleepWhile(3000, Utils.gaussian(9000, 8000), () -> SpotAnims.getClosest(sa -> sa.getId() == 7164 || sa.getId() == 7164) == null && (MyPlayer.get().isMoving() || Interfaces.getInventory().freeSlots() > Utils.random(2, 6)));
+			ctx.sleepWhile(3000, Utils.gaussian(9000, 8000), () -> getRockertunity() == null && (MyPlayer.get().isMoving() || Interfaces.getInventory().freeSlots() > Utils.random(2, 6)));
 		ctx.setState("Mining...");
 	}
 
+	public SpotAnim getRockertunity() {
+		return SpotAnims.getClosest(sa -> sa.getId() == 7164 || sa.getId() == 7164);
+	}
+	
 	@Override
 	public void onMessageReceived(Message message) {
 		if (message.isGame() && message.getText().contains("anything in your backpack into your ore box"))
