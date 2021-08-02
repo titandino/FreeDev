@@ -23,20 +23,22 @@ public class Bank extends State {
 		if (Interfaces.getInventory().freeSlots() < 8)
 			return new MineOre(ore);
 		
-		depositObj = WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)") && obj.withinDistance(MyPlayer.getPosition()));
+		depositObj = getClosestOreBank();
 		if (depositObj == null && ore.getToBank() != null)
-			return new Traversal(this, () -> WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)") && obj.withinDistance(MyPlayer.getPosition())) != null, ore.getToBank());
+			return new Traversal(this, () -> getClosestOreBank() != null, ore.getToBank());
 		return null;
 	}
 
 	@Override
 	public void loop(StateMachineScript ctx) {
-		WorldObject anvil = WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)") && obj.withinDistance(MyPlayer.getPosition()));
-		if (anvil.interact("Deposit-All (Into Metal Bank)"))
+		if (depositObj.interact("Deposit-All (Into Metal Bank)"))
 			ctx.sleepWhile(3000, 20000, () -> Interfaces.getInventory().freeSlots() < 8);
 		if (ore == OreData.Copper || ore == OreData.Tin)
 			ore = ore == OreData.Copper ? OreData.Tin : OreData.Copper;
 		ctx.setState("Depositing into metal bank...");
 	}
-
+	
+	public WorldObject getClosestOreBank() {
+		return WorldObjects.getClosest(obj -> obj.hasOption("Deposit-All (Into Metal Bank)") && obj.withinDistance(MyPlayer.getPosition()));
+	}
 }

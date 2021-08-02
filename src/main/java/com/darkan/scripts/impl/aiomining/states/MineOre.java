@@ -28,9 +28,9 @@ public class MineOre extends State implements MessageListener {
 	public State checkNext() {
 		if (oreBoxFilled && Interfaces.getInventory().isFull() /*MyPlayer.getVars().getVarBit(currentOre.getVarbit()) < 120*/)
 			return new Bank(ore);
-		rock = WorldObjects.getClosestTo(MyPlayer.getPosition(), obj -> obj.hasOption("Mine") && obj.getName().contains(ore.name()) && obj.withinDistance(MyPlayer.getPosition()));
+		rock = getClosestRock();
 		if (rock == null && ore.getFromBank() != null)
-			return new Traversal(this, () -> WorldObjects.getClosestReachable(obj -> obj.hasOption("Mine") && obj.getName().contains(ore.name()) && obj.withinDistance(MyPlayer.getPosition())) != null, ore.getFromBank());
+			return new Traversal(this, () -> getClosestRock() != null, ore.getFromBank());
 		return null;
 	}
 
@@ -52,6 +52,10 @@ public class MineOre extends State implements MessageListener {
 		if (rock.interact("Mine"))
 			ctx.sleepWhile(3000, Utils.gaussian(9000, 8000), () -> getRockertunity() == null && (MyPlayer.get().isMoving() || Interfaces.getInventory().freeSlots() > Utils.random(2, 6)));
 		ctx.setState("Mining...");
+	}
+	
+	public WorldObject getClosestRock() {
+		return WorldObjects.getClosestReachable(obj -> obj.hasOption("Mine") && obj.getName().contains(ore.name()) && obj.withinDistance(MyPlayer.getPosition()));
 	}
 
 	public SpotAnim getRockertunity() {
