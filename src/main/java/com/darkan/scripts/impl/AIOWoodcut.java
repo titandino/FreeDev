@@ -22,8 +22,6 @@ import kraken.plugin.api.Bank;
 public class AIOWoodcut extends LoopScript {
     
     int selectedTree = 0;
-    boolean fletch = false;
-    boolean firemake = false;
     boolean drop = false;
     boolean bank = true;
     boolean fullInventory = true;
@@ -50,7 +48,7 @@ public class AIOWoodcut extends LoopScript {
 		
 		if (Interfaces.getInventory().isFull())
 		    fullInventory = true;
-		else if (!Interfaces.getInventory().containsAnyReg("(?i)logs") && !Interfaces.getInventory().containsAnyReg("(u)")) //Leave the inventory as "full" until the player has finished fletching/firemaking/banking
+		else if (!Interfaces.getInventory().containsAnyReg("(?i)logs"))
 		    fullInventory = false;
 		
 		if (!fullInventory) {
@@ -64,8 +62,7 @@ public class AIOWoodcut extends LoopScript {
                 sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
                 return;
             }
-    		
-    		if (WorldObjects.interactClosestReachable(getTree().equals("Ivy") ? "Chop" : "Chop down", object -> object.getName().equals(getTree()) && (object.hasOption("Chop") || object.hasOption("Chop down")))) {
+    		if (WorldObjects.interactClosestReachable("Chop down", object -> object.getName().equals(getTree()) && object.hasOption("Chop down"))) {
     		    setState("Cutting " + getTree());
     		    sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
     	        return;
@@ -73,40 +70,22 @@ public class AIOWoodcut extends LoopScript {
 		}
 
 		if (fullInventory) {
-//	        if (fletch && Interfaces.getInventory().isFull()) {
-//	            setState("Fletching");
-//	            //do fletching logic
-//	            sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
-//	            return;
-//	        }
-//    		if (firemake && Interfaces.getInventory().freeSlots() <= 1) {
-//    		    setState("Firemaking");
-//    		    WorldObject fire = WorldObjects.getClosest(object -> object.getName() == "Fire" && object.hasOption("Use"));//do firemaking logic
-//    		    if (fire == null) {
-//    		        Interfaces.getInventory().clickItemReg("(?i)logs", "Light");
-//    		        return;
-//    		    }
-//    		    //fire.interact("Use");
-//    		    //Interface: 1179, child: 17, slot: 17
-//                sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
-//    		    return;
-//    		}
     		if (drop) {
     		    setState("Dropping items");
     		    Interfaces.getInventory().clickItemReg("(?i)logs", "Drop");
-    		    Interfaces.getInventory().clickItemReg("(u)", "Drop");
     	        sleep(Utils.gaussian(100, 300));
     		    return;
     		}
     		if (bank && Interfaces.getInventory().isFull() && Bank.isOpen()) {
     		    setState("Banking items");
     	        Interfaces.getBankInventory().clickItemReg("(?i)logs", "Deposit-All");
-    	        Interfaces.getBankInventory().clickItemReg("(u)", "Deposit-All");
+    	        sleep(Utils.gaussian(1200, 1200));
     	        return;
     		}
     		if (bank && Interfaces.getInventory().isFull() && !Bank.isOpen()) {
     		    setState("Running to bank");
     		    if (!openBank()) {
+    		        System.out.println("Failed to open bank");
     		        bank = false;
     		        return;
     		    }
@@ -140,10 +119,8 @@ public class AIOWoodcut extends LoopScript {
 	    ImGui.label("\n\n");
 	    
 	    paused = ImGui.checkbox("Script paused", paused);
-	    //fletch = ImGui.checkbox("Fletch logs", fletch && !firemake);
-	    //firemake = ImGui.checkbox("Firemake logs", firemake && (!fletch && !bank));
-	    drop = ImGui.checkbox("Drop logs", (drop && (!firemake && !bank)) || (!firemake && !bank));
-	    bank = ImGui.checkbox("Bank", bank && (!firemake && !drop));
+	    drop = ImGui.checkbox("Drop logs", drop || !bank);
+	    bank = ImGui.checkbox("Bank", bank && !drop);
 	    
 	    ImGui.label("\n\n");
 	    
@@ -171,7 +148,7 @@ public class AIOWoodcut extends LoopScript {
 	}
 	
 	private boolean openBank() {
-	    WorldObject nearestBank = WorldObjects.getClosest(object -> object.hasOption("Bank") || object.getName().equals("Bank booth") || (object.getName().equals("Bank chest") || object.getName().equals("Deposit box")));
+	    WorldObject nearestBank = WorldObjects.getClosest(object -> object.hasOption("Bank") || object.getName().equals("Bank booth") || (object.getName().equals("Bank chest")));
 	    NPC nearestBanker = NPCs.getClosest(object -> object.hasOption("Bank"));
 	    
 	    int objectDistance = -1, npcDistance = -1;
@@ -180,6 +157,9 @@ public class AIOWoodcut extends LoopScript {
 	        objectDistance = Utils.getRouteDistanceTo(MyPlayer.getPosition(), nearestBank);
 	    if (nearestBanker != null)
 	        npcDistance = Utils.getRouteDistanceTo(MyPlayer.getPosition(), nearestBanker);
+	    
+	    System.out.println("objDist: " + objectDistance);
+	    System.out.println("npcDist: " + npcDistance);
 	    
 	    if (objectDistance != -1 && npcDistance != -1)
 	        return (objectDistance < npcDistance ? (nearestBank.hasOption("Bank") ? nearestBank.interact("Bank") : nearestBank.interact("Use")) : nearestBanker.interact("Bank"));
