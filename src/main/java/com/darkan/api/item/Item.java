@@ -8,7 +8,6 @@ import com.darkan.api.world.WorldObject;
 import com.darkan.cache.def.items.ItemDef;
 
 import kraken.plugin.api.Actions;
-import kraken.plugin.api.Debug;
 
 public class Item {
 	
@@ -89,9 +88,8 @@ public class Item {
 			op = getDef().getEquipOpIdForName(option);
 			op += 2;
 		}
-		if (slot.getInterfaceId() == Interfaces.getInventory().getInterfaceId()) {
+		if (slot.isChild(Interfaces.getInventory())) {
 			op = getDef().getInvOpIdForName(option);
-			Debug.log("invent option: " + op);
 			op = switch(op) {
 				case 0 -> 1;
 				case 1 -> 2;
@@ -100,8 +98,7 @@ public class Item {
 				case 4 -> 8;
 				default -> -1;
 			};
-		}
-        if (slot.getInterfaceId() == Interfaces.getBankInventory().getInterfaceId()) {
+		} else if (slot.isChild(Interfaces.getBankInventory())) {
             op = switch(option) {
                 case "Deposit-1" -> 2;
                 case "Deposit-5" -> 3;
@@ -111,8 +108,7 @@ public class Item {
                 case "Deposit-All" -> 7;
                 default -> 1;
             };
-        }
-        if (slot.getInterfaceId() == Interfaces.getDepositBox().getInterfaceId()) {
+        } else if (slot.isChild(Interfaces.getDepositBox())) {
             op = switch(option) {
                 case "Deposit-1" -> 2;
                 case "Deposit-5" -> 3;
@@ -121,8 +117,7 @@ public class Item {
                 case "Deposit-X" -> 6;
                 default -> 1;
             };
-        }
-        if (slot.getInterfaceId() == Interfaces.getBank().getInterfaceId()) {
+        } else if (slot.isChild(Interfaces.getBank())) {
             op = switch(option) {
                 case "Withdraw-1" -> 1;
                 case "Withdraw-5" -> 3;

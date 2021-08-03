@@ -86,5 +86,9 @@ public class IFSlot {
 			s.append("\t\tItem: \"" + item + "\"\r\n");
 		return s.toString();
 	}
+
+	public boolean isChild(IFComponent component) {
+		return this.interfaceId == component.interfaceId && this.componentId == component.componentId;
+	}
 }
 
