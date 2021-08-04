@@ -3,6 +3,9 @@ package com.darkan.scripts;
 import com.darkan.api.inter.chat.Message;
 import com.darkan.api.listeners.MessageListener;
 
+import kraken.plugin.api.ImGui;
+import kraken.plugin.api.Time;
+
 public abstract class StateMachineScript extends LoopScript implements MessageListener {
 	
 	private State currState;
@@ -30,8 +33,13 @@ public abstract class StateMachineScript extends LoopScript implements MessageLi
 	public abstract State getStartState();
 	
 	@Override
-	public void setState(String state) {
-		super.setState((currState == null ? "None" : currState.getClass().getSimpleName()) + " -> " + state);
+	public void onPaint() {
+		long runtime = System.currentTimeMillis() - getStarted();
+		ImGui.label(getName() + " - " + Time.formatTime(runtime));
+		ImGui.label("Current sub-state: " + (currState == null ? "None" : currState.getClass().getSimpleName()));
+		ImGui.label(getState());
+		ImGui.label(getError());
+		paintImGui(runtime);
 	}
 	
 	@Override

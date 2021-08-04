@@ -20,7 +20,7 @@ public class Bank extends State {
 
 	@Override
 	public State checkNext() {
-		if (Interfaces.getInventory().freeSlots() < 8)
+		if (Interfaces.getInventory().freeSlots() > 8)
 			return new MineOre(ore);
 		
 		depositObj = getClosestOreBank();

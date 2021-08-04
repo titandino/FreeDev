@@ -169,4 +169,20 @@ public abstract class LoopScript {
 	public void onVarChange() {
 
 	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public long getStarted() {
+		return started;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public String getError() {
+		return error;
+	}
 }
