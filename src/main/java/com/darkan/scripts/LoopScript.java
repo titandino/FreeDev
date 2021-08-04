@@ -34,7 +34,6 @@ public abstract class LoopScript {
 	private Supplier<Boolean> sleepConstraint;
 	private long sleepWhileMax = -1;
 	private long sleepWhileMin = -1;
-	private int sleepWhileExtra;
 
 	private int localPlayerAtt = 0;
 
@@ -88,7 +87,7 @@ public abstract class LoopScript {
 			if (sleepConstraint != null) {
 				if (System.currentTimeMillis() >= sleepWhileMin && (!sleepConstraint.get() || System.currentTimeMillis() >= sleepWhileMax))
 					sleepConstraint = null;
-				return loopDelay + sleepWhileExtra;
+				return loopDelay;
 			}
 
 			if (nextRun < System.currentTimeMillis()) {
@@ -120,14 +119,6 @@ public abstract class LoopScript {
 		sleepConstraint = constraint;
 		sleepWhileMin = System.currentTimeMillis() + minTime;
 		sleepWhileMax = System.currentTimeMillis() + maxTime;
-		sleepWhileExtra = 0;
-	}
-
-	public void sleepWhile(long minTime, long maxTime, int extraDelay, Supplier<Boolean> constraint) {
-		sleepWhileMin = System.currentTimeMillis() + minTime;
-		sleepWhileMax = System.currentTimeMillis() + maxTime;
-		sleepWhileExtra = extraDelay;
-		sleepConstraint = constraint;
 	}
 
 	public void printGenericXpGain(long runtime) {
@@ -151,7 +142,7 @@ public abstract class LoopScript {
 		paintOverlay(runtime);
 	}
 
-	public final void setState(String state) {
+	public void setState(String state) {
 		this.state = state;
 	}
 

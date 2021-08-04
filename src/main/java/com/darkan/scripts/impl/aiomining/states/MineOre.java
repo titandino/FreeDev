@@ -26,7 +26,7 @@ public class MineOre extends State implements MessageListener {
 	
 	@Override
 	public State checkNext() {
-		if (oreBoxFilled && Interfaces.getInventory().isFull() /*MyPlayer.getVars().getVarBit(currentOre.getVarbit()) < 120*/)
+		if ((Interfaces.getInventory().getItemReg("ore box") == null || oreBoxFilled) && Interfaces.getInventory().isFull() /*MyPlayer.getVars().getVarBit(currentOre.getVarbit()) < 120*/)
 			return new Bank(ore);
 		rock = getClosestRock();
 		if (rock == null && ore.getFromBank() != null)
@@ -36,11 +36,7 @@ public class MineOre extends State implements MessageListener {
 
 	@Override
 	public void loop(StateMachineScript ctx) {
-		if (!oreBoxFilled && Interfaces.getInventory().freeSlots() <= Utils.random(2, 6)) {
-			if (Interfaces.getInventory().getItemReg("ore box") == null) {
-				oreBoxFilled = true;
-				return;
-			}
+		if (Interfaces.getInventory().getItemReg("ore box") != null && !oreBoxFilled && Interfaces.getInventory().freeSlots() <= Utils.random(2, 6)) {
 			if (Interfaces.getInventory().clickItemReg("ore box", "Fill"))
 				ctx.sleep(Utils.gaussian(2000, 1000));
 			ctx.setState("Filling ore box...");

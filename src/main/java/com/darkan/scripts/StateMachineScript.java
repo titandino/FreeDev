@@ -30,6 +30,11 @@ public abstract class StateMachineScript extends LoopScript implements MessageLi
 	public abstract State getStartState();
 	
 	@Override
+	public void setState(String state) {
+		super.setState((currState == null ? "None" : currState.getClass().getSimpleName()) + " -> " + state);
+	}
+	
+	@Override
 	public void onMessageReceived(Message message) {
 		if (currState != null && currState instanceof MessageListener)
 			((MessageListener)currState).onMessageReceived(message);
