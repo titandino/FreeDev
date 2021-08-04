@@ -8,7 +8,7 @@ import com.darkan.scripts.impl.aiomining.states.MineOre;
 @Script("AIO Mining")
 public class AIOMining extends StateMachineScript {
 	
-	private OreData currentOre = OreData.Coal;
+	private OreData currentOre = OreData.Copper;
 
 	public AIOMining() {
 		super("AIO Mining");

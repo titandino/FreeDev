@@ -59,7 +59,7 @@ public class MineOre extends State implements MessageListener {
 	}
 
 	public SpotAnim getRockertunity() {
-		return SpotAnims.getClosest(sa -> sa.getId() == 7164 || sa.getId() == 7164);
+		return SpotAnims.getClosest(sa -> sa.getId() == 7164 || sa.getId() == 7165);
 	}
 	
 	@Override
