@@ -10,4 +10,5 @@ import java.lang.annotation.Target;
 public @interface Script {
 	String value();
 	boolean utility() default false;
+	boolean debugOnly() default false;
 }

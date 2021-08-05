@@ -56,8 +56,11 @@ public final class BasePlugin extends AbstractPlugin {
 	private void loadScripts() {
     	try {
 	    	List<Class<?>> classes = Utils.getClassesWithAnnotation("com.darkan.scripts.impl", Script.class);
-			for (Class<?> clazz : classes)
+			for (Class<?> clazz : classes) {
+				if (!Settings.getConfig().isDebug() && clazz.getAnnotationsByType(Script.class)[0].debugOnly())
+					continue;
 				scriptTypes.put(clazz.getAnnotationsByType(Script.class)[0].value(), (Class<? extends LoopScript>) clazz);
+			}
 			orderedNames = new ArrayList<>(scriptTypes.keySet());
 		   	Collections.sort(orderedNames);
 			Debug.log("Parsed scripts: " + scriptTypes.keySet().toString());

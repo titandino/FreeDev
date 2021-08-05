@@ -1,19 +1,17 @@
-package com.darkan.scripts.impl.aiomining;
+package com.darkan.scripts.impl.shatteredworlds;
 
 import com.darkan.scripts.Script;
 import com.darkan.scripts.State;
 import com.darkan.scripts.StateMachineScript;
-import com.darkan.scripts.impl.aiomining.states.MineOre;
+import com.darkan.scripts.impl.shatteredworlds.states.DebugState;
 
-@Script(value = "AIO Mining", debugOnly = true)
-public class AIOMining extends StateMachineScript {
-	
-	private OreData currentOre = OreData.Copper;
+@Script(value = "Shattered Worlds", debugOnly = true)
+public class ShatteredWorlds extends StateMachineScript {
 
-	public AIOMining() {
-		super("AIO Mining");
+	public ShatteredWorlds() {
+		super("Shattered Worlds", 200);
 	}
-
+	
 	@Override
 	public boolean onStart() {
 		return true;
@@ -21,7 +19,7 @@ public class AIOMining extends StateMachineScript {
 
 	@Override
 	public State getStartState() {
-		return new MineOre(currentOre);
+		return new DebugState();
 	}
 
 	@Override
@@ -38,4 +36,5 @@ public class AIOMining extends StateMachineScript {
 	public void onStop() {
 		
 	}
+
 }

@@ -16,7 +16,7 @@ import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Vector2i;
 
-@Script(value = "Debug", utility = true)
+@Script(value = "Debug", utility = true, debugOnly = true)
 public class Debug extends LoopScript implements MessageListener {
 	
 	public Debug() {

@@ -61,6 +61,10 @@ public class IFSlot {
 			return null;
 		}
 	}
+	
+	public IFComponent getParent() {
+		return new IFComponent(interfaceId, componentId);
+	}
 
 	public int getInterfaceId() {
 		return interfaceId;
