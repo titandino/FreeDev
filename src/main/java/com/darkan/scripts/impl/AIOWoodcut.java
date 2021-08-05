@@ -67,7 +67,7 @@ public class AIOWoodcut extends LoopScript {
     		    sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
     	        return;
     		}
-    		if (WorldObjects.interactClosestReachable("Cut down", object -> object.getName().equals(getTree()) && object.hasOption("Chop down"))) {
+    		if (WorldObjects.interactClosestReachable("Cut down", object -> object.getName().equals(getTree()) && object.hasOption("Cut down"))) {
     		    setState("Cutting " + getTree());
     		    sleepWhile(Integer.MAX_VALUE, () -> MyPlayer.get().isAnimationPlaying());
     	        return;
