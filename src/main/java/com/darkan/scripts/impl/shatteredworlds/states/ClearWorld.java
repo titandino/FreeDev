@@ -51,8 +51,10 @@ public class ClearWorld extends State implements MessageListener {
 			ctx.setState("Equipping chosen combat style...");
 			return;
 		}
-		if (Interfaces.getInventory().isFull() || MyPlayer.getHealthPerc() < 50.0)
+		if (Interfaces.getInventory().isFull() || MyPlayer.getHealthPerc() < 50.0) {
 			Interfaces.getInventory().clickItemReg("chicken", "Eat");
+			ctx.sleep(1200);
+		}
 		if (MyPlayer.get().isMoving() || MyPlayer.get().getInteractingIndex() != -1)
 			return;
 		if (NPCs.interactClosest("Attack")) {
