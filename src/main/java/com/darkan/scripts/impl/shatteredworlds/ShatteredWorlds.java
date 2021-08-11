@@ -1,12 +1,15 @@
 package com.darkan.scripts.impl.shatteredworlds;
 
+import com.darkan.cache.def.items.ItemDef.CombatStyle;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.State;
 import com.darkan.scripts.StateMachineScript;
-import com.darkan.scripts.impl.shatteredworlds.states.DebugState;
+import com.darkan.scripts.impl.shatteredworlds.states.StartWorld;
 
 @Script(value = "Shattered Worlds", debugOnly = true)
 public class ShatteredWorlds extends StateMachineScript {
+	
+	public CombatStyle attackStyle = CombatStyle.MAGIC_AIR;
 
 	public ShatteredWorlds() {
 		super("Shattered Worlds", 200);
@@ -19,7 +22,7 @@ public class ShatteredWorlds extends StateMachineScript {
 
 	@Override
 	public State getStartState() {
-		return new DebugState();
+		return new StartWorld();
 	}
 
 	@Override
@@ -37,4 +40,7 @@ public class ShatteredWorlds extends StateMachineScript {
 		
 	}
 
+	public CombatStyle getAttackStyle() {
+		return attackStyle;
+	}
 }

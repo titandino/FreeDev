@@ -150,7 +150,7 @@ public class WorldObjects {
     }
 
     public static boolean interactClosest(String option, Filter<WorldObject> filter) {
-        WorldObject obj = getClosest(filter);
+        WorldObject obj = getClosest(o -> o.hasOption(option) && filter.accept(o));
         if (obj == null)
             return false;
         obj.interact(option);

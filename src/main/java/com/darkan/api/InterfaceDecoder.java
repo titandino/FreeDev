@@ -2,6 +2,8 @@ package com.darkan.api;
 
 import java.io.IOException;
 
+import com.darkan.cache.def.objects.ObjectDef;
+
 public class InterfaceDecoder {
 	
 	public static void main(String[] args) throws IOException {
@@ -12,6 +14,9 @@ public class InterfaceDecoder {
 		
 		System.out.println("Interface: " + interfaceId + ", child: " + childId + ", slot: " + slotId);
 		System.out.println("Encoded matches: " + (interfaceId << 16 | childId) + " - " + hash);
+		
+		
+		System.out.println(ObjectDef.get(106707));
 	}
 
 }

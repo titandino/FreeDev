@@ -1,11 +1,15 @@
 package com.darkan.api.inter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import com.darkan.api.item.Item;
+
+import kraken.plugin.api.Filter;
 
 public class ItemContainer extends IFComponent {
 
@@ -172,5 +176,20 @@ public class ItemContainer extends IFComponent {
 			if (item == null || item.getId() == -1)
 				free++;
 		return free;
+	}
+
+	public Item getItem(Filter<Item> filter) {
+		for (Item item : getItems())
+			if (item != null && item.getId() != -1 && filter.accept(item))
+				return item;
+		return null;
+	}
+	
+	public List<Item> getItems(Filter<Item> filter) {
+		List<Item> items = new ArrayList<Item>();
+		for (Item item : getItems())
+			if (item != null && item.getId() != -1 && filter.accept(item))
+				items.add(item);
+		return items;
 	}
 }

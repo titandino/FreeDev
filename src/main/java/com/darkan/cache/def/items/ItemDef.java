@@ -3,6 +3,8 @@ package com.darkan.cache.def.items;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.darkan.Constants;
 import com.darkan.api.item.Item;
@@ -10,6 +12,7 @@ import com.darkan.api.util.Utils;
 import com.darkan.cache.Cache;
 import com.darkan.cache.def.enums.EnumDef;
 import com.darkan.cache.def.params.Params;
+import com.darkan.cache.def.structs.StructDef;
 import kraken.plugin.api.Client;
 
 public class ItemDef {
@@ -334,6 +337,54 @@ public class ItemDef {
 	
 	public double getCreationExperience() {
 		return params.getInt(2697)/10;
+	}
+	
+	public StructDef getCombatMap() {
+		int structId = params.getInt(686, 0);
+		if (structId != 0)
+			return StructDef.get(structId);
+		return null;
+	}
+
+	public int getCombatOpcode(int opcode) {
+		if (params.getInt(opcode, -1) != -1)
+			return params.getInt(opcode, -1);
+		StructDef combatStruct = getCombatMap();
+		return combatStruct == null ? -1 : combatStruct.params.getInt(opcode);
+	}
+	
+	public enum CombatStyle {
+		MAGIC_AIR(1),
+		MAGIC_WATER(2),
+		MAGIC_EARTH(3),
+		MAGIC_FIRE(4),
+		MELEE_STAB(5),
+		MELEE_SLASH(6),
+		MELEE_CRUSH(7),
+		RANGE_BOW(8),
+		RANGE_CROSSBOW(9),
+		RANGE_THROWN(10);
+		
+		private static Map<Integer, CombatStyle> MAP = new HashMap<>();
+		
+		static {
+			for (CombatStyle c : CombatStyle.values())
+				MAP.put(c.id, c);
+		}
+		
+		private int id;
+	
+		private CombatStyle(int id) {
+			this.id = id;
+		}
+		
+		public static CombatStyle forId(int id) {
+			return MAP.get(id);
+		}
+	}
+
+	public CombatStyle getCombatStyle() {
+		return CombatStyle.forId(getCombatOpcode(2853));
 	}
 	
 	private static ItemDefParser PARSER = new ItemDefParser();
