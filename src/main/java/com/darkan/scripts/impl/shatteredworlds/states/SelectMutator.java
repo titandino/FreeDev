@@ -32,7 +32,7 @@ public class SelectMutator extends State {
 	
 	@Override
 	public State checkNext() {
-		if (ClearWorld.getObjective() != null)
+		if (ClearWorld.getObjective() != null && !ClearWorld.getObjective().contains("you are dead") && !ClearWorld.getObjective().contains("new objective"))
 			return new ClearWorld();
 		if (!isOpen())
 			return new StartWorld();

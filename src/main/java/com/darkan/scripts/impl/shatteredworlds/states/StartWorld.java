@@ -17,16 +17,16 @@ public class StartWorld extends State implements MessageListener {
 	public State checkNext() {
 		if (SelectMutator.isOpen())
 			return new SelectMutator();
-		if (SelectWorld.isOpen())
+		if (SelectWorld.isOpen() || SelectWorld.worldCompleteOpen())
 			return new SelectWorld();
-		if (ClearWorld.getObjective() != null)
+		if (ClearWorld.getObjective() != null && !ClearWorld.getObjective().contains("you are dead") && !ClearWorld.getObjective().contains("new objective"))
 			return new ClearWorld();
 		return null;
 	}
 
 	@Override
 	public void loop(StateMachineScript ctx) {
-		if (OUTSIDE.withinDistance(MyPlayer.getPosition(), 50)) {
+		if (OUTSIDE.withinDistance(MyPlayer.getPosition(), 50) || WorldObjects.getClosest(o -> o.hasOption("Return to Shattered Worlds")) != null) {
 			if (WorldObjects.interactClosest("Enter", obj -> obj.getDef().name.equals("Shattered Worlds portal")) || WorldObjects.interactClosest("Return to Shattered Worlds")) {
 				ctx.sleepWhile(3000, 10000, () -> !SelectWorld.isOpen() && !SelectMutator.isOpen());
 				ctx.setState("Clicking portal...");
