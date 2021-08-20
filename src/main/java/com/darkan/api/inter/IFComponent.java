@@ -28,7 +28,7 @@ public class IFComponent {
 		return click(option, -1);
 	}
 	
-	public boolean clickDialogue(int slotId) {
+	public boolean dialContinue(int slotId) {
 		if (isOpen()) {
 			Actions.menu(Actions.MENU_EXECUTE_DIALOGUE, 0, slotId, getHash(), Utils.random(0, Integer.MAX_VALUE));
 			return true;
@@ -36,8 +36,8 @@ public class IFComponent {
 		return false;
 	}
 	
-	public boolean clickDialogue() {
-		return clickDialogue(-1);
+	public boolean dialContinue() {
+		return dialContinue(-1);
 	}
 
 	public int getHash() {

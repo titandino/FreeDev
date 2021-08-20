@@ -9,7 +9,7 @@ import com.darkan.scripts.impl.shatteredworlds.states.StartWorld;
 @Script(value = "Shattered Worlds", debugOnly = true)
 public class ShatteredWorlds extends StateMachineScript {
 	
-	public CombatStyle attackStyle = CombatStyle.MAGIC_AIR;
+	public CombatStyle attackStyle = CombatStyle.RANGE_CROSSBOW;
 
 	public ShatteredWorlds() {
 		super("Shattered Worlds", 200);

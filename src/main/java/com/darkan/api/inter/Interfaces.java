@@ -46,6 +46,14 @@ public class Interfaces {
 	public static boolean click(int option, int interfaceId, int componentId) {
 		return new IFComponent(interfaceId, componentId).click(option, -1);
 	}
+	
+	public static boolean dialContinue(int interfaceId, int componentId, int slotId) {
+		return new IFComponent(interfaceId, componentId).dialContinue(slotId);
+	}
+	
+	public static boolean dialContinue(int interfaceId, int componentId) {
+		return new IFComponent(interfaceId, componentId).dialContinue();
+	}
 
 	public static ItemContainer getInventory() {
 		return INVENTORY;

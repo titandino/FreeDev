@@ -31,7 +31,7 @@ public class SelectMutator extends State {
 	private static final IFSlot[] MUTATORS = { new IFSlot(1868, 0, 2), new IFSlot(1868, 1, 2), new IFSlot(1868, 5, 2) };
 	
 	@Override
-	public State checkNext() {
+	public State checkNext() { //need a way of checking on mutator if you're still in a world
 		if (ClearWorld.getObjective() != null && !ClearWorld.getObjective().contains("you are dead") && !ClearWorld.getObjective().contains("new objective"))
 			return new ClearWorld();
 		if (!isOpen())
