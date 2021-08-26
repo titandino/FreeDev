@@ -1,7 +1,9 @@
 package com.darkan.scripts.impl;
 
+import com.darkan.api.accessors.NPCs;
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
+import com.darkan.api.entity.NPC;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.inter.chat.Message;
 import com.darkan.api.listeners.MessageListener;
@@ -11,10 +13,7 @@ import com.darkan.api.world.WorldTile;
 import com.darkan.scripts.Script;
 import com.darkan.scripts.LoopScript;
 
-import kraken.plugin.api.Client;
-import kraken.plugin.api.ImGui;
-import kraken.plugin.api.Player;
-import kraken.plugin.api.Vector2i;
+import kraken.plugin.api.*;
 
 @Script(value = "Debug", utility = true, debugOnly = true)
 public class Debug extends LoopScript implements MessageListener {
@@ -25,6 +24,8 @@ public class Debug extends LoopScript implements MessageListener {
 
 	Player myPlayer;
 	int interfaceId = 0;
+	private int npcId;
+	private NPC npc;
 	
 	@Override
 	public boolean onStart() {
@@ -38,7 +39,7 @@ public class Debug extends LoopScript implements MessageListener {
 	
 	@Override
 	public void onMessageReceived(Message message) {
-		Interfaces.getInventory().getItemReg("torch").useOn(WorldObjects.getClosest(obj -> obj.getName().contains("Tree")));
+		//Interfaces.getInventory().getItemReg("torch").useOn(WorldObjects.getClosest(obj -> obj.getName().contains("Tree")));
 	}
 	
 	@Override
@@ -60,6 +61,15 @@ public class Debug extends LoopScript implements MessageListener {
 			} catch (Exception e) {
 				System.out.println("Error dumping interface");
 			}
+		}
+		ImGui.label("Player Animation: "+ Players.self().getAnimationId());
+		npcId = ImGui.intInput("NPC ID", npcId);
+		if(npcId != 0) {
+			if(npc == null || npc.getId() != npcId) {
+				npc = NPCs.getClosest(n -> n.getId() == npcId);
+			}
+			if(npc != null)
+				ImGui.label("NPC Animation: "+npc.getAnimationId());
 		}
 	}
 

@@ -1,8 +1,10 @@
 package com.darkan.api.world;
 
 import com.darkan.api.profile.PlayerProfiles;
+import com.darkan.api.util.Area;
 import com.darkan.api.util.Utils;
 
+import kraken.plugin.api.Vector2i;
 import kraken.plugin.api.Vector3i;
 
 public class WorldTile {
@@ -69,6 +71,10 @@ public class WorldTile {
 		this.x = (short) x;
 		this.y = (short) y;
 		this.plane = (byte) plane;
+	}
+
+	public boolean isAt(WorldTile tile) {
+		return this.x == tile.x && this.y == tile.y && this.plane == tile.plane;
 	}
 
 	public boolean isAt(int x, int y) {
@@ -203,6 +209,14 @@ public class WorldTile {
 		return Math.max(deltaX, deltaY);
 	}
 	
+	public WorldTile getOffset(WorldTile tile) {
+		return new WorldTile(getX()-tile.getX(), getY()-tile.getY());
+	}
+
+	public WorldTile transform(WorldTile tile) {
+		return transform(tile.getX(), tile.getY(), tile.getPlane());
+	}
+	
 	public WorldTile transform(int x, int y) {
 		return transform(x, y, 0);
 	}
@@ -211,12 +225,20 @@ public class WorldTile {
 		return new WorldTile(this.x + x, this.y + y, this.plane + plane);
 	}
 
+	public Vector2i toVector2i() {
+		return new Vector2i(getX(), getY());
+	}
+
 	public boolean matches(WorldTile other) {
 		return x == other.x && y == other.y && plane == other.plane;
 	}
 
 	public boolean withinArea(int a, int b, int c, int d) {
 		return getX() >= a && getY() >= b && getX() <= c && getY() <= d;
+	}
+
+	public Area area(int radius) {
+		return new Area(new WorldTile(getX()-radius, getY()-radius), new WorldTile(getX()+radius, getY()+radius));
 	}
 
 	@Override

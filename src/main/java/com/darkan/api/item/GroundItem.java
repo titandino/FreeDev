@@ -39,6 +39,10 @@ public class GroundItem implements Interactable {
 		return getDef().containsGroundOp(option);
 	}
 
+	public void pickup() {
+		interact(2);
+	}
+
 	@Override
 	public boolean interact(int option) {
 		if (option == 2) {

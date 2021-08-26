@@ -18,7 +18,7 @@ public final class Settings {
 	}
 
 	private String cachePath;
-	private boolean debug = false;
+	private boolean debug;
 	
 	public Settings() {
 		this.cachePath = "C:/ProgramData/Jagex/RuneScape/";

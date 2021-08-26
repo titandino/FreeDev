@@ -4,12 +4,19 @@ import com.darkan.api.item.Item;
 import com.darkan.api.util.Utils;
 
 import kraken.plugin.api.Actions;
+import kraken.plugin.api.Widget;
+import kraken.plugin.api.WidgetGroup;
 import kraken.plugin.api.Widgets;
 
 public class IFComponent {
 
 	protected int interfaceId;
 	protected int componentId;
+
+	public IFComponent(int hash) {
+		this.interfaceId = hash >> 16;
+		this.componentId = (hash & 0xFF);
+	}
 
 	public IFComponent(int id, int componentId) {
 		this.interfaceId = id;
@@ -93,6 +100,12 @@ public class IFComponent {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	public Widget getWidget() {
+		WidgetGroup group = Widgets.getGroupById(interfaceId);
+		if(group == null || group.getWidgets() == null || group.getWidgets().length < componentId+1) return null;
+		return group.getWidgets()[componentId];
 	}
 
 	public int getInterfaceId() {

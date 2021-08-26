@@ -4,6 +4,9 @@ import com.darkan.api.world.WorldTile;
 
 import kraken.plugin.api.Vector3i;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Area {
 
 	private int minX;
@@ -33,5 +36,39 @@ public class Area {
 	
 	public boolean inside(Vector3i tile) {
 		return tile.getX() >= minX && tile.getX() <= maxX && tile.getY() >= minY && tile.getY() <= maxY;
+	}
+
+	public WorldTile[] toTiles() {
+		List<WorldTile> tiles = new ArrayList<>();
+		for(int x = minX; x <= maxX; x++) {
+			for(int y = minY; y <= maxY; y++) {
+				tiles.add(new WorldTile(x, y));
+			}
+		}
+		return tiles.toArray(WorldTile[]::new);
+	}
+
+	public String toCopyString() {
+		return "new Area(new WorldTile("+getMinX()+", "+getMinY()+"), new WorldTile("+getMaxX()+", "+getMaxY()+"))";
+	}
+
+	public int getMinX() {
+		return minX;
+	}
+
+	public int getMaxX() {
+		return maxX;
+	}
+
+	public int getMinY() {
+		return minY;
+	}
+
+	public int getMaxY() {
+		return maxY;
+	}
+
+	public String toString() {
+		return "["+minX+", "+minY+"] x ["+maxX+", "+maxY+"]";
 	}
 }

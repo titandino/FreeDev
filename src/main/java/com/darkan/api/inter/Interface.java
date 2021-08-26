@@ -21,6 +21,10 @@ public class Interface {
 		return components;
 	}
 
+	public boolean isOpen() {
+		return Widgets.getGroupById(id) != null && getComponents() != null;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
