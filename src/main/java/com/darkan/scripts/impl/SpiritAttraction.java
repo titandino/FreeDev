@@ -6,8 +6,8 @@ import java.util.Set;
 
 import com.darkan.api.accessors.NPCs;
 import com.darkan.api.entity.NPC;
-import com.darkan.scripts.Script;
 import com.darkan.scripts.LoopScript;
+import com.darkan.scripts.Script;
 
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Time;

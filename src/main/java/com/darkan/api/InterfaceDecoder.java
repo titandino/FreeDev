@@ -2,9 +2,6 @@ package com.darkan.api;
 
 import java.io.IOException;
 
-import com.darkan.api.inter.Interfaces;
-import com.darkan.cache.def.objects.ObjectDef;
-
 public class InterfaceDecoder {
 	
 	public static void main(String[] args) throws IOException {
@@ -15,10 +12,6 @@ public class InterfaceDecoder {
 		
 		//Interfaces.dialContinue(1184, 15);
 		//Interfaces.dialContinue(1189, 19);
-		//Interfaces.dialContinue(1191, 15);
-		
-		//Interfaces.dialContinue(1191, 15);
-		//Interfaces.dialContinue(1191, 15);
 		//Interfaces.dialContinue(1191, 15);
 		
 		System.out.println("Interface: " + interfaceId + ", child: " + childId + ", slot: " + slotId);

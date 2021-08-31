@@ -10,13 +10,13 @@ import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
-import com.darkan.scripts.Script;
 import com.darkan.scripts.LoopScript;
+import com.darkan.scripts.Script;
 
+import kraken.plugin.api.Bank;
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Move;
 import kraken.plugin.api.Vector2i;
-import kraken.plugin.api.Bank;
 
 @Script("AIO Woodcut")
 public class AIOWoodcut extends LoopScript {

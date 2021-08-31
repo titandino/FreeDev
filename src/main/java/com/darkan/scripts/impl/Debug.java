@@ -8,8 +8,8 @@ import com.darkan.api.listeners.MessageListener;
 import com.darkan.api.util.Logger;
 import com.darkan.api.util.Paint;
 import com.darkan.api.world.WorldTile;
-import com.darkan.scripts.Script;
 import com.darkan.scripts.LoopScript;
+import com.darkan.scripts.Script;
 
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;

@@ -4,8 +4,8 @@ import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.inter.Interfaces;
 import com.darkan.api.util.Area;
 import com.darkan.api.world.WorldTile;
-import com.darkan.scripts.Script;
 import com.darkan.scripts.LoopScript;
+import com.darkan.scripts.Script;
 
 import kraken.plugin.api.Player;
 import kraken.plugin.api.Players;

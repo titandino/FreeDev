@@ -21,18 +21,18 @@ import com.darkan.api.listeners.MessageListener;
 import com.darkan.api.util.DebugFrame;
 import com.darkan.api.util.Logger;
 import com.darkan.api.util.Utils;
-import com.darkan.scripts.Script;
 import com.darkan.scripts.LoopScript;
+import com.darkan.scripts.Script;
 import com.darkan.thread.DataUpdateThread;
 import com.darkan.thread.DataUpdateThreadFactory;
 
 import kraken.plugin.api.ConVar;
 import kraken.plugin.api.Debug;
 import kraken.plugin.api.ImGui;
+import kraken.plugin.api.Plugin;
 import kraken.plugin.api.PluginContext;
-import kraken.stub.AbstractPlugin;
 
-public final class BasePlugin extends AbstractPlugin {
+public final class BasePlugin extends Plugin {
 	
 	private static ScheduledExecutorService dataUpdateExecutor = Executors.newSingleThreadScheduledExecutor(new DataUpdateThreadFactory());
 	

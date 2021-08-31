@@ -9,7 +9,11 @@ import com.darkan.api.entity.MyPlayer;
 import com.darkan.api.util.Logger;
 import com.darkan.api.util.Utils;
 
-import kraken.plugin.api.*;
+import kraken.plugin.api.Client;
+import kraken.plugin.api.ImGui;
+import kraken.plugin.api.Player;
+import kraken.plugin.api.Players;
+import kraken.plugin.api.Time;
 
 public abstract class LoopScript {
 

@@ -2,8 +2,8 @@ package com.darkan.scripts.impl.aioagility;
 
 import com.darkan.api.accessors.WorldObjects;
 import com.darkan.api.entity.MyPlayer;
-import com.darkan.scripts.Script;
 import com.darkan.scripts.LoopScript;
+import com.darkan.scripts.Script;
 
 import kraken.plugin.api.ImGui;
 

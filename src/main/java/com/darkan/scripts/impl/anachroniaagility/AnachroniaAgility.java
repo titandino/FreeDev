@@ -5,8 +5,8 @@ import com.darkan.api.inter.Interfaces;
 import com.darkan.api.item.Item;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldObject;
-import com.darkan.scripts.Script;
 import com.darkan.scripts.LoopScript;
+import com.darkan.scripts.Script;
 
 import kraken.plugin.api.Client;
 import kraken.plugin.api.ImGui;

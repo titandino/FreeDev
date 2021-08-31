@@ -7,8 +7,8 @@ import com.darkan.api.inter.Interfaces;
 import com.darkan.api.inter.chat.Message;
 import com.darkan.api.listeners.MessageListener;
 import com.darkan.api.util.Timer;
-import com.darkan.scripts.Script;
 import com.darkan.scripts.LoopScript;
+import com.darkan.scripts.Script;
 
 import kraken.plugin.api.ImGui;
 import kraken.plugin.api.Time;
