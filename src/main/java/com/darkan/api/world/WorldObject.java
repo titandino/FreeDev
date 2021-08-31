@@ -1,6 +1,7 @@
 package com.darkan.api.world;
 
 import com.darkan.api.entity.MyPlayer;
+import com.darkan.api.util.Area;
 import com.darkan.api.util.Utils;
 import com.darkan.cache.def.maps.Region;
 import com.darkan.cache.def.objects.ObjectDef;
@@ -87,6 +88,15 @@ public class WorldObject extends WorldTile implements Interactable {
 		} else  {
 			Actions.menu(MENU_OPS[action], getId(), getX(), getY(), Utils.random(0, Integer.MAX_VALUE));
 		}
+		return true;
+	}
+
+	public boolean interactWithOffset(int action, WorldTile offset) {
+		if (action < 0 || action >= MENU_OPS.length)
+			return false;
+
+		WorldTile tile = transform(offset);
+		Actions.menu(MENU_OPS[action], getId(), tile.getX(), tile.getY(), Utils.random(0, Integer.MAX_VALUE));
 		return true;
 	}
 	

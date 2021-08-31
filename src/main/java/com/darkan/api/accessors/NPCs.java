@@ -1,14 +1,12 @@
 package com.darkan.api.accessors;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 import com.darkan.api.entity.NPC;
+import com.darkan.api.item.GroundItem;
+import com.darkan.api.util.Area;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldTile;
 
@@ -53,6 +51,27 @@ public class NPCs {
 		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
 		Collections.sort(sortedKeys);
 		return distanceMap.get(sortedKeys.get(0));
+	}
+
+	public static List<NPC> getAllWithin(Area area) {
+		return getAllWithin(area, (item) -> true);
+	}
+
+	public static List<NPC> getAllWithin(Area area, Filter<NPC> filter) {
+		return NPCS.stream()
+				.filter(i -> area.inside(i.getPosition()) && filter.accept(i))
+				.collect(Collectors.toList());
+	}
+
+	public static NPC getClosestWithin(Area area) {
+		return getClosestWithin(area, (item) -> true);
+	}
+
+	public static NPC getClosestWithin(Area area, Filter<NPC> filter) {
+		return NPCS.stream()
+				.filter(i -> area.inside(i.getPosition()) && filter.accept(i))
+				.min(Comparator.comparingInt(o -> o.getPosition().getDistance(Players.self().getGlobalPosition())))
+				.orElse(null);
 	}
 
 	public static NPC getClosestReachable(Filter<NPC> filter) {

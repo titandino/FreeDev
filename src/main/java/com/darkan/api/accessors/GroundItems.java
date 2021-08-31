@@ -1,14 +1,11 @@
 package com.darkan.api.accessors;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 import com.darkan.api.item.GroundItem;
+import com.darkan.api.util.Area;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.WorldTile;
 
@@ -52,6 +49,27 @@ public class GroundItems {
 		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
 		Collections.sort(sortedKeys);
 		return distanceMap.get(sortedKeys.get(0));
+	}
+
+	public static List<GroundItem> getAllWithin(Area area) {
+		return getAllWithin(area, (item) -> true);
+	}
+
+	public static List<GroundItem> getAllWithin(Area area, Filter<GroundItem> filter) {
+		return GROUND_ITEMS.stream()
+				.filter(i -> area.inside(i.getPosition()) && filter.accept(i))
+				.collect(Collectors.toList());
+	}
+
+	public static GroundItem getClosestWithin(Area area) {
+		return getClosestWithin(area, (item) -> true);
+	}
+
+	public static GroundItem getClosestWithin(Area area, Filter<GroundItem> filter) {
+		return GROUND_ITEMS.stream()
+				.filter(i -> area.inside(i.getPosition()) && filter.accept(i))
+				.min(Comparator.comparingInt(o -> o.getPosition().getDistance(Players.self().getGlobalPosition())))
+				.orElse(null);
 	}
 
 	public static GroundItem getClosestReachable(Filter<GroundItem> filter) {

@@ -28,6 +28,12 @@ public class ItemContainer extends IFComponent {
 			return new Item[1];
 		}
 	}
+
+	public Item getItemBySlot(int slot) {
+		Item[] items = getItems();
+		if(slot < 0 || slot >= items.length) return null;
+		return items[slot];
+	}
 	
 	public Item getItemById(int... ids) {
 		Set<Integer> itemIds = new HashSet<>(Arrays.asList(Arrays.stream(ids).boxed().toArray(Integer[]::new)));
@@ -56,6 +62,10 @@ public class ItemContainer extends IFComponent {
 				return item;
 		}
 		return null;
+	}
+
+	public boolean contains(int itemId) {
+		return contains(itemId, 1);
 	}
 	
 	public boolean contains(int itemId, int amount) {

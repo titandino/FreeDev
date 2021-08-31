@@ -1,5 +1,6 @@
 package com.darkan.api.entity;
 
+import com.darkan.api.accessors.NPCs;
 import com.darkan.api.util.Utils;
 import com.darkan.api.world.Interactable;
 import com.darkan.api.world.WorldTile;
@@ -80,5 +81,9 @@ public class NPC extends Entity implements Interactable {
 
 	public int getHealth() {
 		return health;
+	}
+
+	public boolean isAlive() {
+		return getHealth() > 0 && NPCs.getClosest(n -> n.serverIndex == serverIndex) != null;
 	}
 }

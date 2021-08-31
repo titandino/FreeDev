@@ -1,15 +1,13 @@
 package com.darkan.api.accessors;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 import com.darkan.api.entity.MyPlayer;
+import com.darkan.api.util.Area;
 import com.darkan.api.util.Utils;
+import com.darkan.api.world.SpotAnim;
 import com.darkan.api.world.WorldObject;
 import com.darkan.api.world.WorldTile;
 
@@ -55,6 +53,27 @@ public class WorldObjects {
 		List<Integer> sortedKeys = new ArrayList<Integer>(distanceMap.keySet());
 		Collections.sort(sortedKeys);
 		return distanceMap.get(sortedKeys.get(0));
+	}
+
+	public static List<WorldObject> getAllWithin(Area area) {
+		return getAllWithin(area, (item) -> true);
+	}
+
+	public static List<WorldObject> getAllWithin(Area area, Filter<WorldObject> filter) {
+		return OBJECTS.stream()
+				.filter(i -> area.inside(i) && filter.accept(i))
+				.collect(Collectors.toList());
+	}
+
+	public static WorldObject getClosestWithin(Area area) {
+		return getClosestWithin(area, (item) -> true);
+	}
+
+	public static WorldObject getClosestWithin(Area area, Filter<WorldObject> filter) {
+		return OBJECTS.stream()
+				.filter(i -> area.inside(i) && filter.accept(i))
+				.min(Comparator.comparingInt(o -> o.getDistance(Players.self().getGlobalPosition())))
+				.orElse(null);
 	}
 	
 	public static WorldObject getClosest(Filter<WorldObject> filter) {
