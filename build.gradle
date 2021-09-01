@@ -20,6 +20,7 @@ dependencies {
 	implementation 'org.apache.commons:commons-compress:1.18'
 	implementation 'org.xerial:sqlite-jdbc:3.32.3.2'
 	implementation project(':KrakenStub')
+	implementation project(':KrakenAPI')
 }
 
 shadowJar {

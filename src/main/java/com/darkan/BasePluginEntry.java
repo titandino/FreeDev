@@ -8,7 +8,7 @@ import kraken.plugin.api.PluginContext;
 public class BasePluginEntry {
 	private static final Plugin plugin = new BasePlugin();
 
-	public static boolean onLoaded(PluginContext pluginContext) {
+	public boolean onLoaded(PluginContext pluginContext) {
 		try {
 			return plugin.onLoaded(pluginContext);
 		} catch (Throwable t) {
@@ -17,7 +17,7 @@ public class BasePluginEntry {
 		}
 	}
 
-	public static int onLoop() {
+	public int onLoop() {
 		try {
 			return plugin.onLoop();
 		} catch (Throwable t) {
@@ -26,7 +26,7 @@ public class BasePluginEntry {
 		}
 	}
 
-	public static void onPaint() {
+	public void onPaint() {
 		try {
 			plugin.onPaint();
 		} catch (Throwable t) {
@@ -34,7 +34,7 @@ public class BasePluginEntry {
 		}
 	}
 
-	public static void onPaintOverlay() {
+	public void onPaintOverlay() {
 		try {
 			plugin.onPaintOverlay();
 		} catch (Throwable t) {
