@@ -14,11 +14,23 @@
 //  Copyright © 2021 Trenton Kress
 //  This file is part of project: FreeDev
 //
-package com.darkan.cache;
+package com.darkan;
 
-public enum ClipType {
-	NORMAL,
-	FLYING,
-	WATER,
-	NOCLIP
+import com.darkan.cache.def.items.ItemDef;
+import com.darkan.cache.def.structs.StructDef;
+
+public class Main {
+	
+	public static void main(String[] args) {
+		for (int i = 0;i < ItemDef.getParser().getMaxId();i++) {
+			ItemDef def = ItemDef.get(i);
+			if (def == null)
+				continue;
+			//System.out.println(ItemDef.get(i).name + " -> " + ItemDef.get(i).getMaterials());
+			if (def.name.contains("arrows"))
+				System.out.println(def);
+		}
+		System.out.println(StructDef.get(1317));
+	}
+
 }
